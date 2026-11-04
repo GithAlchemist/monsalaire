@@ -35,12 +35,12 @@ export function Home({ s, set, rules, slip, computedBase }: { s: AppState; set: 
     <>
       <section className="hero compact">
         <h1>
-          {t('Votre bulletin de paie,', 'Your payslip,')} <em>{t('calculé sous vos yeux.', 'computed before your eyes.')}</em>
+          {t('Votre bulletin de paie,', 'Your payslip,')} <em>{t('calculé sous vos yeux.', 'worked out as you type.')}</em>
         </h1>
         <p className="hero-sub">
           {t(
             'Tapez un salaire : cotisations, impôt et net se recalculent à chaque chiffre, et chaque ligne renvoie à son article de loi.',
-            'Type a salary: contributions, tax and net pay update with every digit, and each line points to its article of law.',
+            'Enter a salary and watch contributions, tax and net pay update instantly. Every line links to the law behind it.',
           )}
         </p>
       </section>
@@ -68,7 +68,7 @@ export function Home({ s, set, rules, slip, computedBase }: { s: AppState; set: 
               </div>
               <div className="k-sub">
                 {slip.grossTotal > 0
-                  ? t(`${pct(slip.netSalary / slip.grossTotal, 1)} du brut, ${period === 'year' ? 'sur douze mois' : 'ce mois-ci'}`, `${pct(slip.netSalary / slip.grossTotal, 1)} of gross, ${period === 'year' ? 'over twelve months' : 'this month'}`)
+                  ? t(`${pct(slip.netSalary / slip.grossTotal, 1)} du brut, ${period === 'year' ? 'sur douze mois' : 'ce mois-ci'}`, `${pct(slip.netSalary / slip.grossTotal, 1)} of gross, ${period === 'year' ? 'over twelve months': 'this month'}`)
                   : t('Saisissez un salaire', 'Enter a salary')}
               </div>
             </div>
@@ -78,7 +78,7 @@ export function Home({ s, set, rules, slip, computedBase }: { s: AppState; set: 
                 <Amount value={slip.grossTotal * k} />
               </div>
               <div className="k-sub">
-                {s.mode === 'net' ? `${t('base', 'base')} ${fcfa(computedBase)}` : catMin ? `${t('minimum', 'minimum')} ${s.category} : ${fcfa(catMin)}` : t('primes comprises', 'bonuses included')}
+                {s.mode === 'net' ? `${t('base', 'base')} ${fcfa(computedBase)}` : catMin ? `${t('minimum', 'minimum')} ${s.category}${t(' :', ':')} ${fcfa(catMin)}` : t('primes comprises', 'bonuses included')}
               </div>
             </div>
             <div>
@@ -86,7 +86,7 @@ export function Home({ s, set, rules, slip, computedBase }: { s: AppState; set: 
               <div className="k-value">
                 <Amount value={slip.employerCost * k} />
               </div>
-              <div className="k-sub">{t(`dont ${fcfa(slip.employerContributions * k)} de charges`, `incl. ${fcfa(slip.employerContributions * k)} of contributions`)}</div>
+              <div className="k-sub">{t(`dont ${fcfa(slip.employerContributions * k)} de charges`, `incl. ${fcfa(slip.employerContributions * k)} in contributions`)}</div>
             </div>
           </div>
 
@@ -103,8 +103,8 @@ export function Home({ s, set, rules, slip, computedBase }: { s: AppState; set: 
 
           <Link to="understand" className="next-link">
             <span>
-              <strong>{t('Comprendre ce calcul', 'Understand this calculation')}</strong>
-              <span>{t('Où va chaque franc, l’impôt pas à pas, les cotisations.', 'Where each franc goes, tax step by step, contributions.')}</span>
+              <strong>{t('Comprendre ce calcul', 'How this is calculated')}</strong>
+              <span>{t('Où va chaque franc, l’impôt pas à pas, les cotisations.', 'Where every franc goes, tax step by step, and contributions.')}</span>
             </span>
             <Icon.arrow />
           </Link>
@@ -131,7 +131,7 @@ function Disclaimer({ rules }: { rules: Rules }) {
     <details className="disclaimer">
       <summary>
         <Icon.info />
-        <span>{t('À savoir avant de vous fier à ce calcul', 'Worth knowing before you rely on this figure')}</span>
+        <span>{t('À savoir avant de vous fier à ce calcul', 'Before you rely on this figure')}</span>
         <span className="chev" aria-hidden="true">
           <Icon.chevron />
         </span>
@@ -141,25 +141,25 @@ function Disclaimer({ rules }: { rules: Rules }) {
           <li>
             {t(
               'C’est une simulation pour un salarié du secteur privé au régime général (CNSS, AMU et impôt sur le revenu), d’après les textes en vigueur au Togo, vérifiés le',
-              'This is a simulation for a private-sector employee under the general regime (CNSS, AMU and income tax), based on the laws in force in Togo, checked on',
+              'This is a simulation for a private-sector employee under the general regime (CNSS, AMU and income tax), based on the laws in force in Togo, last checked on',
             )}{' '}
             {date(rules.verified_on)}.
           </li>
           <li>
             {t(
               'Votre bulletin réel peut différer de quelques francs : chaque employeur arrondit, régularise l’impôt dans l’année et applique parfois une convention de branche plus favorable.',
-              'Your real payslip may differ by a few francs: each employer rounds, adjusts tax over the year and sometimes applies a more favourable sector agreement.',
+              'Your actual payslip may differ by a few francs: employers round differently, adjust tax during the year and sometimes apply a more generous industry agreement.',
             )}
           </li>
           <li>
             {t(
               'Ne sont pas couverts : agents publics, indépendants, indemnités de fin de contrat. Deux points des textes admettent deux lectures ; le choix retenu est indiqué.',
-              'Not covered: public servants, self-employed, end-of-contract payments. Two points of the texts can be read two ways; the reading used is stated.',
+              'Not covered: civil servants, the self-employed and end-of-contract payments. Two points in the law are open to interpretation; the reading used is stated.',
             )}
           </li>
           <li>
-            {t('Ce calcul ne remplace ni le bulletin de votre employeur, ni l’avis d’un professionnel.', 'This calculation replaces neither your employer’s payslip nor professional advice.')}{' '}
-            <Link to="sources">{t('Voir les textes et les limites', 'See the texts and the limits')}</Link>.
+            {t('Ce calcul ne remplace ni le bulletin de votre employeur, ni l’avis d’un professionnel.', 'This calculation is no substitute for your employer’s payslip or professional advice.')}{' '}
+            <Link to="sources">{t('Voir les textes et les limites', 'See the sources and limitations')}</Link>.
           </li>
         </ul>
       </div>

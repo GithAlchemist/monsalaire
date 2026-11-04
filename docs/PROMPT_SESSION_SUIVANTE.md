@@ -38,9 +38,11 @@ Lis d'abord, dans cet ordre : `CLAUDE.md`, `docs/STATUS.md` (état, décisions, 
 
 ## À faire ensuite, par ordre de valeur
 
-0. **Déploiement**, dès que Kévin le demande : projet Vercel depuis le dépôt, domaine `monsalaire.aconta.io`, puis
-   Search Console et Bing Webmaster Tools avec `sitemap.xml`, et vérifier l'aperçu LinkedIn. Ensuite le blog et les
-   pages de données (comparatif du SMIG entre pays d'abord), voir `docs/STATUS.md`.
+0. **En ligne depuis le 04/11** : projet Vercel `monsalaire`, branché sur GitHub (chaque push sur `main` part en
+   production), https://monsalaire-aconta.vercel.app. `monsalaire.aconta.io` attend l'enregistrement CNAME chez
+   Cloudflare (voir `docs/STATUS.md`). Ensuite : Search Console, Bing Webmaster Tools, aperçu LinkedIn, puis le
+   sélecteur de pays dans les paramètres du calcul, le blog et les pages de données.
+   Anglais réécrit le 04/11 : de l'anglais britannique naturel, jamais du mot à mot (Kévin y tient).
 
 1. **Vectoriser le logo.** Les découpes sont des PNG (nets jusqu'à environ 2x la taille d'affichage). Un SVG fidèle du
    symbole et du logotype rendrait le favicon et le README plus nets. Demander à Kévin s'il a le fichier source

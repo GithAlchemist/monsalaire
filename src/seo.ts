@@ -32,14 +32,14 @@ export const META: Record<Lang, Record<Page, { title: string; description: strin
   },
   en: {
     home: {
-      title: 'monsalaire · net salary calculator for Togo (income tax, CNSS, AMU)',
+      title: 'monsalaire · Togo net salary calculator (income tax, CNSS, AMU)',
       description:
-        'Free payslip simulator for Togo: from gross to net, income tax (IRPP), CNSS, AMU and employer cost computed as you type. Every line cites the article and page of the official text.',
+        'Free payslip calculator for Togo: gross to net pay, income tax (IRPP), CNSS, AMU and employer cost, worked out as you type. Every line cites the article and page of the official text.',
     },
     understand: {
-      title: 'How salaries are computed in Togo · monsalaire',
+      title: 'How pay is calculated in Togo · monsalaire',
       description:
-        'How does gross pay become net pay in Togo? CNSS and AMU contributions, allowance, income tax brackets and employer cost, explained step by step with a worked example.',
+        'How does gross pay become net pay in Togo? CNSS and AMU contributions, the standard deduction, income tax brackets and employer cost, explained step by step with a worked example.',
     },
     sources: {
       title: 'Official texts behind payroll in Togo · monsalaire',

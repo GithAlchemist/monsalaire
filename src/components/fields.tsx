@@ -57,11 +57,11 @@ export function Counter({ label, value, onChange, min = 0, max = 20, disabledPlu
     <div className="counter" role="group" aria-label={label}>
       <span className="c-label">{label}</span>
       <div className="c-row">
-        <button type="button" aria-label={`${label} : ${t('moins', 'fewer')}`} disabled={value <= min} onClick={() => onChange(Math.max(min, value - 1))}>
+        <button type="button" aria-label={`${label}${t(' :', ':')} ${t('moins', 'fewer')}`} disabled={value <= min} onClick={() => onChange(Math.max(min, value - 1))}>
           −
         </button>
         <output aria-live="polite">{value}</output>
-        <button type="button" aria-label={`${label} : ${t('plus', 'more')}`} disabled={value >= max || disabledPlus} onClick={() => onChange(Math.min(max, value + 1))}>
+        <button type="button" aria-label={`${label}${t(' :', ':')} ${t('plus', 'more')}`} disabled={value >= max || disabledPlus} onClick={() => onChange(Math.min(max, value + 1))}>
           +
         </button>
       </div>

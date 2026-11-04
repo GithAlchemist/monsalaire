@@ -55,14 +55,14 @@ export function Header({ onShare, copied }: { onShare?: () => void; copied?: boo
   }, []);
   const next: Record<Theme, Theme> = { system: 'light', light: 'dark', dark: 'system' };
   const label: Record<Theme, string> = {
-    system: t('Thème : celui de l’appareil', 'Theme: device'),
+    system: t('Thème : celui de l’appareil', 'Theme: system'),
     light: t('Thème : clair', 'Theme: light'),
     dark: t('Thème : sombre', 'Theme: dark'),
   };
   const nav: { to: Page; label: string }[] = [
     { to: 'home', label: t('Simulateur', 'Simulator') },
     { to: 'understand', label: t('Comprendre', 'How it works') },
-    { to: 'sources', label: t('Les textes', 'Legal texts') },
+    { to: 'sources', label: t('Les textes', 'Sources') },
   ];
   return (
     <header className={`header${scrolled ? ' scrolled' : ''}`}>
@@ -125,7 +125,7 @@ export function Footer({ rules }: { rules: Rules }) {
               <Logo size="lg" />
             </Link>
             <p className="tagline">{t('Les salaires en perspective.', 'Salaries in perspective.')}</p>
-            <p>{t('Le bulletin de paie, calculé sous vos yeux et expliqué ligne par ligne. Libre, gratuit, sans compte.', 'Your payslip, computed before your eyes and explained line by line. Free, open source, no account.')}</p>
+            <p>{t('Le bulletin de paie, calculé sous vos yeux et expliqué ligne par ligne. Libre, gratuit, sans compte.', 'Your payslip, worked out as you type and explained line by line. Free, open source, no sign-up.')}</p>
             <p className="f-meta">
               {t('Règles', 'Rules')} {rules.version} · {t('vérifiées le', 'checked on')} {date(rules.verified_on)}
             </p>
@@ -138,10 +138,10 @@ export function Footer({ rules }: { rules: Rules }) {
             <h3>{t('Simulateur', 'Simulator')}</h3>
             <ul>
               <li>
-                <Link to="home">{t('Calculer mon salaire', 'Compute my salary')}</Link>
+                <Link to="home">{t('Calculer mon salaire', 'Calculate my pay')}</Link>
               </li>
               <li>
-                <Link to="understand">{t('Comprendre le calcul', 'How it is computed')}</Link>
+                <Link to="understand">{t('Comprendre le calcul', 'How it’s calculated')}</Link>
               </li>
               <li>
                 <Link to="sources">{t('Les textes officiels', 'Official texts')}</Link>
@@ -155,13 +155,13 @@ export function Footer({ rules }: { rules: Rules }) {
                 <Link to="home">Togo</Link> <span className="pill on">{t('en ligne', 'live')}</span>
               </li>
               <li>
-                {t('Bénin', 'Benin')} <span className="pill">{t('bientôt', 'soon')}</span>
+                {t('Bénin', 'Benin')} <span className="pill">{t('bientôt', 'coming soon')}</span>
               </li>
               <li>
-                {t('Sénégal', 'Senegal')} <span className="pill">{t('bientôt', 'soon')}</span>
+                {t('Sénégal', 'Senegal')} <span className="pill">{t('bientôt', 'coming soon')}</span>
               </li>
               <li>
-                Côte d'Ivoire <span className="pill">{t('bientôt', 'soon')}</span>
+                Côte d'Ivoire <span className="pill">{t('bientôt', 'coming soon')}</span>
               </li>
               <li>
                 <a href={issue('new-country.yml')} target="_blank" rel="noreferrer">
@@ -185,7 +185,7 @@ export function Footer({ rules }: { rules: Rules }) {
               </li>
               <li>
                 <a href={issue('rule-error.yml')} target="_blank" rel="noreferrer">
-                  {t('Signaler une règle fausse', 'Report a wrong rule')}
+                  {t('Signaler une règle fausse', 'Report an incorrect rule')}
                 </a>
               </li>
               <li>
@@ -208,7 +208,7 @@ export function Footer({ rules }: { rules: Rules }) {
                   <img src="/brand/aconta-emblem.png" alt="" width="18" height="18" />
                   <span>
                     <b>aconta.io</b>
-                    <small>{t('Le suivi de l’argent des petites entreprises, sans cahier ni Excel.', 'Money tracking for small businesses, without a notebook or Excel.')}</small>
+                    <small>{t('Le suivi de l’argent des petites entreprises, sans cahier ni Excel.', 'Keep track of your small business’s money, no notebook or spreadsheet needed.')}</small>
                   </span>
                 </a>
               </li>
@@ -223,7 +223,7 @@ export function Footer({ rules }: { rules: Rules }) {
               <li>
                 <Link to="terms">{t('Confidentialité', 'Privacy')}</Link>
               </li>
-              <li className="f-note">{t('Aucun compte, aucun cookie : vos montants restent dans votre navigateur.', 'No account, no cookie: your figures stay in your browser.')}</li>
+              <li className="f-note">{t('Aucun compte, aucun cookie : vos montants restent dans votre navigateur.', 'No sign-up, no cookies: your figures stay in your browser.')}</li>
             </ul>
           </div>
         </div>
@@ -231,7 +231,7 @@ export function Footer({ rules }: { rules: Rules }) {
           <span>
             © 2026 monsalaire · {t('projet libre sous licence MIT', 'open source under the MIT licence')} · <ByAconta place="footer-bottom" />
           </span>
-          <span>{t('Simulation indicative : elle ne remplace pas le bulletin de votre employeur.', 'Indicative simulation: it does not replace your employer’s payslip.')}</span>
+          <span>{t('Simulation indicative : elle ne remplace pas le bulletin de votre employeur.', 'This is an estimate, not your employer’s payslip.')}</span>
         </div>
       </div>
     </footer>
@@ -243,7 +243,7 @@ function ThemeButton() {
   const [theme, setTheme] = useTheme();
   const next: Record<Theme, Theme> = { system: 'light', light: 'dark', dark: 'system' };
   const label: Record<Theme, string> = {
-    system: t('Thème : celui de l’appareil', 'Theme: device'),
+    system: t('Thème : celui de l’appareil', 'Theme: system'),
     light: t('Thème : clair', 'Theme: light'),
     dark: t('Thème : sombre', 'Theme: dark'),
   };

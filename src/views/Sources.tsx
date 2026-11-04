@@ -28,17 +28,17 @@ export function Sources({ rules }: { rules: Rules }) {
   const pages = (library as Doc[]).reduce((a, d) => a + (d.pages ?? 0), 0);
 
   const checks: { what: string; value: string; ref: Ref }[] = [
-    { what: t('SMIG', 'Minimum wage'), value: t('52 500 F par mois, 302,89 F de l’heure', '52 500 F a month, 302.89 F an hour'), ref: rules.minimum_wage.ref },
+    { what: t('SMIG', 'Minimum wage'), value: t('52 500 F par mois, 302,89 F de l’heure', '52,500 F a month, 302.89 F an hour'), ref: rules.minimum_wage.ref },
     { what: t('Durée du travail', 'Working week'), value: t('40 h par semaine', '40 h a week'), ref: rules.working_time.ref_hours },
-    { what: t('Taux CNSS', 'CNSS rates'), value: t('4 % salarié, 17,5 % employeur', '4 % employee, 17.5 % employer'), ref: rules.social.cnss.ref },
-    { what: t('Assiette CNSS', 'CNSS base'), value: t('tout le brut, plancher SMIG, sans plafond', 'all gross pay, minimum wage floor, no ceiling'), ref: rules.social.cnss.ref_base },
-    { what: t('Taux AMU', 'AMU rates'), value: t('5 % salarié, 5 % employeur', '5 % employee, 5 % employer'), ref: rules.social.amu.ref },
-    { what: t('Déductions avant impôt', 'Deductions before tax'), value: t('cotisations, 28 % jusqu’à 10 M, retraite volontaire, assurance vie', 'contributions, 28 % up to 10 M, voluntary pension, life insurance'), ref: rules.irpp.ref_deductions },
-    { what: t('Charges de famille', 'Dependents'), value: t('10 000 F par personne et par mois, 6 au plus', '10 000 F per person per month, 6 at most'), ref: rules.irpp.ref_dependents },
-    { what: t('Barème de l’IRPP', 'Income tax scale'), value: t('0 % à 35 %, par tranches annuelles', '0 % to 35 %, annual brackets'), ref: rules.irpp.ref },
-    { what: t('Heures supplémentaires', 'Overtime'), value: '+20 %, +40 %, +65 %, +100 %', ref: rules.overtime.ref },
-    { what: t('Prime d’ancienneté', 'Seniority bonus'), value: t('2 % à 2 ans, puis +1 point par an, 35 % au plus', '2 % at 2 years, then +1 point a year, 35 % at most'), ref: rules.seniority.ref },
-    { what: t('Grille des salaires', 'Wage grid'), value: t('E1 52 500 F à C4 246 500 F', 'E1 52 500 F to C4 246 500 F'), ref: rules.categories.ref },
+    { what: t('Taux CNSS', 'CNSS rates'), value: t('4 % salarié, 17,5 % employeur', '4% employee, 17.5% employer'), ref: rules.social.cnss.ref },
+    { what: t('Assiette CNSS', 'CNSS base'), value: t('tout le brut, plancher SMIG, sans plafond', 'total gross pay, minimum wage floor, no cap'), ref: rules.social.cnss.ref_base },
+    { what: t('Taux AMU', 'AMU rates'), value: t('5 % salarié, 5 % employeur', '5% employee, 5% employer'), ref: rules.social.amu.ref },
+    { what: t('Déductions avant impôt', 'Deductions before tax'), value: t('cotisations, 28 % jusqu’à 10 M, retraite volontaire, assurance vie', 'contributions, 28% up to 10 M, voluntary pension, life insurance'), ref: rules.irpp.ref_deductions },
+    { what: t('Charges de famille', 'Dependants'), value: t('10 000 F par personne et par mois, 6 au plus', '10,000 F per person per month, up to 6'), ref: rules.irpp.ref_dependents },
+    { what: t('Barème de l’IRPP', 'Income tax brackets'), value: t('0 % à 35 %, par tranches annuelles', '0% to 35%, annual brackets'), ref: rules.irpp.ref },
+    { what: t('Heures supplémentaires', 'Overtime'), value: t('+20 %, +40 %, +65 %, +100 %', '+20%, +40%, +65%, +100%'), ref: rules.overtime.ref },
+    { what: t('Prime d’ancienneté', 'Seniority bonus'), value: t('2 % à 2 ans, puis +1 point par an, 35 % au plus', '2% at 2 years, then +1 point a year, up to 35%'), ref: rules.seniority.ref },
+    { what: t('Grille des salaires', 'Pay scale'), value: t('E1 52 500 F à C4 246 500 F', 'E1 52,500 F to C4 246,500 F'), ref: rules.categories.ref },
   ];
   const srcTitle = (id: string) => {
     const s = rules.sources[id];
@@ -48,7 +48,7 @@ export function Sources({ rules }: { rules: Rules }) {
   return (
     <article className="doc-page">
       <header className="page-hero">
-        <div className="kicker">{t('Les textes', 'Legal texts')}</div>
+        <div className="kicker">{t('Les textes', 'Sources')}</div>
         <h1>
           {t('Rien n’est inventé,', 'Nothing is made up,')} <em>{t('tout est sourcé', 'everything is sourced')}</em>
         </h1>
@@ -63,7 +63,7 @@ export function Sources({ rules }: { rules: Rules }) {
             {t('Règles', 'Rules')} <b>{rules.version}</b> · {t('vérifiées le', 'checked on')} <b>{date(rules.verified_on)}</b>
           </span>
           <a className="sim-edit" href={`${REPO}/tree/main/sources`} target="_blank" rel="noreferrer">
-            {t('Voir sur GitHub', 'See on GitHub')} <Icon.arrow />
+            {t('Voir sur GitHub', 'View on GitHub')} <Icon.arrow />
           </a>
         </div>
       </header>
@@ -73,7 +73,7 @@ export function Sources({ rules }: { rules: Rules }) {
           <span className="u-n">01</span>
           <div>
             <h2>{t('La bibliothèque', 'The library')}</h2>
-            <p>{t('Le PDF d’origine et sa transcription fidèle, sans reformulation.', 'The original PDF and its faithful transcription, without rewording.')}</p>
+            <p>{t('Le PDF d’origine et sa transcription fidèle, sans reformulation.', 'Each original PDF alongside a word-for-word transcription.')}</p>
           </div>
         </div>
         <div className="lib">
@@ -94,7 +94,7 @@ export function Sources({ rules }: { rules: Rules }) {
                   <a href={`${ORIG}/${d.id}.pdf`} target="_blank" rel="noreferrer">
                     PDF
                   </a>
-                  {d.method === 'ocr' && <span className="ocr">{t('scan, lu par OCR', 'scan, read by OCR')}</span>}
+                  {d.method === 'ocr' && <span className="ocr">{t('scan, lu par OCR', 'scanned, read by OCR')}</span>}
                 </span>
               </span>
             </div>
@@ -143,13 +143,13 @@ export function Sources({ rules }: { rules: Rules }) {
         <div className="u-head">
           <span className="u-n">03</span>
           <div>
-            <h2>{t('Les limites, dites franchement', 'The limits, stated plainly')}</h2>
+            <h2>{t('Les limites, dites franchement', 'Limitations, stated plainly')}</h2>
           </div>
         </div>
         <div className="u-split even">
           <div className="u-card">
-            <h3 className="u-h3">{t('Ce qui reste à trancher', 'Still open')}</h3>
-            <p className="muted-p">{t('Les textes admettent deux lectures. Le choix du simulateur est indiqué.', 'The texts can be read two ways. The simulator’s choice is stated.')}</p>
+            <h3 className="u-h3">{t('Ce qui reste à trancher', 'Open questions')}</h3>
+            <p className="muted-p">{t('Les textes admettent deux lectures. Le choix du simulateur est indiqué.', 'These points of law are open to interpretation. The simulator’s reading is stated.')}</p>
             <ul className="clean">
               {((lang === 'en' && rules.open_questions_en) || rules.open_questions).map((q) => (
                 <li key={q}>{q}</li>
@@ -158,7 +158,7 @@ export function Sources({ rules }: { rules: Rules }) {
           </div>
           <div className="u-card">
             <h3 className="u-h3">{t('Pas encore couvert', 'Not covered yet')}</h3>
-            <p className="muted-p">{t('Pour un salarié du privé au régime général, le reste est pris en compte.', 'For a private-sector employee under the general regime, the rest is covered.')}</p>
+            <p className="muted-p">{t('Pour un salarié du privé au régime général, le reste est pris en compte.', 'Everything else is covered for private-sector employees under the general regime.')}</p>
             <ul className="clean">
               {((lang === 'en' && rules.not_modeled_en) || rules.not_modeled).map((q) => (
                 <li key={q}>{q}</li>
@@ -168,8 +168,8 @@ export function Sources({ rules }: { rules: Rules }) {
         </div>
         <a className="next-link wide" href={`${REPO}/issues/new?template=rule-error.yml`} target="_blank" rel="noreferrer">
           <span>
-            <strong>{t('Une règle a changé, ou elle est fausse ?', 'A rule has changed, or is wrong?')}</strong>
-            <span>{t('Signalez-la avec le texte (lien, article, date). Les règles sont des données : la correction est rapide.', 'Report it with the text (link, article, date). Rules are data: fixing them is quick.')}</span>
+            <strong>{t('Une règle a changé, ou elle est fausse ?', 'Has a rule changed, or is one wrong?')}</strong>
+            <span>{t('Signalez-la avec le texte (lien, article, date). Les règles sont des données : la correction est rapide.', 'Report it with the source (link, article, date). Rules are stored as data, so fixes are quick.')}</span>
           </span>
           <Icon.arrow />
         </a>

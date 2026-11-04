@@ -53,7 +53,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
   const en = lang === 'en';
   const tr = (fr: string, e: string) => (en ? e : fr);
   const loc = en ? 'en-GB' : 'fr-FR';
-  const pct = (r: number) => `${(r * 100).toLocaleString(loc, { maximumFractionDigits: 2 })} %`;
+  const pct = (r: number) => `${(r * 100).toLocaleString(loc, { maximumFractionDigits: 2 })}${lang === 'en' ? '' : '\u00a0'}%`;
   const fcfa = (n: number) => `${Math.round(n).toLocaleString(loc)} F`;
 
   const lines: PayLine[] = [];
@@ -74,7 +74,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
     employer: 0,
     explain: tr(
       'Le salaire fixe du contrat pour un mois complet. Il ne peut pas être inférieur au minimum de votre catégorie, ni au SMIG.',
-      'The fixed salary of the contract for a full month. It cannot be lower than the minimum of your category, nor than the minimum wage (SMIG).',
+      'The fixed monthly salary in your contract for a full month’s work. It can’t be lower than your category’s minimum or the minimum wage (SMIG).',
     ),
     ref: rules.categories.ref,
   });
@@ -96,16 +96,16 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
       explain:
         tr(
           `${pct(senRate)} après ${years} ans dans l'entreprise : 2 % à partir de deux ans, puis un point de plus chaque année dès la quatrième, 35 % au plus. `,
-          `${pct(senRate)} after ${years} years with the company: 2 % from two years, then one more point each year from the fourth, 35 % at most. `,
+          `${pct(senRate)} after ${years} years with the company: 2% from year two, then one extra point a year from year four, up to 35%. `,
         ) +
         (catMin
           ? tr(
               `Elle se calcule sur le minimum de la catégorie ${input.category} (${fcfa(catMin)}), pas sur le salaire réel.`,
-              `It is computed on the minimum wage of category ${input.category} (${fcfa(catMin)}), not on the actual salary.`,
+              `It’s based on the minimum pay for category ${input.category} (${fcfa(catMin)}), not on your actual salary.`,
             )
           : tr(
               'Elle se calcule sur le minimum de votre catégorie : sans catégorie choisie, elle est estimée ici sur le salaire de base.',
-              'It is computed on the minimum of your category: with no category chosen, it is estimated here on the base salary.',
+              'It’s based on your category’s minimum pay; with no category selected, it’s estimated here from your base salary.',
             )),
       ref: rules.seniority.ref,
     });
@@ -120,7 +120,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
     const withSur = wt.hourly_base_items.some((id) => items[id]);
     lines.push({
       id: ot.id,
-      label: tr(`Heures supplémentaires +${Math.round(ot.rate * 100)} %`, `Overtime +${Math.round(ot.rate * 100)} %`),
+      label: tr(`Heures supplémentaires +${Math.round(ot.rate * 100)} %`, `Overtime +${Math.round(ot.rate * 100)}%`),
       kind: 'earning',
       quantity: hours,
       unit: 'h',
@@ -130,7 +130,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
       employer: 0,
       explain: tr(
         `${labelOf(ot, lang)}. ${hours} h au taux horaire de ${fcfa(hourlyRate)} (salaire de base${withSur ? ' et sursalaire' : ''} divisé par ${wt.monthly_hours} h), majoré de ${Math.round(ot.rate * 100)} %.`,
-        `${labelOf(ot, lang)}. ${hours} h at the hourly rate of ${fcfa(hourlyRate)} (base salary${withSur ? ' and additional salary' : ''} divided by ${wt.monthly_hours} h), plus ${Math.round(ot.rate * 100)} %.`,
+        `${labelOf(ot, lang)}. ${hours} h at an hourly rate of ${fcfa(hourlyRate)} (base salary${withSur ? ' and salary supplement': ''} divided by ${wt.monthly_hours} h), plus ${Math.round(ot.rate * 100)}%.`,
       ),
       ref: rules.overtime.ref,
     });
@@ -162,16 +162,16 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
         kind === 'benefit'
           ? tr(
               "Avantage en nature : il n'est pas versé en argent, mais il compte dans le brut. Il est imposé et soumis à la CNSS pour sa valeur réelle, puis retiré du net à payer.",
-              'Benefit in kind: it is not paid in cash, but it counts in the gross. It is taxed and subject to CNSS at its real value, then taken out of the net pay.',
+              'Benefit in kind: not paid in cash, but counted in gross pay. It’s taxed and subject to CNSS at its actual value, then deducted from net pay.',
             )
           : kind === 'reimbursement'
             ? tr(
                 'Les frais réellement engagés pour le travail et remboursés sur justificatifs ne sont ni imposés ni cotisés.',
-                'Expenses actually incurred for work and refunded against receipts are neither taxed nor subject to contributions.',
+                'Work expenses reimbursed against receipts are free of tax and contributions.',
               )
             : tr(
                 'Élément de salaire : il est imposé et soumis aux cotisations, comme le salaire de base.',
-                'Part of the salary: it is taxed and subject to contributions, like the base salary.',
+                'Part of your pay: taxed and subject to contributions, just like the base salary.',
               ),
       ref: kind === 'reimbursement' ? rules.pay_items_ref.exempt : rules.pay_items_ref.irpp,
     });
@@ -195,7 +195,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
       employer: 0,
       explain: tr(
         `Due après au moins six heures de travail de nuit, ou une longue journée prolongée. Elle vaut trois fois le salaire horaire du manœuvre (${fcfa(al.meal.hours_multiplier * e1Hourly)}). Traitée ici comme un remboursement de frais de repas, sans impôt ni cotisation.`,
-        `Due after at least six hours of night work, or a long extended day. It is worth three times the labourer's hourly wage (${fcfa(al.meal.hours_multiplier * e1Hourly)}). Treated here as a meal expense refund, with no tax or contribution.`,
+        `Payable after at least six hours of night work or an unusually long day. It’s worth three times a labourer’s hourly wage (${fcfa(al.meal.hours_multiplier * e1Hourly)}). Treated here as a reimbursed meal expense, so no tax or contributions.`,
       ),
       ref: al.meal.ref,
     });
@@ -209,7 +209,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
     reimbursements += missionAmount;
     lines.push({
       id: 'mission',
-      label: tr('Frais de mission', 'Mission allowances'),
+      label: tr('Frais de mission', 'Travel allowances'),
       kind: 'reimbursement',
       quantity: pos(m.oneMeal) + pos(m.twoMeals) + pos(m.night),
       unit: 'j',
@@ -217,7 +217,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
       employer: 0,
       explain: tr(
         `Barème minimum de la convention, sur le taux horaire de base de la catégorie (${fcfa(catHourly)}) : 3 fois pour un repas, 5 fois pour deux repas, 10 fois pour deux repas et une nuit. Ce sont des frais, non imposés.`,
-        `Minimum scale of the collective agreement, on the category's hourly base rate (${fcfa(catHourly)}): 3 times for one meal, 5 times for two meals, 10 times for two meals and a night. These are expenses, not taxed.`,
+        `Minimum rates under the collective agreement, based on the category’s hourly rate (${fcfa(catHourly)}): 3 times for one meal, 5 times for two meals, 10 times for two meals and a night. These are expenses, so they’re tax-free.`,
       ),
       ref: al.mission.ref,
     });
@@ -233,7 +233,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
       employer: 0,
       explain: tr(
         "Versement ponctuel. Son impôt est calculé à part : on mesure ce qu'il ajoute à l'impôt de l'année, au lieu de le traiter comme s'il était touché douze fois.",
-        'One-off payment. Its tax is computed separately: what it adds to the tax of the year, instead of treating it as if it were received twelve times.',
+        'A one-off payment. Its tax is worked out separately, as the extra tax it adds to the year, rather than as if you received it every month.',
       ),
       ref: { source: 'ccit-2026', article: 'art. 42', page: 39 },
     });
@@ -256,7 +256,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
     warnings.push(
       tr(
         `Le salaire est inférieur au SMIG (${fcfa(smig)} par mois, arrêté 3790 du 31 décembre 2022). Les cotisations sont calculées sur le SMIG, qui est leur plancher légal.`,
-        `The salary is below the minimum wage (${fcfa(smig)} a month, order 3790 of 31 December 2022). Contributions are computed on the minimum wage, their legal floor.`,
+        `This salary is below the minimum wage (${fcfa(smig)} a month, Order 3790 of 31 December 2022). Contributions are calculated on the minimum wage, which is their legal floor.`,
       ),
     );
   }
@@ -264,7 +264,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
     warnings.push(
       tr(
         `Le salaire de base est inférieur au minimum de la catégorie ${input.category} (${fcfa(catMin)}) fixé par la convention collective de 2026.`,
-        `The base salary is below the minimum of category ${input.category} (${fcfa(catMin)}) set by the 2026 collective agreement.`,
+        `The base salary is below the minimum for category ${input.category} (${fcfa(catMin)}) set by the 2026 collective agreement.`,
       ),
     );
   }
@@ -286,7 +286,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
       employer: 0,
       explain: tr(
         'Votre part de la cotisation retraite, versée à la CNSS. Elle ouvre vos droits à la pension. Elle se calcule sur tout le brut, avantages en nature compris, jamais moins que le SMIG, sans plafond.',
-        'Your share of the pension contribution, paid to the CNSS (national social security fund). It builds your pension rights. It is computed on the whole gross, benefits in kind included, never below the minimum wage, with no ceiling.',
+        'Your share of the pension contribution, paid to the CNSS (National Social Security Fund). It builds up your pension entitlement. It’s calculated on your total gross pay, including benefits in kind, never below the minimum wage and with no cap.',
       ),
       ref: cnss.ref,
     });
@@ -307,11 +307,11 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
         c.id === 'cnss_work_risk' && surcharge
           ? tr(
               `Taux majoré de ${Math.round(surcharge * 100)} % : l'employeur n'a pas corrigé les risques relevés lors d'un contrôle de prévention.`,
-              `Rate increased by ${Math.round(surcharge * 100)} %: the employer did not fix the risks found during a prevention inspection.`,
+              `Rate raised by ${Math.round(surcharge * 100)}%: the employer did not deal with hazards found during a safety inspection.`,
             )
           : tr(
               "Payée par l'employeur en plus du salaire brut. Elle ne réduit pas votre net, mais elle fait partie de ce que vous coûtez.",
-              'Paid by the employer on top of the gross salary. It does not reduce your net, but it is part of what you cost.',
+              'Paid by the employer on top of your gross salary. It doesn’t reduce your net pay, but it’s part of what you cost them.',
             ),
       ref: c.id === 'cnss_work_risk' && surcharge ? cnss.ref_surcharge : cnss.ref,
     });
@@ -334,7 +334,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
       tr(
         `Finance votre couverture santé : ${pct(amu.employee_rate + amu.employer_rate)} du salaire de base et des primes, moitié pour vous, moitié pour l'employeur.`,
         `Funds your health cover: ${pct(amu.employee_rate + amu.employer_rate)} of the base salary and bonuses, half paid by you, half by the employer.`,
-      ) + (benefitsInKind ? tr(' Les avantages en nature ne sont pas soumis à l’AMU.', ' Benefits in kind are not subject to the AMU.') : ''),
+      ) + (benefitsInKind ? tr(' Les avantages en nature ne sont pas soumis à l’AMU.', ' Benefits in kind are not subject to AMU.') : ''),
     ref: amu.ref,
   });
 
@@ -380,42 +380,42 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
   const irppSteps: IrppStep[] = [
     {
       kind: 'base',
-      label: tr('Revenu imposable de l’année', 'Taxable income of the year'),
+      label: tr('Revenu imposable de l’année', 'Annual taxable income'),
       amount: display.grossTaxable,
       note: exceptional
-        ? tr('Salaire imposable du mois × 12, plus le versement exceptionnel', 'Taxable salary of the month × 12, plus the one-off payment')
-        : tr('Salaire imposable du mois × 12, avantages en nature compris', 'Taxable salary of the month × 12, benefits in kind included'),
+        ? tr('Salaire imposable du mois × 12, plus le versement exceptionnel', 'Monthly taxable pay × 12, plus the one-off payment')
+        : tr('Salaire imposable du mois × 12, avantages en nature compris', 'Monthly taxable pay × 12, including benefits in kind'),
     },
-    { kind: 'minus', label: tr('Cotisations CNSS et AMU', 'CNSS and AMU contributions'), amount: display.pension + display.social, note: tr('Déduites avant tout calcul', 'Deducted before anything else') },
+    { kind: 'minus', label: tr('Cotisations CNSS et AMU', 'CNSS and AMU contributions'), amount: display.pension + display.social, note: tr('Déduites avant tout calcul', 'Deducted first') },
     {
       kind: 'minus',
-      label: tr(`Abattement forfaitaire de ${pct(ir.flat_allowance.rate)}`, `Flat deduction of ${pct(ir.flat_allowance.rate)}`),
+      label: tr(`Abattement forfaitaire de ${pct(ir.flat_allowance.rate)}`, `${pct(ir.flat_allowance.rate)} standard deduction`),
       amount: round(display.flatAllowance),
-      note: tr(`Pour les frais professionnels, sur la part qui ne dépasse pas ${fcfa(ir.flat_allowance.cap_income)}`, `For work expenses, on the part up to ${fcfa(ir.flat_allowance.cap_income)}`),
+      note: tr(`Pour les frais professionnels, sur la part qui ne dépasse pas ${fcfa(ir.flat_allowance.cap_income)}`, `For work expenses, on income up to ${fcfa(ir.flat_allowance.cap_income)}`),
     },
   ];
   if (display.voluntaryPension)
-    irppSteps.push({ kind: 'minus', label: tr('Épargne retraite volontaire', 'Voluntary pension savings'), amount: round(display.voluntaryPension), note: tr(`Dans la limite de ${pct(ir.voluntary_pension_cap)} du revenu net`, `Within ${pct(ir.voluntary_pension_cap)} of net income`) });
+    irppSteps.push({ kind: 'minus', label: tr('Épargne retraite volontaire', 'Voluntary pension savings'), amount: round(display.voluntaryPension), note: tr(`Dans la limite de ${pct(ir.voluntary_pension_cap)} du revenu net`, `Up to ${pct(ir.voluntary_pension_cap)} of net income`) });
   if (display.lifeInsurance)
     irppSteps.push({
       kind: 'minus',
       label: tr('Primes d’assurance vie', 'Life insurance premiums'),
       amount: round(display.lifeInsurance),
-      note: tr(`${fcfa(ir.life_insurance.base_cap)} au plus, plus ${fcfa(ir.life_insurance.per_child)} par enfant`, `${fcfa(ir.life_insurance.base_cap)} at most, plus ${fcfa(ir.life_insurance.per_child)} per child`),
+      note: tr(`${fcfa(ir.life_insurance.base_cap)} au plus, plus ${fcfa(ir.life_insurance.per_child)} par enfant`, `Up to ${fcfa(ir.life_insurance.base_cap)}, plus ${fcfa(ir.life_insurance.per_child)} per child`),
     });
   irppSteps.push(
     {
       kind: 'minus',
-      label: tr(`Charges de famille (${dependents} personne${dependents > 1 ? 's' : ''})`, `Dependents (${dependents} ${dependents > 1 ? 'people' : 'person'})`),
+      label: tr(`Charges de famille (${dependents} personne${dependents > 1 ? 's' : ''})`, `Dependants (${dependents} ${dependents > 1 ? 'people': 'person'})`),
       amount: display.dependentsDeduction,
-      note: tr(`${fcfa(ir.dependents.amount_per_month)} par personne et par mois, ${ir.dependents.max} au plus`, `${fcfa(ir.dependents.amount_per_month)} per person per month, ${ir.dependents.max} at most`),
+      note: tr(`${fcfa(ir.dependents.amount_per_month)} par personne et par mois, ${ir.dependents.max} au plus`, `${fcfa(ir.dependents.amount_per_month)} per person per month, up to ${ir.dependents.max}`),
     },
-    { kind: 'result', label: tr('Revenu net imposable', 'Net taxable income'), amount: display.taxableIncome, note: tr('Arrondi au millier inférieur', 'Rounded down to the thousand') },
+    { kind: 'result', label: tr('Revenu net imposable', 'Net taxable income'), amount: display.taxableIncome, note: tr('Arrondi au millier inférieur', 'Rounded down to the nearest thousand') },
     {
       kind: 'result',
       label: tr('Impôt de l’année', 'Tax for the year'),
       amount: irppAnnual,
-      note: exempt ? tr('Salaire d’apprenti sous contrat : exonéré', 'Apprentice under contract: exempt') : tr('Barème par tranches, arrondi à la dizaine inférieure', 'Progressive scale, rounded down to the ten'),
+      note: exempt ? tr('Salaire d’apprenti sous contrat : exonéré', 'Apprentice: exempt') : tr('Barème par tranches, arrondi à la dizaine inférieure', 'Tax brackets, rounded down to the nearest 10'),
     },
   );
 
@@ -428,10 +428,10 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
     employee: irpp,
     employer: 0,
     explain: exempt
-      ? tr("Les salaires des apprentis sous contrat d'apprentissage sont exonérés d'impôt sur le revenu.", 'Wages of apprentices under an apprenticeship contract are exempt from income tax.')
+      ? tr("Les salaires des apprentis sous contrat d'apprentissage sont exonérés d'impôt sur le revenu.", 'Apprentices on an apprenticeship contract pay no income tax.')
       : tr(
           "Retenu chaque mois par l'employeur et reversé à l'OTR avant le 15 du mois suivant. Il se calcule sur l'année : douze mois de salaire imposable, moins les cotisations, un abattement de 28 % et vos charges de famille, puis le barème par tranches, divisé par douze.",
-          'Withheld every month by the employer and paid to the OTR (tax office) by the 15th of the next month. It is computed over the year: twelve months of taxable salary, minus contributions, a 28 % flat deduction and your dependents, then the progressive scale, divided by twelve.',
+          'Withheld by your employer every month and paid to the OTR (Togo’s revenue authority) by the 15th of the following month. It’s calculated on a yearly basis: twelve months of taxable pay, minus contributions, a 28% standard deduction and your dependants, run through the tax brackets, then divided by twelve.',
         ),
     ref: exempt ? ir.ref_apprentice : ir.ref,
   });
@@ -446,7 +446,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
       employer: 0,
       explain: tr(
         "Versement volontaire à une retraite complémentaire, retenu sur le salaire. Il réduit l'impôt, dans la limite de 6 % du revenu net.",
-        'Voluntary payment to a supplementary pension, withheld from the salary. It reduces the tax, within 6 % of net income.',
+        'A voluntary contribution to a private pension, deducted from your pay. It lowers your tax, up to 6% of net income.',
       ),
       ref: ir.ref_deductions,
     });
@@ -454,13 +454,13 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
   if (benefitsInKind) {
     lines.push({
       id: 'benefits_back',
-      label: tr('Avantages en nature (reçus en nature)', 'Benefits in kind (received in kind)'),
+      label: tr('Avantages en nature (reçus en nature)', 'Benefits in kind (already received)'),
       kind: 'deduction',
       employee: benefitsInKind,
       employer: 0,
       explain: tr(
         "Les avantages en nature ont été ajoutés au brut pour calculer l'impôt et les cotisations. Ils sont retirés ici, puisque vous les recevez autrement qu'en argent.",
-        'Benefits in kind were added to the gross to compute tax and contributions. They are taken out here, since you receive them otherwise than in cash.',
+        'Benefits in kind were added to gross pay to work out tax and contributions. They’re taken back out here because you don’t receive them as cash.',
       ),
     });
   }
@@ -474,7 +474,7 @@ export function computePayslip(input: PayInput, rules: Rules, lang: Lang = 'fr')
       employer: 0,
       explain: tr(
         'Avances sur salaire, remboursement de prêt, mutuelle : seules les retenues prévues par le Code du travail sont permises, dans la limite de la quotité cessible.',
-        'Salary advances, loan repayments, mutual insurance: only the deductions allowed by the Labour Code are permitted, within the assignable share of the wage.',
+        'Salary advances, loan repayments, top-up health insurance: only deductions allowed by the Labour Code are permitted, and only up to the share of pay that can legally be withheld.',
       ),
       ref: { source: 'code-travail-2021', article: 'art. 173', page: 27 },
     });

@@ -5,7 +5,7 @@
   </picture>
 </p>
 
-<p align="center"><b>Les salaires en perspective.</b> Votre bulletin de paie au Togo, calculé sous vos yeux.</p>
+<p align="center"><b>Les salaires en perspective.</b> Votre bulletin de paie au Togo, calculé sous vos yeux. Par <a href="https://aconta.io">Aconta</a>.</p>
 
 <p align="center">
   <a href="README.md">English</a> · <b>Français</b>
@@ -114,7 +114,8 @@ slip.irpp;     // 2745
 rules/tg/2026.json        la loi en données : chaque valeur avec sa source, son article et sa page
 sources/                  la bibliothèque : originals/ (PDF), text/ (transcriptions), sources.json, tools/
 src/engine/               le moteur de paie en TypeScript pur et ses tests
-src/pages/                Simulateur, Comprendre, Les textes, Conditions
+src/pages/                routes Astro, sitemap.xml et llms.txt
+src/views/                Simulateur, Comprendre, Les textes, Conditions (React)
 src/components/           paramètres, bulletin, graphiques, en-tête et pied de page
 ```
 

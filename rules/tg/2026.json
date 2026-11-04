@@ -57,7 +57,7 @@
           "id": "cnss_work_risk",
           "label": "CNSS, risques professionnels",
           "rate": 0.02,
-          "label_en": "CNSS, work-related risks"
+          "label_en": "CNSS, occupational risks"
         },
         {
           "id": "cnss_pension_employer",
@@ -413,7 +413,7 @@
       "amu": true,
       "irpp": true,
       "cash": true,
-      "label_en": "Additional salary (sursalaire)"
+      "label_en": "Salary supplement (sursalaire)"
     },
     {
       "id": "prime_rendement",
@@ -431,7 +431,7 @@
       "amu": true,
       "irpp": true,
       "cash": true,
-      "label_en": "Function or responsibility allowance"
+      "label_en": "Position or responsibility allowance"
     },
     {
       "id": "prime_technicite",
@@ -503,7 +503,7 @@
       "amu": false,
       "irpp": false,
       "cash": true,
-      "label_en": "Refund of actual expenses"
+      "label_en": "Expenses reimbursed"
     },
     {
       "id": "aen_logement",
@@ -514,7 +514,7 @@
       "cash": false,
       "hint": "Valeur du loyer (CGI art. 20)",
       "label_en": "Housing provided",
-      "hint_en": "Value of the rent (CGI art. 20)"
+      "hint_en": "Rental value (CGI art. 20)"
     },
     {
       "id": "aen_vehicule",
@@ -525,7 +525,7 @@
       "cash": false,
       "hint": "Un tiers des frais du véhicule (CGI art. 20)",
       "label_en": "Company car",
-      "hint_en": "One third of the car costs (CGI art. 20)"
+      "hint_en": "One third of the car’s running costs (CGI art. 20)"
     },
     {
       "id": "aen_utilites",
@@ -534,7 +534,7 @@
       "amu": false,
       "irpp": true,
       "cash": false,
-      "label_en": "Water, electricity, phone"
+      "label_en": "Water, electricity and phone"
     },
     {
       "id": "aen_domesticite",
@@ -624,7 +624,7 @@
       "title": "Arrêté 003/2012, majoration des risques professionnels",
       "publisher": "Ministère du Travail",
       "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/arrete-2012-003-risques-professionnels.md",
-      "title_en": "Order 003/2012, work-risk surcharge"
+      "title_en": "Order 003/2012 on the occupational risk surcharge"
     },
     "decret-2023-096-taux-amu": {
       "title": "Décret 2023-096 sur les cotisations AMU",
@@ -646,15 +646,15 @@
     }
   },
   "not_modeled_en": [
-    "Public servants (CRT, INAM), self-employed (21.5 %) and informal workers (19.5 %): other regimes, not covered yet.",
-    "End-of-contract payments: retirement indemnity taxed at half (CGI art. 21), dismissal indemnity partly taxed (art. 22).",
+    "Civil servants (CRT, INAM), the self-employed (21.5%) and informal workers (19.5%): separate schemes, not covered yet.",
+    "End-of-contract payments: retirement payments taxed on half their amount (CGI art. 21), severance pay partly taxed (art. 22).",
     "Mortgage interest on the main home and maintenance payments (CGI art. 26, items 5 to 7): rare on a payslip, not covered yet.",
-    "Payroll tax: it does not exist in the 2025 tax code. No tax on the wage bill is applied.",
-    "Tax credit of 120 000 F a year for hiring a person with a disability (2026 finance law): it reduces the company's tax, not the payslip."
+    "Payroll tax: there is none in the 2025 tax code, so none is applied.",
+    "Tax credit of 120,000 F a year for hiring a person with a disability (2026 finance law): it reduces the company's tax, not the payslip."
   ],
   "open_questions_en": [
-    "Seniority bonus (CCIT 2026, art. 40): \"1 % per year of presence from the fourth year\" can be read two ways. The simulator adds one point a year (3 % at 4 years); the other reading gives a rate equal to the number of years (4 % at 4 years).",
+    "Seniority bonus (CCIT 2026, art. 40): \"1% per year of presence from the fourth year\" is open to two readings. The simulator adds one point a year (3% at 4 years); the other reading gives a rate equal to the number of years (4% at 4 years).",
     "AMU base: decree 2023-096 (art. 9) lists the base salary and taxable bonuses and allowances, not benefits in kind, which the Social Security Code (art. 12) includes for the CNSS. The simulator leaves benefits in kind out of the AMU.",
-    "Apprentices: the tax code (art. 23-4) exempts their wages from income tax. The simulator keeps CNSS and AMU contributions, as no text removes them."
+    "Apprentices: the tax code (art. 23-4) exempts their wages from income tax. The simulator still applies CNSS and AMU contributions, since no text exempts them."
   ]
 }

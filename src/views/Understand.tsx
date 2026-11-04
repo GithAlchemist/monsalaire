@@ -15,18 +15,18 @@ export function Understand({ s, rules, slip, computedBase }: { s: AppState; rule
       <header className="page-hero">
         <div className="kicker">{t('Comprendre', 'How it works')}</div>
         <h1>
-          {t('Comment votre salaire', 'How your salary')} <em>{t('est calculé', 'is computed')}</em>
+          {t('Comment votre salaire', 'How your pay')} <em>{t('est calculé', 'is calculated')}</em>
         </h1>
         <p className="lead">
           {t(
             "Le salaire brut n'est ni ce que vous touchez, ni ce que vous coûtez. Cette page suit chaque franc, de la poche de l'employeur jusqu'à votre compte, avec les chiffres de votre simulation.",
-            "Gross salary is neither what you receive nor what you cost. This page follows each franc, from the employer's pocket to your account, using the figures of your simulation.",
+            "Gross pay is neither what you take home nor what you cost your employer. This page follows every franc from your employer’s pocket to your bank account, using the figures from your simulation.",
           )}
         </p>
         <div className="sim-chip">
           <span>
-            {t('Votre simulation', 'Your simulation')} : <b>{fcfa(s.mode === 'net' ? computedBase : s.base)}</b> {t('de base', 'base')}
-            {deps ? ` · ${deps} ${t(deps > 1 ? 'personnes à charge' : 'personne à charge', deps > 1 ? 'dependents' : 'dependent')}` : ''} · {t('net', 'net')} <b>{fcfa(slip.netPay)}</b>
+            {t('Votre simulation :', 'Your simulation:')} <b>{fcfa(s.mode === 'net' ? computedBase : s.base)}</b> {t('de base', 'base')}
+            {deps ? ` · ${deps} ${t(deps > 1 ? 'personnes à charge' : 'personne à charge', deps > 1 ? 'dependants' : 'dependant')}` : ''} · {t('net', 'net')} <b>{fcfa(slip.netPay)}</b>
           </span>
           <Link to="home" className="sim-edit">
             {t('Modifier', 'Edit')} <Icon.arrow />
@@ -34,14 +34,14 @@ export function Understand({ s, rules, slip, computedBase }: { s: AppState; rule
         </div>
       </header>
 
-      <Section n="01" title={t('Le chemin de l’argent', 'Where the money goes')} lead={t("Chaque barre part de la précédente : ce que l'employeur dépense, puis ce que chacun prélève en route.", 'Each bar starts where the previous one ends: what the employer spends, then what is taken along the way.')}>
+      <Section n="01" title={t('Le chemin de l’argent', 'Where the money goes')} lead={t("Chaque barre part de la précédente : ce que l'employeur dépense, puis ce que chacun prélève en route.", 'Each bar starts where the previous one ends: what the employer spends, then what gets taken out along the way.')}>
         <div className="u-split">
           <div className="u-card">
             <Waterfall slip={slip} />
             <div className="read-notes">
               <p>
                 <b>{t('Charges patronales.', 'Employer contributions.')}</b>{' '}
-                {t('Payées par l’employeur en plus du brut : retraite, famille, accidents du travail, santé.', 'Paid by the employer on top of gross: pension, family, work accidents, health.')}
+                {t('Payées par l’employeur en plus du brut : retraite, famille, accidents du travail, santé.', 'Paid by the employer on top of gross pay: pension, family benefits, workplace injury, health.')}
               </p>
               <p>
                 <b>{t('Vos cotisations.', 'Your contributions.')}</b>{' '}
@@ -53,13 +53,13 @@ export function Understand({ s, rules, slip, computedBase }: { s: AppState; rule
             </div>
           </div>
           <div className="u-card">
-            <h3 className="u-h3">{t("Sur 100 F dépensés par l'employeur", 'Out of every 100 F the employer spends')}</h3>
+            <h3 className="u-h3">{t("Sur 100 F dépensés par l'employeur", 'For every 100 F the employer spends')}</h3>
             <Hundred slip={slip} />
           </div>
         </div>
       </Section>
 
-      <Section n="02" title={t('Trois montants à ne pas confondre', 'Three amounts not to mix up')}>
+      <Section n="02" title={t('Trois montants à ne pas confondre', 'Three figures not to confuse')}>
         <div className="trio">
           <Amount3
             tone="gross"
@@ -67,7 +67,7 @@ export function Understand({ s, rules, slip, computedBase }: { s: AppState; rule
             value={slip.grossTotal}
             text={t(
               'Tout ce que l’employeur vous attribue pour le mois : salaire de base, primes, heures supplémentaires et avantages en nature. C’est le chiffre du contrat, et la base des cotisations.',
-              'Everything the employer grants you for the month: base salary, bonuses, overtime and benefits in kind. It is the figure in the contract, and the base for contributions.',
+              'Everything your employer pays you for the month: base salary, bonuses, overtime and benefits in kind. It’s the figure in your contract, and the basis for contributions.',
             )}
           />
           <Amount3
@@ -76,7 +76,7 @@ export function Understand({ s, rules, slip, computedBase }: { s: AppState; rule
             value={slip.netPay}
             text={t(
               'Ce qui arrive sur votre compte : le brut moins vos cotisations et l’impôt, moins les avantages déjà reçus en nature et les avances, plus les frais remboursés.',
-              'What reaches your account: gross minus your contributions and tax, minus benefits already received in kind and advances, plus refunded expenses.',
+              'What lands in your account: gross pay minus your contributions and tax, minus benefits already received in kind and any advances, plus reimbursed expenses.',
             )}
           />
           <Amount3
@@ -85,7 +85,7 @@ export function Understand({ s, rules, slip, computedBase }: { s: AppState; rule
             value={slip.employerCost}
             text={t(
               'Le brut plus les charges patronales (CNSS et AMU) et les remboursements de frais. C’est ce que votre poste coûte vraiment, et ce qu’il faut avoir en tête pour négocier.',
-              'Gross plus employer contributions (CNSS and AMU) and expense refunds. It is what your job really costs, worth keeping in mind when you negotiate.',
+              'Gross pay plus employer contributions (CNSS and AMU) and reimbursed expenses. It’s what your job really costs, worth bearing in mind when you negotiate.',
             )}
           />
         </div>
@@ -96,7 +96,7 @@ export function Understand({ s, rules, slip, computedBase }: { s: AppState; rule
         title={t('Les cotisations sociales', 'Social contributions')}
         lead={t(
           'Elles financent votre retraite, les prestations familiales, les accidents du travail et votre assurance maladie. Elles se calculent sur le brut, jamais en dessous du SMIG, sans plafond.',
-          'They fund your pension, family benefits, work accidents and your health insurance. They are computed on gross pay, never below the minimum wage, with no ceiling.',
+          'They fund your pension, family benefits, workplace injury cover and health insurance. They’re calculated on gross pay, never below the minimum wage, with no cap.',
         )}
       >
         <Contributions slip={slip} rules={rules} />
@@ -107,7 +107,7 @@ export function Understand({ s, rules, slip, computedBase }: { s: AppState; rule
         title={t("L'impôt sur le revenu, pas à pas", 'Income tax, step by step')}
         lead={t(
           "L'IRPP se calcule sur l'année, puis l'employeur en retient un douzième chaque mois. Le barème est progressif : chaque taux ne frappe que la part du revenu qui tombe dans sa tranche.",
-          'The IRPP is computed over the year, then the employer withholds one twelfth each month. The scale is progressive: each rate only applies to the part of income within its bracket.',
+          'IRPP is calculated on a yearly basis, and your employer withholds one twelfth of it each month. The rates are progressive: each rate applies only to the slice of income that falls within its bracket.',
         )}
       >
         <div className="u-split tax">
@@ -124,21 +124,21 @@ export function Understand({ s, rules, slip, computedBase }: { s: AppState; rule
             ))}
           </ol>
           <div className="u-card">
-            <h3 className="u-h3">{t('Le barème, tranche par tranche', 'The scale, bracket by bracket')}</h3>
+            <h3 className="u-h3">{t('Le barème, tranche par tranche', 'Bracket by bracket')}</h3>
             <TaxStairs slip={slip} />
             <Brackets slip={slip} />
           </div>
         </div>
       </Section>
 
-      <Section n="05" title={t('Les règles qui s’appliquent', 'The rules that apply')} lead={t('Les repères à connaître, chacun avec son texte.', 'The key figures, each with its legal text.')}>
+      <Section n="05" title={t('Les règles qui s’appliquent', 'The rules that apply')} lead={t('Les repères à connaître, chacun avec son texte.', 'The key figures, each with its source.')}>
         <Facts rules={rules} />
       </Section>
 
       <Link to="sources" className="next-link wide">
         <span>
           <strong>{t('Les textes officiels', 'The official texts')}</strong>
-          <span>{t('13 textes archivés et transcrits page par page, et ce que le simulateur ne couvre pas encore.', '13 texts archived and transcribed page by page, and what the simulator does not cover yet.')}</span>
+          <span>{t('13 textes archivés et transcrits page par page, et ce que le simulateur ne couvre pas encore.', '13 texts archived and transcribed page by page, plus what the simulator doesn’t cover yet.')}</span>
         </span>
         <Icon.arrow />
       </Link>
@@ -239,7 +239,7 @@ function Brackets({ slip }: { slip: Payslip }) {
         <tr>
           <th>{t('Tranche annuelle', 'Annual bracket')}</th>
           <th className="r">{t('Taux', 'Rate')}</th>
-          <th className="r">{t('Votre part', 'Your part')}</th>
+          <th className="r">{t('Votre part', 'Your income in it')}</th>
           <th className="r">{t('Impôt', 'Tax')}</th>
         </tr>
       </thead>
@@ -266,11 +266,11 @@ function Facts({ rules }: { rules: Rules }) {
   const { fcfa, pct } = useFmt();
   const facts = [
     { k: fcfa(rules.minimum_wage.smig_monthly), l: t('SMIG par mois, soit 302,89 F de l’heure', 'minimum wage a month, 302.89 F an hour'), ref: rules.minimum_wage.ref },
-    { k: `${rules.working_time.weekly_hours} h`, l: t(`par semaine ; le taux horaire divise le salaire par ${rules.working_time.monthly_hours} h`, `a week; the hourly rate divides the salary by ${rules.working_time.monthly_hours} h`), ref: rules.working_time.ref_hours },
-    { k: '+20 % · +40 %', l: t('heures supplémentaires de jour, de la 41e à la 48e heure puis au-delà ; +65 % à +100 % la nuit et les jours fériés', 'daytime overtime, 41st to 48th hour then beyond; +65 % to +100 % at night and on holidays'), ref: rules.overtime.ref },
-    { k: `2 % → ${pct(rules.seniority.cap, 0)}`, l: t(`prime d'ancienneté : 2 % à deux ans, ${pct(seniorityRate(10, rules), 0)} à dix ans, sur le minimum de la catégorie`, `seniority bonus: 2 % at two years, ${pct(seniorityRate(10, rules), 0)} at ten years, on the category minimum`), ref: rules.seniority.ref },
-    { k: '28 %', l: t('abattement pour frais professionnels avant l’impôt, sur la part jusqu’à 10 M par an', 'flat deduction for work expenses before tax, on the part up to 10 M a year'), ref: rules.irpp.ref_deductions },
-    { k: '10 000 F', l: t('de revenu en moins par personne à charge et par mois, six au plus', 'less taxable income per dependent per month, six at most'), ref: rules.irpp.ref_dependents },
+    { k: `${rules.working_time.weekly_hours} h`, l: t(`par semaine ; le taux horaire divise le salaire par ${rules.working_time.monthly_hours} h`, `a week; the hourly rate is the monthly salary divided by ${rules.working_time.monthly_hours} h`), ref: rules.working_time.ref_hours },
+    { k: t('+20 % · +40 %', '+20% · +40%'), l: t('heures supplémentaires de jour, de la 41e à la 48e heure puis au-delà ; +65 % à +100 % la nuit et les jours fériés', 'daytime overtime, from the 41st to the 48th hour, then beyond; +65% to +100% at night and on public holidays'), ref: rules.overtime.ref },
+    { k: `${pct(0.02, 0)} → ${pct(rules.seniority.cap, 0)}`, l: t(`prime d'ancienneté : 2 % à deux ans, ${pct(seniorityRate(10, rules), 0)} à dix ans, sur le minimum de la catégorie`, `seniority bonus: 2% at two years, ${pct(seniorityRate(10, rules), 0)} at ten years, on the category minimum`), ref: rules.seniority.ref },
+    { k: pct(rules.irpp.flat_allowance.rate, 0), l: t('abattement pour frais professionnels avant l’impôt, sur la part jusqu’à 10 M par an', 'standard deduction for work expenses before tax, on income up to 10 M a year'), ref: rules.irpp.ref_deductions },
+    { k: fcfa(rules.irpp.dependents.amount_per_month), l: t('de revenu en moins par personne à charge et par mois, six au plus', 'less taxable income per dependant per month, up to six'), ref: rules.irpp.ref_dependents },
   ];
   return (
     <div className="facts">

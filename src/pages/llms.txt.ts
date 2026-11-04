@@ -7,7 +7,7 @@ import { SITE } from '../seo';
  */
 export function GET() {
   const r = rulesFor(new Date().toISOString().slice(0, 10));
-  const pct = (x: number) => `${+(x * 100).toFixed(2)} %`;
+  const pct = (x: number) => `${+(x * 100).toFixed(2)}%`;
   const f = (n: number) => `${n.toLocaleString('en-GB')} FCFA`;
   const cite = (ref?: Ref) => {
     if (!ref) return '';
@@ -44,7 +44,7 @@ Rules version ${r.version}, checked against the official texts on ${r.verified_o
 - Minimum wage (SMIG): ${f(r.minimum_wage.smig_monthly)} a month, ${r.minimum_wage.smig_hourly} FCFA an hour${cite(r.minimum_wage.ref)}.
 - CNSS, employee: ${cnss.employee.map((c) => pct(c.rate)).join(' + ')} of gross pay (pension). Employer: ${employer}${cnss.ceiling === null ? ". No ceiling" : ""}${cite(cnss.ref)}.
 - AMU (universal health insurance): ${pct(r.social.amu.employee_rate)} employee and ${pct(r.social.amu.employer_rate)} employer${cite(r.social.amu.ref)}.
-- Income tax (IRPP), computed over the year and withheld monthly. Taxable income = yearly salary minus the employee contributions, minus a flat ${pct(r.irpp.flat_allowance.rate)} allowance for work expenses (on the part up to ${f(r.irpp.flat_allowance.cap_income)}), minus ${f(r.irpp.dependents.amount_per_month)} a month per dependant (${r.irpp.dependents.max} at most)${cite(r.irpp.ref_deductions)}. Yearly brackets:
+- Income tax (IRPP), computed over the year and withheld monthly. Taxable income = yearly salary minus the employee contributions, minus a ${pct(r.irpp.flat_allowance.rate)} standard deduction for work expenses (on the part up to ${f(r.irpp.flat_allowance.cap_income)}), minus ${f(r.irpp.dependents.amount_per_month)} a month per dependant (${r.irpp.dependents.max} at most)${cite(r.irpp.ref_deductions)}. Yearly brackets:
 ${brackets}
   Brackets${cite(r.irpp.ref)}.
 `;

@@ -122,7 +122,7 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
             <dd>{category || t('Non précisée', 'Not set')}</dd>
           </div>
           <div>
-            <dt>{t('Personnes à charge, taux horaire', 'Dependents, hourly rate')}</dt>
+            <dt>{t('Personnes à charge, taux horaire', 'Dependants, hourly rate')}</dt>
             <dd className="num">
               {slip.dependents} · {money(slip.hourlyRate)} F/h
             </dd>
@@ -132,7 +132,7 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
         <table className="slip">
           <thead>
             <tr>
-              <th scope="col">{t('Libellé', 'Item')}</th>
+              <th scope="col">{t('Libellé', 'Description')}</th>
               <th scope="col" className="hide-sm">
                 {t('Base', 'Base')}
               </th>
@@ -161,7 +161,7 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
             {contributions.map(row)}
             {group(t('Impôt sur le revenu', 'Income tax'), '#c8102e')}
             {tax.map(row)}
-            {after.length > 0 && group(t('Hors brut', 'Outside gross'), '#6a6255')}
+            {after.length > 0 && group(t('Hors brut', 'Not part of gross'), '#6a6255')}
             {after.map(row)}
             <tr className={`total${totalFlash ? ' flash' : ''}`}>
               <td>{t('Totaux', 'Totals')}</td>
@@ -196,7 +196,7 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
             <span className="switch" aria-hidden="true" />
             {t('Part employeur', 'Employer share')}
           </label>
-          <span>{t('Touchez une ligne pour voir son calcul et son texte de loi.', 'Tap a line to see how it is computed and its legal text.')}</span>
+          <span>{t('Touchez une ligne pour voir son calcul et son texte de loi.', 'Tap a line to see how it’s worked out and the law behind it.')}</span>
           <span>
             {t('Règles', 'Rules')} {rules.version}, {t('vérifiées le', 'checked on')} {date(rules.verified_on)}
           </span>

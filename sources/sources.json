@@ -35,7 +35,7 @@
     "short_fr": "Cahier fiscal de la loi de finances 2026",
     "use_fr": "Vérifie que 2026 ne change rien à l’impôt sur les salaires",
     "short_en": "2026 finance law, OTR summary",
-    "use_en": "Checks that 2026 changes nothing on wage tax"
+    "use_en": "Confirms 2026 brings no change to tax on wages"
   },
   {
     "id": "ccit-2026",
@@ -59,7 +59,7 @@
     "short_fr": "Convention collective interprofessionnelle 2026",
     "use_fr": "Grille des salaires, ancienneté, heures sup, primes",
     "short_en": "2026 interprofessional collective agreement",
-    "use_en": "Wage grid, seniority, overtime, allowances"
+    "use_en": "Pay scale, seniority, overtime, allowances"
   },
   {
     "id": "ccit-2011",
@@ -97,7 +97,7 @@
     "short_fr": "Code de sécurité sociale (loi 2011-006)",
     "use_fr": "Assiette CNSS, plancher au SMIG, pas de plafond",
     "short_en": "Social Security Code (law 2011-006)",
-    "use_en": "CNSS base, minimum wage floor, no ceiling"
+    "use_en": "CNSS base, minimum wage floor, no cap"
   },
   {
     "id": "decret-2012-038-taux-cnss",
@@ -115,7 +115,7 @@
     "short_fr": "Décret 2012-038 sur les taux CNSS",
     "use_fr": "4 % salarié, 17,5 % employeur",
     "short_en": "Decree 2012-038 on CNSS rates",
-    "use_en": "4 % employee, 17.5 % employer"
+    "use_en": "4% employee, 17.5% employer"
   },
   {
     "id": "arrete-2012-003-risques-professionnels",
@@ -169,7 +169,7 @@
     "short_fr": "Loi 2021-022 sur l’assurance maladie universelle",
     "use_fr": "Fondement de l’AMU",
     "short_en": "Law 2021-022 on universal health insurance",
-    "use_en": "Legal basis of the AMU"
+    "use_en": "Legal basis for AMU"
   },
   {
     "id": "decret-2023-096-taux-amu",
@@ -192,7 +192,7 @@
     "short_fr": "Décret 2023-096 sur les cotisations AMU",
     "use_fr": "Assiette et taux : 5 % et 5 %",
     "short_en": "Decree 2023-096 on AMU contributions",
-    "use_en": "Base and rates: 5 % and 5 %"
+    "use_en": "Base and rates: 5% and 5%"
   },
   {
     "id": "decret-2023-097-gestion-amu",
@@ -210,7 +210,7 @@
     "short_fr": "Décret 2023-097 sur la gestion de l’AMU",
     "use_fr": "CNSS pour le privé, INAM pour le public",
     "short_en": "Decree 2023-097 on AMU management",
-    "use_en": "CNSS for the private sector, INAM for the public"
+    "use_en": "CNSS for the private sector, INAM for the public sector"
   },
   {
     "id": "code-travail-2021",
@@ -232,7 +232,7 @@
     "short_fr": "Code du travail (loi 2021-012)",
     "use_fr": "Salaire, SMIG, retenues permises, 40 h",
     "short_en": "Labour Code (law 2021-012)",
-    "use_en": "Wage, minimum wage, allowed deductions, 40 h"
+    "use_en": "Pay, minimum wage, permitted deductions, 40-hour week"
   },
   {
     "id": "arrete-3790-smig-2022",
@@ -250,6 +250,6 @@
     "short_fr": "Arrêté 3790 sur le SMIG",
     "use_fr": "52 500 F par mois depuis 2023",
     "short_en": "Order 3790 on the minimum wage",
-    "use_en": "52 500 F a month since 2023"
+    "use_en": "52,500 F a month since 2023"
   }
 ]

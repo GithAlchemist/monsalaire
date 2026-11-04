@@ -10,52 +10,52 @@ export function Terms() {
         <h1>
           {t("Conditions d'utilisation", 'Terms of use')} <em>{t('et confidentialité', 'and privacy')}</em>
         </h1>
-        <p className="lead">{t('Courtes, parce qu’il n’y a presque rien à cacher : pas de compte, et vos montants ne quittent pas votre navigateur.', 'Short, because there is almost nothing to hide: no account, and your figures never leave your browser.')}</p>
+        <p className="lead">{t('Courtes, parce qu’il n’y a presque rien à cacher : pas de compte, et vos montants ne quittent pas votre navigateur.', 'Short, because there’s little to declare: no sign-up, and your figures never leave your browser.')}</p>
       </header>
 
       <div className="prose">
-        <h2>{t('Ce qu’est monsalaire', 'What monsalaire is')}</h2>
+        <h2>{t('Ce qu’est monsalaire', 'About monsalaire')}</h2>
         <p>
           {t(
             'monsalaire est un simulateur gratuit et libre. Il calcule un bulletin de paie indicatif pour un salarié du secteur privé au Togo, au régime général, d’après les textes officiels listés sur la page',
             'monsalaire is a free, open-source simulator. It computes an indicative payslip for a private-sector employee in Togo under the general regime, based on the official texts listed on the page',
           )}{' '}
-          <Link to="sources">{t('Les textes', 'Legal texts')}</Link>.
+          <Link to="sources">{t('Les textes', 'Sources')}</Link>.
         </p>
 
         <h2>{t('Une simulation, pas un bulletin officiel', 'A simulation, not an official payslip')}</h2>
         <p>
           {t(
             'Le résultat est une estimation. Il ne remplace ni le bulletin de votre employeur, ni l’avis d’un comptable, d’un juriste ou de l’administration (OTR, CNSS, inspection du travail). Les auteurs ne peuvent être tenus responsables d’une décision prise sur la base de ce calcul.',
-            'The result is an estimate. It replaces neither your employer’s payslip nor the advice of an accountant, a lawyer or the administration (OTR, CNSS, labour inspectorate). The authors cannot be held liable for any decision taken on the basis of this calculation.',
+            'The result is an estimate. It is no substitute for your employer’s payslip or for advice from an accountant, a lawyer or the authorities (OTR, CNSS, labour inspectorate). The authors accept no liability for decisions made on the basis of this calculation.',
           )}
         </p>
 
         <h2 id="confidentialite">{t('Confidentialité', 'Privacy')}</h2>
         <ul>
-          <li>{t('Tout le calcul se fait dans votre navigateur. Aucun chiffre saisi n’est envoyé à un serveur.', 'All calculation happens in your browser. No figure you type is sent to a server.')}</li>
+          <li>{t('Tout le calcul se fait dans votre navigateur. Aucun chiffre saisi n’est envoyé à un serveur.', 'All calculations run in your browser. Nothing you type is sent to a server.')}</li>
           <li>
             {t(
               'Pas de compte, pas de cookie, pas de publicité.',
-              'No account, no cookie, no advertising.',
+              'No sign-up, no cookies, no advertising.',
             )}
           </li>
           <li>
             {t(
               'Une mesure d’audience anonyme et sans cookie (Vercel Web Analytics et Speed Insights) compte les pages vues et leur vitesse d’affichage. Elle ne reçoit ni les montants saisis ni la partie de l’adresse qui les contient, et ne permet pas de vous identifier.',
-              'An anonymous, cookie-free audience measurement (Vercel Web Analytics and Speed Insights) counts page views and how fast pages load. It never receives the figures you type nor the part of the address that holds them, and cannot identify you.',
+              'Anonymous, cookie-free analytics (Vercel Web Analytics and Speed Insights) count page views and load times. They never receive the figures you type or the part of the address that contains them, and cannot identify you.',
             )}
           </li>
           <li>
             {t(
               'Votre navigateur garde seulement, chez vous, la langue, le thème et votre dernière simulation, pour les retrouver à la prochaine visite. Vider les données du site les efface.',
-              'Your browser only keeps, on your device, the language, the theme and your last simulation, to find them on your next visit. Clearing the site data erases them.',
+              'Your browser stores only your language, theme and last simulation, on your device, so they are there next time. Clearing the site’s data removes them.',
             )}
           </li>
           <li>
             {t(
               'Un lien partagé contient les paramètres de la simulation dans son adresse : ne le partagez qu’avec qui vous voulez.',
-              'A shared link carries the simulation’s parameters in its address: share it only with whom you choose.',
+              'A shared link contains your simulation’s figures in its address, so only share it with people you choose.',
             )}
           </li>
           <li>{t('Les polices d’écriture sont chargées depuis Google Fonts.', 'Fonts are loaded from Google Fonts.')}</li>

@@ -23,7 +23,7 @@ export function Waterfall({ slip }: { slip: Payslip }) {
   const steps: Step[] = [
     { name: t('Coût pour l’employeur', 'Cost to the employer'), from: 0, to: cost, color: 'var(--ink-3)', strong: true },
     { name: t('Charges patronales', 'Employer contributions'), from: gross, to: cost, color: 'var(--line-2)', sign: '−' },
-    { name: slip.reimbursements ? t('Brut et remboursements', 'Gross and refunds') : t('Salaire brut', 'Gross salary'), from: 0, to: gross, color: 'var(--forest-3)', strong: true },
+    { name: slip.reimbursements ? t('Brut et remboursements', 'Gross and reimbursements') : t('Salaire brut', 'Gross salary'), from: 0, to: gross, color: 'var(--forest-3)', strong: true },
     { name: t('Vos cotisations', 'Your contributions'), from: afterContrib, to: gross, color: 'var(--gold)', sign: '−' },
     { name: t('Impôt (IRPP)', 'Income tax (IRPP)'), from: afterTax, to: afterContrib, color: 'var(--red)', sign: '−' },
   ];
@@ -63,7 +63,7 @@ export function Hundred({ slip }: { slip: Payslip }) {
   const total = slip.employerCost;
   if (total <= 0) return null;
   const parts = [
-    { v: slip.netPay, c: 'var(--brand)', label: t('Pour vous', 'For you') },
+    { v: slip.netPay, c: 'var(--brand)', label: t('Pour vous', 'You') },
     { v: slip.employeeContributions, c: 'var(--gold)', label: t('Vos cotisations', 'Your contributions') },
     { v: slip.employerContributions, c: 'var(--line-2)', label: t('Charges patronales', 'Employer contributions') },
     { v: slip.irpp, c: 'var(--red)', label: t('Impôt', 'Income tax') },
@@ -84,7 +84,7 @@ export function Hundred({ slip }: { slip: Payslip }) {
   const dots = parts.flatMap((p, i) => Array.from({ length: n[i] }, () => p.c));
   return (
     <div className="hundred-wrap">
-      <div className="hundred" role="img" aria-label={t(`Sur 100 F dépensés par l'employeur, ${n[0]} F vous reviennent.`, `Of every 100 F the employer spends, ${n[0]} F reach you.`)}>
+      <div className="hundred" role="img" aria-label={t(`Sur 100 F dépensés par l'employeur, ${n[0]} F vous reviennent.`, `For every 100 F the employer spends, you take home ${n[0]} F.`)}>
         {dots.map((c, i) => (
           <i key={i} style={{ ['--c' as string]: c }} />
         ))}
@@ -112,12 +112,12 @@ export function TaxStairs({ slip }: { slip: Payslip }) {
   const maxRate = Math.max(...slip.irppBrackets.map((b) => b.rate), 0.35);
   const active = [...slip.irppBrackets].reverse().find((b) => b.taxed > 0);
   return (
-    <div className="stairs" role="img" aria-label={t('Barème par tranches : la part de votre revenu dans chaque tranche', 'Progressive scale: the part of your income in each bracket')}>
+    <div className="stairs" role="img" aria-label={t('Barème par tranches : la part de votre revenu dans chaque tranche', 'Tax brackets: how much of your income falls in each')}>
       {slip.irppBrackets.map((b) => {
         const size = b.to === null ? 10_000_000 : b.to - b.from;
         const fill = Math.min(1, b.taxed / size);
         return (
-          <div key={b.from} className={`stair${active === b && b.rate > 0 ? ' active' : ''}`} style={{ height: `${24 + (b.rate / maxRate) * 76}%` }} title={`${money(b.from)} ${t('à', 'to')} ${b.to ? money(b.to) : '…'} : ${pct(b.rate, 0)}`}>
+          <div key={b.from} className={`stair${active === b && b.rate > 0 ? ' active' : ''}`} style={{ height: `${24 + (b.rate / maxRate) * 76}%` }} title={`${money(b.from)} ${t('à', 'to')} ${b.to ? money(b.to) : '…'}${t(' :', ':')} ${pct(b.rate, 0)}`}>
             <span className="rate">{pct(b.rate, 0)}</span>
             <span className="fill" style={{ height: `${fill * 100}%` }} />
             <span className="lbl">{b.to === null ? '20 M+' : b.to >= 1_000_000 ? `${b.to / 1_000_000} M` : `${b.to / 1000} k`}</span>

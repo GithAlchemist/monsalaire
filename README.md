@@ -5,7 +5,7 @@
   </picture>
 </p>
 
-<p align="center"><b>Salaries in perspective.</b> Your payslip in Togo, computed before your eyes.</p>
+<p align="center"><b>Salaries in perspective.</b> Your Togo payslip, worked out as you type. By <a href="https://aconta.io">Aconta</a>.</p>
 
 <p align="center">
   <b>English</b> · <a href="README.fr.md">Français</a>
@@ -20,9 +20,9 @@
 </p>
 
 <p align="center">
-  <b>Type a salary. Watch the payslip build itself.</b><br>
-  Contributions, income tax, net pay and employer cost update with every digit,<br>
-  and every single line links to the article and page of the law it comes from.
+  <b>Enter a salary. Watch the payslip build itself.</b><br>
+  Contributions, income tax, net pay and employer cost update as you type,<br>
+  and every line links to the article and page of the law behind it.
 </p>
 
 <br>
@@ -33,26 +33,26 @@
 
 ## Why
 
-In Togo, most people learn what their salary really is when the first payslip arrives. Online calculators, when
-they exist, show a number without saying where it comes from, and often apply rates from another country.
+In Togo, most people only find out what their salary is really worth when their first payslip arrives. Online calculators,
+where they exist, give a number without saying where it comes from, and often use another country's rates.
 
-**monsalaire** does the opposite: it is a full payroll engine built only from Togolese texts, it runs in your
-browser, and it shows its work. Ask for 400 000 F net, and it tells you the base salary to negotiate. Tap any line,
+**monsalaire** does the opposite: it is a complete payroll engine built solely from Togolese law, it runs in your
+browser, and it shows its working. Ask for 400,000 F net and it tells you the base salary to negotiate. Tap any line
 and it tells you why, with the article and the page.
 
 ## What it does
 
 | | |
 |---|---|
-| **Live payslip** | Gross, CNSS, AMU, income tax (IRPP), net pay and employer cost, recomputed at every keystroke. |
-| **Gross to net, net to gross** | Type the net you want: the engine finds the base salary to ask for, to the franc. |
-| **Everything on a real payslip** | Bonuses and allowances, benefits in kind, overtime at the five legal rates, 13th month taxed at the margin, seniority bonus, meal and mission allowances, advances. |
-| **The 2026 collective agreement** | Categories E1 to C4 with their minimum wages, seniority on the category minimum, warnings below the minimum. |
-| **Family and savings** | Spouse, children and other dependents (6 at most), voluntary pension and life insurance deductions, apprentice exemption. |
-| **Explained** | A How it works page: where each franc goes, the tax step by step, contributions and what they pay for. |
+| **Live payslip** | Gross, CNSS, AMU, income tax (IRPP), net pay and employer cost, recalculated as you type. |
+| **Gross to net, net to gross** | Enter the net pay you want and the engine finds the base salary to ask for, to the franc. |
+| **Everything on a real payslip** | Bonuses and allowances, benefits in kind, overtime at the five legal rates, 13th month taxed at the margin, seniority bonus, meal and travel allowances, advances. |
+| **The 2026 collective agreement** | Categories E1 to C4 with their minimum wages, seniority bonus based on the category minimum, a warning when pay falls below it. |
+| **Family and savings** | Spouse, children and other dependants (up to 6), voluntary pension and life insurance deductions, apprentice exemption. |
+| **Explained** | A How it works page: where every franc goes, the tax step by step, and what contributions pay for. |
 | **Sourced** | 13 official texts archived in the repo with page-by-page transcriptions; every rule cites `{ source, article, page }`. |
-| **Private by design** | No account, no server, no cookie. The figures you type never leave the browser; only anonymous, cookie-free page views and load times are counted (Vercel Web Analytics and Speed Insights). Shareable links carry the simulation in the URL. |
-| **Bilingual** | French and English, site and payslip alike. Light and dark themes, phone first, print-ready. |
+| **Private by design** | No sign-up, no server, no cookies. The figures you type never leave the browser; only anonymous, cookie-free page views and load times are counted (Vercel Web Analytics and Speed Insights). Shareable links carry the simulation in the URL. |
+| **Bilingual** | French and English, site and payslip alike. Light and dark themes, built for phones first, print-ready. |
 
 <p align="center">
   <img src="docs/screenshots/understand-en.png" alt="The How it works page: from employer cost to net pay, and where 100 F go" width="100%">
@@ -73,14 +73,14 @@ A few of the rules, as checked on 4 November 2026 ([full table](sources/README.m
 
 | Rule | Value | Where it comes from |
 |---|---|---|
-| CNSS | 4 % employee, 17.5 % employer; no ceiling; never below the minimum wage | Decree 2012-038, art. 1 to 3 · Social Security Code, art. 12 |
-| AMU (health) | 5 % employee, 5 % employer | Decree 2023-096, art. 12 and 29 |
-| Income tax | 28 % flat deduction, 10 000 F per dependent a month, scale 0 to 35 % | Tax code 2025, art. 26, 72, 73, 74 |
-| Minimum wage | 52 500 F a month | Order 3790 of 31 December 2022 |
-| Overtime | +20 %, +40 %, +65 %, +100 %; hourly rate = (base + additional salary) / 173.33 | Collective agreement 2026, art. 36 |
+| CNSS | 4% employee, 17.5% employer; no cap; never below the minimum wage | Decree 2012-038, art. 1 to 3 · Social Security Code, art. 12 |
+| AMU (health) | 5% employee, 5% employer | Decree 2023-096, art. 12 and 29 |
+| Income tax | 28% standard deduction, 10,000 F per dependant a month, brackets from 0 to 35% | Tax code 2025, art. 26, 72, 73, 74 |
+| Minimum wage | 52,500 F a month | Order 3790 of 31 December 2022 |
+| Overtime | +20%, +40%, +65%, +100%; hourly rate = (base + salary supplement) / 173.33 | Collective agreement 2026, art. 36 |
 
-Where a text can be read two ways, the simulator says so and states its choice. Nothing is taken from a
-calculator of another country.
+Where the law is open to interpretation, the simulator says so and states its reading. Nothing is borrowed from
+another country's calculator.
 
 ## Quick start
 
@@ -113,7 +113,8 @@ slip.irpp;     // 2745
 rules/tg/2026.json        the law as data: every value with its source, article and page
 sources/                  the legal library: originals/ (PDF), text/ (transcriptions), sources.json, tools/
 src/engine/               pure TypeScript payroll engine and its tests
-src/pages/                Simulator, How it works, Legal texts, Terms
+src/pages/                Astro routes, sitemap.xml and llms.txt
+src/views/                Simulator, How it works, Sources, Terms (React)
 src/components/           controls, payslip, charts, header and footer
 ```
 
@@ -125,26 +126,26 @@ The site has four pages, in both languages: `/` and `/en` (simulator), `/compren
 - [x] Togo, private sector, general regime: CNSS, AMU, IRPP, collective agreement 2026
 - [x] Legal library: 13 official texts, transcribed page by page
 - [x] French and English
-- [ ] Public servants (CRT pension, INAM health), self-employed and informal workers
-- [ ] End-of-contract payments (retirement and dismissal indemnities)
+- [ ] Civil servants (CRT pension, INAM health), the self-employed and informal workers
+- [ ] End-of-contract payments (retirement payments and severance pay)
 - [ ] **Other countries**: Benin, Senegal, Côte d'Ivoire, Burkina Faso, Ghana
-- [ ] **Compare countries**: the same income, net of tax, corrected for the cost of living (purchasing power parity)
+- [ ] **Compare countries**: the same income after tax, adjusted for the cost of living (purchasing power parity)
 
 ## Contributing
 
-The most valuable contribution is a correction backed by a text. Found a rate that changed, a rule that is wrong,
-a case not covered? [Report a rule](https://github.com/GithAlchemist/monsalaire/issues/new?template=rule-error.yml)
+The most valuable contribution is a correction backed by a text. Spotted a rate that has changed, a rule that is wrong
+or a case that isn't covered? [Report a rule](https://github.com/GithAlchemist/monsalaire/issues/new?template=rule-error.yml)
 with the legal text (link, article, date). Rules are data: most fixes are a JSON change and a test.
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) to set up the project, add a country or update the rules for a new year.
 
 ## Disclaimer
 
-monsalaire gives an indicative simulation for private-sector employees under the general regime. It replaces
-neither your employer's payslip nor professional advice.
+monsalaire gives an indicative estimate for private-sector employees under the general regime. It is no substitute
+for your employer's payslip or professional advice.
 
 ## Licence
 
 [MIT](LICENSE). The archived legal texts are public documents of the Togolese Republic.
 
-<p align="center"><sub>For everyone who has ever wondered where their salary went.</sub></p>
+<p align="center"><sub>For everyone who has ever wondered where their pay went.</sub></p>

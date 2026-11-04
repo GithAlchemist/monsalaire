@@ -42,4 +42,7 @@ then `src/App.tsx` hydrates and restores the simulation from the hash or localSt
 - Published by Aconta: "par Aconta" signature in the header, "Autres projets" in the footer, links built with
   `acontaLink(place)` (`src/seo.ts`). Aconta does no payroll: never say or imply it manages salaries, and no pitch
   or "why Aconta offers this" paragraph (Kévin, 4 November 2026).
-- Domain: `monsalaire.aconta.io` (Vercel). No Vercel deployment until Kévin asks.
+- Deployed: every push to `main` goes to production on Vercel (https://monsalaire-aconta.vercel.app, then
+  `monsalaire.aconta.io`). Check the build and the pages before pushing.
+- English is written as natural British English, never translated word for word; English typography (`4%`,
+  `250,000 F`, no space before a colon).

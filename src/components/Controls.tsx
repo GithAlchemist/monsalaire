@@ -39,7 +39,7 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
       </div>
 
       <Seg
-        label={t('Type de calcul', 'Calculation')}
+        label={t('Type de calcul', 'Calculation type')}
         value={s.mode}
         onChange={(mode) => set({ mode, ...(mode === 'gross' && s.mode === 'net' ? { base: computedBase } : {}), ...(mode === 'net' && s.mode === 'gross' ? { targetNet: s.targetNet || 250000 } : {}) })}
         options={[
@@ -59,12 +59,12 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
         </Field>
       ) : (
         <Field
-          label={t('Net que vous voulez toucher', 'Net pay you want')}
+          label={t('Net que vous voulez toucher', 'Target net pay')}
           aside={t('par mois', 'a month')}
           hint={
             <>
               {t('Salaire de base à demander :', 'Base salary to ask for:')} <strong>{fcfa(computedBase)}</strong>
-              {t(', avec les primes et la situation ci-dessous.', ', with the bonuses and situation below.')}
+              {t(', avec les primes et la situation ci-dessous.', ', given the bonuses and details below.')}
             </>
           }
         >
@@ -78,18 +78,18 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
       )}
 
       <Field
-        label={t('Personnes à charge', 'Dependents')}
-        aside={t(`${Math.min(deps, maxDeps)} sur ${maxDeps} au plus`, `${Math.min(deps, maxDeps)} of ${maxDeps} at most`)}
+        label={t('Personnes à charge', 'Dependants')}
+        aside={t(`${Math.min(deps, maxDeps)} sur ${maxDeps} au plus`, `${Math.min(deps, maxDeps)} of ${maxDeps} max`)}
         hint={t(
           "Conjoint sans revenu, enfants de moins de 21 ans (25 s'ils étudient), parents invalides qui vivent chez vous.",
-          'Spouse without income, children under 21 (25 if studying), disabled relatives living with you.',
+          'A spouse with no income, children under 21 (25 if in education) and disabled relatives living with you.',
         )}
       >
         {() => (
           <div className="family">
             <Counter label={t('Conjoint', 'Spouse')} value={s.spouses} max={4} disabledPlus={deps >= maxDeps} onChange={(spouses) => set({ spouses })} />
             <Counter label={t('Enfants', 'Children')} value={s.children} max={maxDeps} disabledPlus={deps >= maxDeps} onChange={(children) => set({ children })} />
-            <Counter label={t('Autres', 'Others')} value={s.otherDependents} max={maxDeps} disabledPlus={deps >= maxDeps} onChange={(otherDependents) => set({ otherDependents })} />
+            <Counter label={t('Autres', 'Other')} value={s.otherDependents} max={maxDeps} disabledPlus={deps >= maxDeps} onChange={(otherDependents) => set({ otherDependents })} />
           </div>
         )}
       </Field>
@@ -119,7 +119,7 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
         <p className="note">
           {t(
             "Fournis par l'employeur au lieu d'être payés. Ils sont imposés pour leur valeur réelle sans être versés en argent.",
-            'Provided by the employer instead of being paid. They are taxed at their real value without being paid in cash.',
+            'Things your employer provides instead of paying you for them. They are taxed at their actual value even though no cash changes hands.',
           )}
         </p>
         <ItemList list={kind} s={s} set={set} placeholder={t('Ajouter un avantage', 'Add a benefit')} />
@@ -131,7 +131,7 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
         badge={s.category ? `${s.category}${(rules.categories.grid[s.category]?.length ?? 0) > 1 ? 'ABC'[s.echelon] : ''}${senRate ? ` · +${pct(senRate)}` : ''}` : senRate ? `+${pct(senRate)}` : undefined}
       >
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 96px', gap: 8 }}>
-          <Field label={t('Catégorie (convention 2026)', 'Category (2026 agreement)')}>
+          <Field label={t('Catégorie (convention 2026)', 'Category (2026 collective agreement)')}>
             {(id) => (
               <select id={id} className="select" value={s.category} onChange={(e) => set({ category: e.target.value, echelon: 0 })}>
                 <option value="">{t('Je ne sais pas', "I don't know")}</option>
@@ -169,11 +169,11 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
           ) : (
             t(
               'De E1 (manœuvre, au SMIG) à C4 (doctorat, direction). La catégorie fixe votre salaire minimum et la base de la prime d’ancienneté.',
-              'From E1 (labourer, at the minimum wage) to C4 (doctorate, management). The category sets your minimum wage and the base of the seniority bonus.',
+              'From E1 (labourer, at the minimum wage) to C4 (doctorate, management). The category sets your minimum pay and the basis for the seniority bonus.',
             )
           )}
         </p>
-        <Field label={t("Années dans l'entreprise", 'Years with the company')} aside={senRate ? t(`prime de ${pct(senRate)}`, `bonus of ${pct(senRate)}`) : t('prime dès 2 ans', 'bonus from 2 years')}>
+        <Field label={t("Années dans l'entreprise", 'Years with the company')} aside={senRate ? t(`prime de ${pct(senRate)}`, `${pct(senRate)} bonus`) : t('prime dès 2 ans', 'bonus after 2 years')}>
           {() => (
             <div className="stepper-row">
               <Counter label={t('Ancienneté (ans)', 'Seniority (years)')} value={s.seniorityYears} max={50} onChange={(seniorityYears) => set({ seniorityYears })} />
@@ -187,7 +187,7 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
           <div className="item-row two" key={ot.id}>
             <label htmlFor={`ot-${ot.id}`}>
               {labelOf(ot, lang)}
-              <small>{t(`majorées de ${Math.round(ot.rate * 100)} %`, `paid ${Math.round(ot.rate * 100)} % extra`)}</small>
+              <small>{t(`majorées de ${Math.round(ot.rate * 100)} %`, `paid ${Math.round(ot.rate * 100)}% extra`)}</small>
             </label>
             <MoneyInput id={`ot-${ot.id}`} unit="h" max={300} value={s.overtime[ot.id] || 0} onChange={(v) => set({ overtime: { ...s.overtime, [ot.id]: v } })} />
           </div>
@@ -195,13 +195,13 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
         <p className="f-hint">
           {t(
             `Heures du mois. Taux horaire : salaire de base et sursalaire divisés par ${rules.working_time.monthly_hours} h.`,
-            `Hours this month. Hourly rate: base salary and additional salary divided by ${rules.working_time.monthly_hours} h.`,
+            `Hours this month. Hourly rate: base salary and salary supplement divided by ${rules.working_time.monthly_hours} h.`,
           )}
         </p>
       </Section>
 
       <Section title={t('Ce mois-ci', 'This month')} icon={<Icon.calendar />} badge={monthCount ? `${monthCount}` : undefined}>
-        <Field label={t('Treizième mois ou prime exceptionnelle', '13th month or one-off bonus')} hint={t("Imposé à part, sans le compter comme s'il était touché douze fois.", 'Taxed separately, not as if it were received twelve times.')}>
+        <Field label={t('Treizième mois ou prime exceptionnelle', '13th month or one-off bonus')} hint={t("Imposé à part, sans le compter comme s'il était touché douze fois.", 'Taxed on its own, not as if you received it every month.')}>
           {(id) => <MoneyInput id={id} value={s.exceptional} onChange={(exceptional) => set({ exceptional })} />}
         </Field>
         <Field
@@ -216,21 +216,21 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
           )}
         </Field>
         <Field
-          label={t('Jours de mission', 'Mission days')}
+          label={t('Jours de mission', 'Business travel days')}
           hint={t(
             'Barème minimum de la convention : 3, 5 ou 10 fois le taux horaire de votre catégorie. Non imposé.',
-            "The agreement's minimum scale: 3, 5 or 10 times your category's hourly rate. Not taxed.",
+            "Minimum rates under the agreement: 3, 5 or 10 times your category's hourly rate. Tax-free.",
           )}
         >
           {() => (
             <div className="family">
               <Counter label={t('Un repas', 'One meal')} value={s.missions.oneMeal} max={31} onChange={(v) => set({ missions: { ...s.missions, oneMeal: v } })} />
               <Counter label={t('Deux repas', 'Two meals')} value={s.missions.twoMeals} max={31} onChange={(v) => set({ missions: { ...s.missions, twoMeals: v } })} />
-              <Counter label={t('Avec nuit', 'With a night')} value={s.missions.night} max={31} onChange={(v) => set({ missions: { ...s.missions, night: v } })} />
+              <Counter label={t('Avec nuit', 'Overnight')} value={s.missions.night} max={31} onChange={(v) => set({ missions: { ...s.missions, night: v } })} />
             </div>
           )}
         </Field>
-        <Field label={t('Frais réels remboursés', 'Actual expenses refunded')} hint={t('Sur justificatifs : ni imposés, ni cotisés.', 'Against receipts: neither taxed nor subject to contributions.')}>
+        <Field label={t('Frais réels remboursés', 'Expenses reimbursed')} hint={t('Sur justificatifs : ni imposés, ni cotisés.', 'With receipts: no tax, no contributions.')}>
           {(id) => (
             <MoneyInput
               id={id}
@@ -244,16 +244,16 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
             />
           )}
         </Field>
-        <Field label={t('Avances et autres retenues', 'Advances and other deductions')} hint={t('Avance sur salaire, prêt, mutuelle : retirées du net.', 'Salary advance, loan, mutual insurance: taken out of the net.')}>
+        <Field label={t('Avances et autres retenues', 'Advances and other deductions')} hint={t('Avance sur salaire, prêt, mutuelle : retirées du net.', 'Salary advance, loan, top-up health insurance: taken off your net pay.')}>
           {(id) => <MoneyInput id={id} value={s.otherDeductions} onChange={(otherDeductions) => set({ otherDeductions })} />}
         </Field>
       </Section>
 
-      <Section title={t('Épargne et côté employeur', 'Savings and employer side')} icon={<Icon.shield />} badge={savings || s.workRisk ? '•' : undefined}>
+      <Section title={t('Épargne et côté employeur', 'Savings and employer settings')} icon={<Icon.shield />} badge={savings || s.workRisk ? '•' : undefined}>
         <Field
           label={t('Épargne retraite volontaire', 'Voluntary pension savings')}
           aside={t('par mois', 'a month')}
-          hint={t("Retenue sur le salaire, elle réduit l'impôt dans la limite de 6 % du revenu net.", 'Withheld from the salary, it reduces the tax within 6 % of net income.')}
+          hint={t("Retenue sur le salaire, elle réduit l'impôt dans la limite de 6 % du revenu net.", 'Deducted from your pay; it lowers your tax, up to 6% of net income.')}
         >
           {(id) => <MoneyInput id={id} value={s.voluntaryPension} onChange={(voluntaryPension) => set({ voluntaryPension })} />}
         </Field>
@@ -262,25 +262,25 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
           aside={t('par an', 'a year')}
           hint={t(
             `Contrat d'au moins six ans. Déductible jusqu'à ${fcfa(liCap)} pour vous (200 000 F plus 30 000 F par enfant).`,
-            `Contract of at least six years. Deductible up to ${fcfa(liCap)} for you (200 000 F plus 30 000 F per child).`,
+            `Policies of six years or more. Deductible up to ${fcfa(liCap)} in your case (200,000 F plus 30,000 F per child).`,
           )}
         >
           {(id) => <MoneyInput id={id} value={s.lifeInsurance} onChange={(lifeInsurance) => set({ lifeInsurance })} />}
         </Field>
         <Field
-          label={t("Taux risques professionnels de l'employeur", "Employer's work-risk rate")}
-          hint={t("Majoré quand l'employeur n'a pas corrigé les risques relevés lors d'un contrôle.", 'Increased when the employer has not fixed the risks found during an inspection.')}
+          label={t("Taux risques professionnels de l'employeur", "Employer’s occupational risk rate")}
+          hint={t("Majoré quand l'employeur n'a pas corrigé les risques relevés lors d'un contrôle.", 'Raised when the employer has not dealt with hazards found during an inspection.')}
         >
           {() => (
             <Seg
               small
-              label={t('Majoration des risques professionnels', 'Work-risk surcharge')}
+              label={t('Majoration des risques professionnels', 'Occupational risk surcharge')}
               value={s.workRisk}
               onChange={(workRisk) => set({ workRisk })}
               options={[
                 { value: 0, label: t('Normal', 'Normal') },
-                { value: 1, label: '+50 %' },
-                { value: 2, label: '+100 %' },
+                { value: 1, label: t('+50 %', '+50%') },
+                { value: 2, label: t('+100 %', '+100%') },
               ]}
             />
           )}

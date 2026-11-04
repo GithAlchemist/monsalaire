@@ -43,6 +43,17 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
   (hidden on phones), in the footer bottom line, and an "Autres projets" footer column linking to aconta.io. Every
   Aconta link carries `utm_source=monsalaire` and the place (`header`, `footer`, `footer-bottom`).
 
+- Deployed on 4 November 2026: Vercel project `monsalaire` (team githalchemist), connected to the GitHub repo, so
+  every push to `main` deploys to production. Addresses: https://monsalaire-aconta.vercel.app
+  (`monsalaire.vercel.app` belongs to someone else) and `monsalaire.aconta.io`, added to the project but waiting for
+  its DNS record: aconta.io's DNS is on Cloudflare, it needs a CNAME `monsalaire` ->
+  `0b89f626125f4d37.vercel-dns-017.com`, DNS only (grey cloud), like bookme. `vercel.json` declares Astro and `dist`.
+- Vercel Web Analytics and Speed Insights injected in production (`src/analytics.ts`), the address hash (the
+  user's figures) cut before sending; privacy texts say so.
+- English rewritten on 4 November 2026 (Kévin: the English read as translated French). British English, natural
+  phrasing, English typography: `4%` (no space), `250,000 F`, no space before a colon. `pct` in `src/format.ts` and
+  the engine handle the space per language. Rule: write the English as an English writer would, never word for word.
+
 ## Decisions taken with Kévin (do not reopen without asking him)
 
 - Name `monsalaire` (not "Togolet"): the tool will compare countries.
@@ -61,19 +72,19 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
 - Blog later on this site (not on aconta.io): every LinkedIn post of Kévin (minimum wage compared across West
   African countries, minimum wage corrected for the cost of living...) gets a durable, sourced data page and a dated
   article here. Aim: become the reference source on salaries, cited by search engines and AI assistants.
-- **No Vercel deployment until Kévin asks.**
+- Home: no "laws in force" badge above the title (the date is in the disclaimer); title on one line at every width,
+  subtitle on one line from 700 px. Later: a country selector inside the calculation controls (Kévin).
 
 ## Next steps
 
 1. Have a Togolese labour lawyer or payroll firm settle the reading of CCIT art. 40 (seniority).
 2. Other regimes: civil servants (CRT pension, INAM health), self-employed (21.5 % CNSS), informal economy (19.5 %).
 3. End-of-contract payments (CGI art. 21 and 22), mortgage interest deduction (art. 26-5).
-4. Country comparison: one rules file per country (`rules/<cc>/<year>.json`, the engine already keys rules by
+4. Country selector in the calculation controls, then country comparison: one rules file per country (`rules/<cc>/<year>.json`, the engine already keys rules by
    country), then a purchasing-power correction (World Bank PPP conversion factors).
 5. Every January: fetch the new finance law and the OTR "Cahier fiscal", check CGI art. 17 to 26 and 72 to 74, add
    `rules/tg/<year>.json` with its `valid_from` if anything changed, and a test.
-6. Deployment on Vercel when Kévin decides: new project from the repo (Astro is detected, output `dist/`), domain
-   `monsalaire.aconta.io`, then Google Search Console (a domain property on aconta.io covers the subdomains) and
+6. After the Cloudflare CNAME is in place: check https://monsalaire.aconta.io, then Google Search Console (a domain property on aconta.io covers the subdomains) and
    Bing Webmaster Tools (ChatGPT search leans on Bing), submit `sitemap.xml`. Check a LinkedIn preview with the
    LinkedIn Post Inspector.
 7. Blog and data pages (Astro content collections in Markdown), starting with the minimum wage compared across
