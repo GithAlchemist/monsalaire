@@ -317,6 +317,18 @@ a {
     border-color: var(--ink);
   }
 }
+/* Four pages must fit on a 360 to 400 px phone without scrolling. */
+@media (max-width: 420px) {
+  .subnav {
+    gap: 3px;
+  }
+  .subnav a {
+    flex: 1 1 auto;
+    text-align: center;
+    font-size: 12.5px;
+    padding: 6px 7px;
+  }
+}
 .lang-btn {
   gap: 5px;
   font-family: var(--font-num);
@@ -2397,12 +2409,12 @@ ul.clean li::marker {
 }
 .f-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) repeat(5, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.4fr) repeat(6, minmax(0, 1fr));
   gap: 28px;
 }
-@media (max-width: 1100px) and (min-width: 961px) {
+@media (max-width: 1360px) and (min-width: 961px) {
   .f-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
   .f-brand {
     grid-column: 1 / -1;

@@ -4,20 +4,47 @@ import { rulesFor } from '../engine';
 import { PATHS, type Lang, type Page } from '../i18n';
 import { ACONTA, META, SITE } from '../seo';
 
+/**
+ * Head of every page. The simulator pages pass `page` and get their title, description, addresses and preview
+ * from META and PATHS; the article pages pass their own values (`title`, `path`, `alternates`, `ogImage`, `graph`).
+ */
 interface Props {
   lang: Lang;
-  page: Page;
+  page?: Page;
+  title?: string;
+  description?: string;
+  /** Address of this page (e.g. /articles/smig-togo-2026); defaults to PATHS[lang][page]. */
+  path?: string;
+  /** Address of the page in each language that has it (hreflang); defaults to both versions of `page`. */
+  alternates?: Partial<Record<Lang, string>>;
+  ogType?: 'website' | 'article';
+  /** Absolute URL of a 1200 x 630 image; defaults to the site preview. */
+  ogImage?: string;
+  ogImageAlt?: string;
+  /** Open Graph article fields. */
+  article?: { published: string; modified: string; section: string; tags: string[]; author: string };
+  /** Extra JSON-LD nodes (BlogPosting, BreadcrumbList...), added to the site's graph. */
+  graph?: Record<string, unknown>[];
+  noindex?: boolean;
+  /** schema.org type of the page: WebPage by default, CollectionPage for lists of articles. */
+  pageType?: 'WebPage' | 'CollectionPage';
 }
-const { lang, page } = Astro.props;
-const meta = META[lang][page];
-const url = (l: Lang) => SITE + (PATHS[l][page] === '/' ? '' : PATHS[l][page]);
-const canonical = url(lang);
+const { lang, page, ogType = 'website', article, noindex = false } = Astro.props;
+const abs = (path: string) => SITE + (path === '/' ? '' : path);
+const meta = page ? META[lang][page] : { title: Astro.props.title ?? 'monsalaire', description: Astro.props.description ?? '' };
+const title = Astro.props.title ?? meta.title;
+const description = Astro.props.description ?? meta.description;
+const path = Astro.props.path ?? (page ? PATHS[lang][page] : '/');
+const canonical = abs(path);
+const alternates: Partial<Record<Lang, string>> = Astro.props.alternates ?? (page ? { fr: PATHS.fr[page], en: PATHS.en[page] } : { [lang]: path });
+const xDefault = alternates.fr ?? alternates.en;
 const rules = rulesFor(new Date().toISOString().slice(0, 10));
-const ogImage = `${SITE}/og-${lang}.png`;
+const ogImage = Astro.props.ogImage ?? `${SITE}/og-${lang}.png`;
+const rss = `${PATHS[lang].articles}/rss.xml`;
 
 // Structured data: who publishes the site, what the tool is, and when its rules were last checked.
 const graph: Record<string, unknown>[] = [
-  { '@type': 'Organization', '@id': `${ACONTA}/#organization`, name: 'Aconta', url: ACONTA },
+  { '@type': 'Organization', '@id': `${ACONTA}/#organization`, name: 'Aconta', url: ACONTA, logo: { '@type': 'ImageObject', url: `${SITE}/brand/aconta-emblem.png`, width: 192, height: 192 } },
   {
     '@type': 'WebSite',
     '@id': `${SITE}/#website`,
@@ -28,22 +55,23 @@ const graph: Record<string, unknown>[] = [
     publisher: { '@id': `${ACONTA}/#organization` },
   },
   {
-    '@type': 'WebPage',
+    '@type': Astro.props.pageType ?? (page === 'articles' ? 'CollectionPage' : 'WebPage'),
     '@id': `${canonical}#page`,
     url: canonical,
-    name: meta.title,
-    description: meta.description,
+    name: title,
+    description,
     inLanguage: lang,
     isPartOf: { '@id': `${SITE}/#website` },
-    dateModified: rules.verified_on,
+    ...(article ? { dateModified: article.modified } : page && page !== 'articles' ? { dateModified: rules.verified_on } : {}),
   },
+  ...(Astro.props.graph ?? []),
 ];
 if (page === 'home') {
   graph.push({
     '@type': 'WebApplication',
     name: 'monsalaire',
     url: canonical,
-    description: meta.description,
+    description,
     applicationCategory: 'FinanceApplication',
     operatingSystem: 'Any',
     browserRequirements: 'Requires JavaScript',
@@ -56,7 +84,7 @@ if (page === 'home') {
     publisher: { '@id': `${ACONTA}/#organization` },
   });
 }
-const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c');
 
 // Before the first paint: apply the stored theme, and send a first visit to "/" from a non-French device to /en
 // (never for crawlers, so search engines index the French home as it is).
@@ -71,37 +99,51 @@ var w=s==='en'||s==='fr'?s:(n.indexOf('fr')===0?'fr':'en');if(w==='en')location.
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>{meta.title}</title>
-    <meta name="description" content={meta.description} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="fr" href={url('fr')} />
-    <link rel="alternate" hreflang="en" href={url('en')} />
-    <link rel="alternate" hreflang="x-default" href={url('fr')} />
+    {alternates.fr && <link rel="alternate" hreflang="fr" href={abs(alternates.fr)} />}
+    {alternates.en && <link rel="alternate" hreflang="en" href={abs(alternates.en)} />}
+    {xDefault && Object.keys(alternates).length > 1 && <link rel="alternate" hreflang="x-default" href={abs(xDefault)} />}
+    <link rel="alternate" type="application/rss+xml" title={lang === 'en' ? 'monsalaire: articles' : 'monsalaire : articles'} href={SITE + rss} />
     <script is:inline set:html={headScript} />
     <meta name="theme-color" content="#073f2a" />
-    <meta name="author" content="Aconta" />
+    <meta name="author" content={article?.author ?? 'Aconta'} />
     <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="monsalaire" />
     <meta property="og:url" content={canonical} />
-    <meta property="og:title" content={meta.title} />
-    <meta property="og:description" content={meta.description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    {Astro.props.ogImageAlt && <meta property="og:image:alt" content={Astro.props.ogImageAlt} />}
+    {
+      article && (
+        <>
+          <meta property="article:published_time" content={article.published} />
+          <meta property="article:modified_time" content={article.modified} />
+          <meta property="article:section" content={article.section} />
+          {article.tags.map((tag) => <meta property="article:tag" content={tag} />)}
+        </>
+      )
+    }
     <meta property="og:locale" content={lang === 'en' ? 'en_GB' : 'fr_FR'} />
     <meta property="og:locale:alternate" content={lang === 'en' ? 'fr_FR' : 'en_GB'} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={meta.title} />
-    <meta name="twitter:description" content={meta.description} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <script type="application/ld+json" set:html={jsonLd} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <slot name="head" />
   </head>
   <body>
     <slot />

@@ -1,0 +1,134 @@
+---
+import { PATHS, type Lang } from '../i18n';
+import BlogLayout from '../layouts/BlogLayout.astro';
+import { SITE } from '../seo';
+import { postsIn, themeCounts } from './data';
+import { articlePath, articlesPath, pickFeatured, rssPath, themePath, typo } from './lib';
+import PostCard from './PostCard.astro';
+import ThemeNav from './ThemeNav.astro';
+import { themeOf } from './themes';
+
+/** /articles and /en/articles: the featured article, the latest ones, then a section per theme. */
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = (fr: string, en: string) => (lang === 'en' ? en : fr);
+const other: Lang = lang === 'fr' ? 'en' : 'fr';
+const posts = await postsIn(lang);
+const featured = pickFeatured(posts);
+const latest = posts.filter((p) => p !== featured).slice(0, 6);
+const counts = themeCounts(posts);
+const filled = counts.filter((c) => c.count > 0);
+const empty = counts.filter((c) => c.count === 0);
+
+// Structured data: the list of articles, so that search engines and assistants see them all from this page.
+const graph = [
+  {
+    '@type': 'ItemList',
+    '@id': `${SITE}${articlesPath(lang)}#list`,
+    itemListElement: posts.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: SITE + articlePath(lang, p.slug), name: p.entry.data.title })),
+  },
+];
+---
+
+<BlogLayout lang={lang} page="articles" altHref={PATHS[other].articles} graph={graph}>
+  <header class="page-hero blog-hero">
+    <div class="kicker">{t('Articles', 'Articles')}</div>
+    <h1>
+      {t('Les salaires,', 'Pay in Togo,')} <em>{t('textes et chiffres à l’appui', 'backed by the law and the figures')}</em>
+    </h1>
+    <p class="lead">
+      {
+        t(
+          'SMIG, impôt, cotisations, comparaisons entre pays : des articles datés, où chaque chiffre renvoie au texte officiel qui le fixe.',
+          'Minimum wage, tax, contributions and country comparisons: dated articles in which every figure points to the official text behind it.',
+        )
+      }
+    </p>
+    <p class="blog-feed">
+      <a href={rssPath(lang)} type="application/rss+xml">{t('Suivre par flux RSS', 'Follow by RSS')}</a>
+    </p>
+  </header>
+
+  <ThemeNav lang={lang} counts={counts} total={posts.length} />
+
+  {
+    !featured && (
+      <div class="blog-empty">
+        <p>{t('Aucun article publié pour l’instant.', 'No articles in English yet.')}</p>
+        <p>
+          <a href={PATHS[other].articles} hreflang={other}>
+            {t('Voir les articles en anglais', 'Read the articles in French')}
+          </a>
+        </p>
+      </div>
+    )
+  }
+
+  {
+    featured && (
+      <section class="blog-block" aria-labelledby="a-la-une">
+        <h2 class="blog-h" id="a-la-une">
+          {t('À la une', 'Featured')}
+        </h2>
+        <PostCard post={featured} variant="featured" eager heading="h3" />
+      </section>
+    )
+  }
+
+  {
+    latest.length > 0 && (
+      <section class="blog-block" aria-labelledby="derniers">
+        <h2 class="blog-h" id="derniers">
+          {t('Derniers articles', 'Latest articles')}
+        </h2>
+        <div class="pgrid">
+          {latest.map((p) => (
+            <PostCard post={p} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    posts.length > 0 && (
+      <section class="blog-block" id="themes" aria-labelledby="par-theme">
+        <h2 class="blog-h" id="par-theme">
+          {t('Par thème', 'By theme')}
+        </h2>
+        <div class="tgrid">
+          {filled.map(({ id, count }) => {
+            const th = themeOf(id)[lang];
+            const items = posts.filter((p) => p.theme === id).slice(0, 4);
+            return (
+              <section class="tblock">
+                <h3>
+                  <a href={themePath(lang, id)}>{th.name}</a> <span class="n">{count}</span>
+                </h3>
+                <p class="tblurb">{th.blurb}</p>
+                <ul>
+                  {items.map((p) => (
+                    <li>
+                      <a href={articlePath(lang, p.slug)}>{typo(p.entry.data.title, lang)}</a>
+                    </li>
+                  ))}
+                </ul>
+                <a class="tmore" href={themePath(lang, id)}>
+                  {count > 1 ? t(`Les ${count} articles du thème`, `All ${count} articles`) : t('Voir le thème', 'See the theme')}
+                </a>
+              </section>
+            );
+          })}
+        </div>
+        {empty.length > 0 && (
+          <p class="tsoon">
+            {t('À venir : ', 'Coming soon: ')}
+            {empty.map((c) => themeOf(c.id)[lang].name).join(', ')}.
+          </p>
+        )}
+      </section>
+    )
+  }
+</BlogLayout>

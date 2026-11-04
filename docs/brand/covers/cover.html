@@ -1,0 +1,57 @@
+<!doctype html>
+<!--
+  Article cover (1200 x 630, also the social preview of the article). Placeholder style: forest green card, gold kicker,
+  one big figure or a title. Rendered by docs/brand/covers/render.mjs; the text comes from the address hash (JSON).
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body { background: radial-gradient(120% 90% at 85% 10%, #0f5236 0%, #073f2a 55%, #05311f 100%); font-family: Geist, sans-serif; color: #f4efe2; position: relative; }
+  .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(244,239,226,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(244,239,226,.05) 1px, transparent 1px); background-size: 60px 60px; }
+  .card { position: absolute; inset: 0; padding: 70px 84px 0; box-sizing: border-box; }
+  .lockup { width: 300px; display: block; }
+  .kicker { font-family: 'Geist Mono', monospace; font-size: 24px; letter-spacing: .08em; color: #f5b102; margin: 64px 0 10px; text-transform: uppercase; }
+  .figure { font-family: Outfit, sans-serif; font-weight: 650; font-size: 168px; line-height: 1; letter-spacing: -0.04em; margin: 0; white-space: nowrap; }
+  .figure small { font-size: 46px; font-weight: 500; letter-spacing: -0.01em; color: rgba(244,239,226,.74); margin-left: 18px; }
+  h1 { font-family: Outfit, sans-serif; font-weight: 600; font-size: 66px; line-height: 1.08; letter-spacing: -0.02em; margin: 0; max-width: 1000px; text-wrap: balance; }
+  p { font-size: 28px; line-height: 1.35; margin: 22px 0 0; color: rgba(244,239,226,.78); max-width: 960px; }
+  .foot { position: absolute; left: 84px; right: 84px; bottom: 50px; display: flex; justify-content: space-between; font-size: 21px; color: rgba(244,239,226,.6); }
+  .flag { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; display: flex; }
+  .flag i { flex: 1; } .flag i:nth-child(1) { background: #209b44; } .flag i:nth-child(2) { background: #f5b102; } .flag i:nth-child(3) { background: #e60514; }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="card">
+    <img class="lockup" src="../../../public/brand/lockup-dark.png" alt="">
+    <div class="kicker" id="kicker"></div>
+    <div id="main"></div>
+    <p id="line"></p>
+  </div>
+  <div class="foot"><span>monsalaire.aconta.io</span><span id="site"></span></div>
+  <div class="flag"><i></i><i></i><i></i></div>
+  <script>
+    // Hash: JSON { lang, kicker, figure?, unit?, title?, line? }
+    const d = JSON.parse(decodeURIComponent(location.hash.slice(1) || '{}'));
+    document.documentElement.lang = d.lang || 'fr';
+    document.getElementById('kicker').textContent = d.kicker || '';
+    const main = document.getElementById('main');
+    if (d.figure) {
+      const el = document.createElement('div');
+      el.className = 'figure';
+      el.textContent = d.figure;
+      if (d.unit) { const s = document.createElement('small'); s.textContent = d.unit; el.append(s); }
+      main.append(el);
+    } else {
+      const h = document.createElement('h1');
+      h.textContent = d.title || '';
+      main.append(h);
+    }
+    document.getElementById('line').textContent = d.line || '';
+    document.getElementById('site').textContent = 'Articles';
+  </script>
+</body>
+</html>

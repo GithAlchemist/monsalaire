@@ -36,6 +36,11 @@ Lis d'abord, dans cet ordre : `CLAUDE.md`, `docs/STATUS.md` (état, décisions, 
   vers aconta.io, liens marqués `utm_source=monsalaire`. Aconta ne fait pas de paie : ne jamais le laisser entendre,
   pas d'argumentaire (Kévin, 04/11).
 
+- **Rubrique Articles** (04/11, branche `claude/admiring-lamport-pdtaas`, PR vers `main`) : articles en Markdown dans
+  `src/content/articles/fr|en/`, pages `/articles`, thèmes, flux RSS, données structurées, règles d'images vérifiées à
+  la construction, article d'exemple sur le SMIG. **Pour publier un article : `docs/PUBLIER_UN_ARTICLE.md`.** On ne
+  pousse plus sur `main` directement (chaque push part en production) : branche, PR, puis fusion.
+
 ## À faire ensuite, par ordre de valeur
 
 0. **En ligne depuis le 04/11** : projet Vercel `monsalaire`, branché sur GitHub (chaque push sur `main` part en

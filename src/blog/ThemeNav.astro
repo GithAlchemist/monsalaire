@@ -1,0 +1,34 @@
+---
+import type { Lang } from '../i18n';
+import { articlesPath, themePath } from './lib';
+import { themeName, type ThemeId } from './themes';
+
+/** Filter by theme: plain links to the theme pages, so it works without JavaScript. */
+interface Props {
+  lang: Lang;
+  counts: { id: ThemeId; count: number }[];
+  total: number;
+  current?: ThemeId;
+}
+const { lang, counts, total, current } = Astro.props;
+const t = (fr: string, en: string) => (lang === 'en' ? en : fr);
+---
+
+<nav class="theme-nav" aria-label={t('Filtrer par thème', 'Filter by theme')}>
+  <a href={articlesPath(lang)} aria-current={current ? undefined : 'page'}>
+    {t('Tous', 'All')} <span class="n">{total}</span>
+  </a>
+  {
+    counts.map(({ id, count }) =>
+      count > 0 ? (
+        <a href={themePath(lang, id)} aria-current={current === id ? 'page' : undefined}>
+          {themeName(id, lang)} <span class="n">{count}</span>
+        </a>
+      ) : (
+        <span class="empty" aria-current={current === id ? 'page' : undefined} title={t('Bientôt', 'Coming soon')}>
+          {themeName(id, lang)} <span class="n">0</span>
+        </span>
+      ),
+    )
+  }
+</nav>

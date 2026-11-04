@@ -1,0 +1,30 @@
+---
+import '../blog.css';
+import { BlogFooter, BlogHeader } from '../components/BlogChrome';
+import { rulesFor } from '../engine';
+import type { Lang } from '../i18n';
+import Base from './Base.astro';
+
+/**
+ * Frame of the static article pages: the site head (Base), the same header and footer as the simulator (React
+ * islands, for the theme and language buttons), and the page content in between, plain HTML without JavaScript.
+ */
+type BaseProps = Parameters<typeof Base>[0];
+type Props = BaseProps & {
+  lang: Lang;
+  /** Where the language button goes: the translation of this page, or the articles in the other language. */
+  altHref: string;
+};
+const { altHref, ...base } = Astro.props;
+const { lang } = base;
+const { version, verified_on } = rulesFor(new Date().toISOString().slice(0, 10));
+---
+
+<Base {...base}>
+  <slot name="head" slot="head" />
+  <BlogHeader client:load lang={lang} page="articles" altHref={altHref} />
+  <main class="wrap blog" id="contenu">
+    <slot />
+  </main>
+  <BlogFooter client:idle lang={lang} page="articles" altHref={altHref} rules={{ version, verified_on }} />
+</Base>

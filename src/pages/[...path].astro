@@ -1,12 +1,13 @@
 ---
 import App from '../App';
-import { PATHS, type Lang, type Page } from '../i18n';
+import { APP_PAGES, PATHS, type Lang, type Page } from '../i18n';
 import Base from '../layouts/Base.astro';
 
 // One static page per address and language: /, /comprendre, /textes, /conditions, /en, /en/understand...
+// The articles pages are built by src/pages/articles and src/pages/en/articles.
 export function getStaticPaths() {
   return (['fr', 'en'] as Lang[]).flatMap((lang) =>
-    (Object.entries(PATHS[lang]) as [Page, string][]).map(([page, path]) => ({
+    APP_PAGES.map((page) => [page, PATHS[lang][page]] as [Page, string]).map(([page, path]) => ({
       params: { path: path === '/' ? undefined : path.slice(1) },
       props: { lang, page },
     })),

@@ -1,13 +1,19 @@
 import { createContext, useCallback, useContext, useEffect, useState, type MouseEvent, type ReactNode } from 'react';
 
 export type Lang = 'fr' | 'en';
-export type Page = 'home' | 'understand' | 'sources' | 'terms';
+export type Page = 'home' | 'understand' | 'articles' | 'sources' | 'terms';
 
 /** Every page has a French and an English address. French lives at the root, English under /en. */
 export const PATHS: Record<Lang, Record<Page, string>> = {
-  fr: { home: '/', understand: '/comprendre', sources: '/textes', terms: '/conditions' },
-  en: { home: '/en', understand: '/en/understand', sources: '/en/sources', terms: '/en/terms' },
+  fr: { home: '/', understand: '/comprendre', articles: '/articles', sources: '/textes', terms: '/conditions' },
+  en: { home: '/en', understand: '/en/understand', articles: '/en/articles', sources: '/en/sources', terms: '/en/terms' },
 };
+
+/**
+ * Pages drawn by the React app (src/App.tsx), built by src/pages/[...path].astro and switched without reloading.
+ * The articles live in static Astro pages (src/pages/articles, src/pages/en/articles): links to them always load.
+ */
+export const APP_PAGES: Page[] = ['home', 'understand', 'sources', 'terms'];
 
 export function parsePath(pathname: string): { lang: Lang; page: Page } {
   const p = pathname.replace(/\/+$/, '') || '/';
@@ -29,6 +35,10 @@ const LANG_KEY = 'monsalaire-lang';
 interface Ctx {
   lang: Lang;
   page: Page;
+  /** False on the static article pages: every internal link is then a plain page load. */
+  spa: boolean;
+  /** Address of this page in the other language, when it is not the other language's version of `page` (articles). */
+  altHref?: string;
   go: (page: Page, lang?: Lang) => void;
   href: (page: Page, lang?: Lang) => string;
   t: (fr: string, en: string) => string;
@@ -36,14 +46,15 @@ interface Ctx {
 
 const RouteContext = createContext<Ctx | null>(null);
 
-export function RouterProvider({ lang, page, children }: { lang: Lang; page: Page; children: ReactNode }) {
+export function RouterProvider({ lang, page, spa = true, altHref, children }: { lang: Lang; page: Page; spa?: boolean; altHref?: string; children: ReactNode }) {
   const [route, setRoute] = useState<{ lang: Lang; page: Page }>({ lang, page });
 
   useEffect(() => {
+    if (!spa) return;
     const onPop = () => setRoute(parsePath(window.location.pathname));
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
-  }, []);
+  }, [spa]);
 
   useEffect(() => {
     document.documentElement.lang = route.lang;
@@ -70,7 +81,7 @@ export function RouterProvider({ lang, page, children }: { lang: Lang; page: Pag
 
   const t = useCallback((fr: string, en: string) => (route.lang === 'en' ? en : fr), [route.lang]);
 
-  return <RouteContext.Provider value={{ ...route, go, href, t }}>{children}</RouteContext.Provider>;
+  return <RouteContext.Provider value={{ ...route, spa, altHref, go, href, t }}>{children}</RouteContext.Provider>;
 }
 
 export function useRoute(): Ctx {
@@ -81,8 +92,10 @@ export function useRoute(): Ctx {
 
 /** Internal link: a real <a href> (works without JavaScript, opens in a new tab), handled by the router on click. */
 export function Link({ to, lang, className, children, onClick, ...rest }: { to: Page; lang?: Lang; className?: string; children: ReactNode; onClick?: () => void; 'aria-current'?: 'page'; hrefLang?: string; title?: string }) {
-  const { go, href } = useRoute();
+  const { go, href, spa } = useRoute();
   const handle = (e: MouseEvent<HTMLAnchorElement>) => {
+    // Pages outside the React app (articles), or any link from an article page: let the browser load the page.
+    if (!spa || !APP_PAGES.includes(to)) return;
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
     e.preventDefault();
     onClick?.();

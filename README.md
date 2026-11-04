@@ -52,6 +52,7 @@ and it tells you why, with the article and the page.
 | **Explained** | A How it works page: where every franc goes, the tax step by step, and what contributions pay for. |
 | **Sourced** | 13 official texts archived in the repo with page-by-page transcriptions; every rule cites `{ source, article, page }`. |
 | **Private by design** | No sign-up, no server, no cookies. The figures you type never leave the browser; only anonymous, cookie-free page views and load times are counted (Vercel Web Analytics and Speed Insights). Shareable links carry the simulation in the URL. |
+| **Articles** | Dated, sourced articles on pay in Togo and French-speaking Africa (minimum wage, tax, country comparisons), with an RSS feed per language. |
 | **Bilingual** | French and English, site and payslip alike. Light and dark themes, built for phones first, print-ready. |
 
 <p align="center">
@@ -113,19 +114,25 @@ slip.irpp;     // 2745
 rules/tg/2026.json        the law as data: every value with its source, article and page
 sources/                  the legal library: originals/ (PDF), text/ (transcriptions), sources.json, tools/
 src/engine/               pure TypeScript payroll engine and its tests
-src/pages/                Astro routes, sitemap.xml and llms.txt
+src/pages/                Astro routes, sitemap.xml, llms.txt and the articles' RSS feeds
 src/views/                Simulator, How it works, Sources, Terms (React)
 src/components/           controls, payslip, charts, header and footer
+src/content/articles/     the articles, in Markdown: fr/<slug>.md and en/<slug>.md
+src/content/authors/      article authors (one JSON file each)
+src/blog/                 articles section: themes, pages, build rules for images and text
+src/assets/articles/      article covers and images (optimised at build time)
 ```
 
-The site has four pages, in both languages: `/` and `/en` (simulator), `/comprendre` and `/en/understand`,
-`/textes` and `/en/sources`, `/conditions` and `/en/terms`.
+The site has five sections, in both languages: `/` and `/en` (simulator), `/comprendre` and `/en/understand`,
+`/articles` and `/en/articles`, `/textes` and `/en/sources`, `/conditions` and `/en/terms`. How to publish an
+article (in French): [`docs/PUBLIER_UN_ARTICLE.md`](docs/PUBLIER_UN_ARTICLE.md).
 
 ## Roadmap
 
 - [x] Togo, private sector, general regime: CNSS, AMU, IRPP, collective agreement 2026
 - [x] Legal library: 13 official texts, transcribed page by page
 - [x] French and English
+- [x] Articles: dated and sourced, with themes, RSS feeds and structured data for search engines and AI assistants
 - [ ] Civil servants (CRT pension, INAM health), the self-employed and informal workers
 - [ ] End-of-contract payments (retirement payments and severance pay)
 - [ ] **Other countries**: Benin, Senegal, Côte d'Ivoire, Burkina Faso, Ghana
