@@ -6,6 +6,10 @@ countries for similar incomes, corrected for the cost of living.
 
 Memory card: `General Manual Memory/projets/monsalaire.md` (read it before working here).
 
+Where the project stands, decisions and next steps (read first, update at the end of every session):
+
+@docs/STATUS.md
+
 ## Stack and commands
 
 Vite + React + TypeScript, plain CSS tokens (`src/styles.css`), no backend.
