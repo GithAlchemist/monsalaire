@@ -1,15 +1,17 @@
 import { useState } from 'react';
-import { categoryMinimum, seniorityRate, type Rules } from '../engine';
-import { fcfa, pct } from '../format';
+import { categoryMinimum, labelOf, seniorityRate, type Rules } from '../engine';
+import { useFmt } from '../format';
+import { useRoute } from '../i18n';
 import { defaultState, type AppState } from '../state';
 import { Counter, Field, Icon, MoneyInput, Section, Seg } from './fields';
 
 type Set = (patch: Partial<AppState>) => void;
 
 const PRESETS = [52500, 100000, 250000, 500000, 1000000];
-const presetLabel = (n: number) => (n === 52500 ? 'SMIG' : n >= 1000000 ? `${n / 1000000} M` : `${n / 1000} k`);
 
 export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Set; rules: Rules; computedBase: number }) {
+  const { t, lang } = useRoute();
+  const { fcfa, pct } = useFmt();
   const cash = rules.pay_items.filter((i) => i.cash && (i.cnss || i.irpp));
   const kind = rules.pay_items.filter((i) => !i.cash);
   const catMin = categoryMinimum(rules, s.category, s.echelon);
@@ -23,28 +25,31 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
   const monthCount = (s.exceptional ? 1 : 0) + (s.items.frais_rembourses ? 1 : 0) + (s.otherDeductions ? 1 : 0) + (s.meals ? 1 : 0) + (missionDays ? 1 : 0);
   const savings = s.voluntaryPension || s.lifeInsurance;
   const target = s.mode === 'gross' ? s.base : s.targetNet;
+  const examples = (lang === 'en' && rules.categories.examples_en) || rules.categories.examples;
+  const li = rules.irpp.life_insurance;
+  const liCap = li.base_cap + li.per_child * Math.min(s.children, li.max_children);
 
   return (
-    <aside className="controls" aria-label="Vos paramètres" id="parametres">
+    <aside className="controls" aria-label={t('Vos paramètres', 'Your details')} id="parametres">
       <div className="c-title">
-        <h2>Vos paramètres</h2>
+        <h2>{t('Vos paramètres', 'Your details')}</h2>
         <button type="button" className="c-reset" onClick={() => set({ ...defaultState(), mode: s.mode })}>
-          Tout effacer
+          {t('Tout effacer', 'Clear all')}
         </button>
       </div>
 
       <Seg
-        label="Type de calcul"
+        label={t('Type de calcul', 'Calculation')}
         value={s.mode}
         onChange={(mode) => set({ mode, ...(mode === 'gross' && s.mode === 'net' ? { base: computedBase } : {}), ...(mode === 'net' && s.mode === 'gross' ? { targetNet: s.targetNet || 250000 } : {}) })}
         options={[
-          { value: 'gross', label: 'Du brut au net' },
-          { value: 'net', label: 'Du net au brut' },
+          { value: 'gross', label: t('Du brut au net', 'Gross to net') },
+          { value: 'net', label: t('Du net au brut', 'Net to gross') },
         ]}
       />
 
       {s.mode === 'gross' ? (
-        <Field label="Salaire de base mensuel" aside="avant primes">
+        <Field label={t('Salaire de base mensuel', 'Monthly base salary')} aside={t('avant primes', 'before bonuses')}>
           {(id) => (
             <>
               <MoneyInput id={id} big value={s.base} onChange={(base) => set({ base })} />
@@ -54,11 +59,12 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
         </Field>
       ) : (
         <Field
-          label="Net que vous voulez toucher"
-          aside="par mois"
+          label={t('Net que vous voulez toucher', 'Net pay you want')}
+          aside={t('par mois', 'a month')}
           hint={
             <>
-              Salaire de base à demander : <strong>{fcfa(computedBase)}</strong>, avec les primes et la situation ci-dessous.
+              {t('Salaire de base à demander :', 'Base salary to ask for:')} <strong>{fcfa(computedBase)}</strong>
+              {t(', avec les primes et la situation ci-dessous.', ', with the bonuses and situation below.')}
             </>
           }
         >
@@ -71,26 +77,33 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
         </Field>
       )}
 
-      <Field label="Personnes à charge" aside={`${Math.min(deps, maxDeps)} sur ${maxDeps} au plus`} hint="Conjoint sans revenu, enfants de moins de 21 ans (25 s'ils étudient), parents invalides qui vivent chez vous.">
+      <Field
+        label={t('Personnes à charge', 'Dependents')}
+        aside={t(`${Math.min(deps, maxDeps)} sur ${maxDeps} au plus`, `${Math.min(deps, maxDeps)} of ${maxDeps} at most`)}
+        hint={t(
+          "Conjoint sans revenu, enfants de moins de 21 ans (25 s'ils étudient), parents invalides qui vivent chez vous.",
+          'Spouse without income, children under 21 (25 if studying), disabled relatives living with you.',
+        )}
+      >
         {() => (
           <div className="family">
-            <Counter label="Conjoint" value={s.spouses} max={4} disabledPlus={deps >= maxDeps} onChange={(spouses) => set({ spouses })} />
-            <Counter label="Enfants" value={s.children} max={maxDeps} disabledPlus={deps >= maxDeps} onChange={(children) => set({ children })} />
-            <Counter label="Autres" value={s.otherDependents} max={maxDeps} disabledPlus={deps >= maxDeps} onChange={(otherDependents) => set({ otherDependents })} />
+            <Counter label={t('Conjoint', 'Spouse')} value={s.spouses} max={4} disabledPlus={deps >= maxDeps} onChange={(spouses) => set({ spouses })} />
+            <Counter label={t('Enfants', 'Children')} value={s.children} max={maxDeps} disabledPlus={deps >= maxDeps} onChange={(children) => set({ children })} />
+            <Counter label={t('Autres', 'Others')} value={s.otherDependents} max={maxDeps} disabledPlus={deps >= maxDeps} onChange={(otherDependents) => set({ otherDependents })} />
           </div>
         )}
       </Field>
 
-      <Field label="Statut">
+      <Field label={t('Statut', 'Status')}>
         {() => (
           <Seg
             small
-            label="Statut"
+            label={t('Statut', 'Status')}
             value={s.status}
             onChange={(status) => set({ status })}
             options={[
-              { value: 'employee', label: 'Salarié du privé' },
-              { value: 'apprentice', label: 'Apprenti sous contrat' },
+              { value: 'employee', label: t('Salarié du privé', 'Private-sector employee') },
+              { value: 'apprentice', label: t('Apprenti sous contrat', 'Apprentice') },
             ]}
           />
         )}
@@ -98,28 +111,37 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
 
       <div style={{ marginTop: 8 }} />
 
-      <Section title="Primes et indemnités" icon={<Icon.gift />} badge={has(cash) ? fcfa(sum(cash)) : undefined}>
-        <ItemList list={cash} s={s} set={set} placeholder="Ajouter une prime" />
+      <Section title={t('Primes et indemnités', 'Bonuses and allowances')} icon={<Icon.gift />} badge={has(cash) ? fcfa(sum(cash)) : undefined}>
+        <ItemList list={cash} s={s} set={set} placeholder={t('Ajouter une prime', 'Add a bonus')} />
       </Section>
 
-      <Section title="Avantages en nature" icon={<Icon.home />} badge={has(kind) ? fcfa(sum(kind)) : undefined}>
-        <p className="note">Fournis par l'employeur au lieu d'être payés. Ils sont imposés pour leur valeur réelle sans être versés en argent.</p>
-        <ItemList list={kind} s={s} set={set} placeholder="Ajouter un avantage" />
+      <Section title={t('Avantages en nature', 'Benefits in kind')} icon={<Icon.home />} badge={has(kind) ? fcfa(sum(kind)) : undefined}>
+        <p className="note">
+          {t(
+            "Fournis par l'employeur au lieu d'être payés. Ils sont imposés pour leur valeur réelle sans être versés en argent.",
+            'Provided by the employer instead of being paid. They are taxed at their real value without being paid in cash.',
+          )}
+        </p>
+        <ItemList list={kind} s={s} set={set} placeholder={t('Ajouter un avantage', 'Add a benefit')} />
       </Section>
 
-      <Section title="Catégorie et ancienneté" icon={<Icon.badge />} badge={s.category ? `${s.category}${(rules.categories.grid[s.category]?.length ?? 0) > 1 ? 'ABC'[s.echelon] : ''}${senRate ? ` · +${pct(senRate)}` : ''}` : senRate ? `+${pct(senRate)}` : undefined}>
+      <Section
+        title={t('Catégorie et ancienneté', 'Category and seniority')}
+        icon={<Icon.badge />}
+        badge={s.category ? `${s.category}${(rules.categories.grid[s.category]?.length ?? 0) > 1 ? 'ABC'[s.echelon] : ''}${senRate ? ` · +${pct(senRate)}` : ''}` : senRate ? `+${pct(senRate)}` : undefined}
+      >
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 96px', gap: 8 }}>
-          <Field label="Catégorie (convention 2026)">
+          <Field label={t('Catégorie (convention 2026)', 'Category (2026 agreement)')}>
             {(id) => (
               <select id={id} className="select" value={s.category} onChange={(e) => set({ category: e.target.value, echelon: 0 })}>
-                <option value="">Je ne sais pas</option>
+                <option value="">{t('Je ne sais pas', "I don't know")}</option>
                 {rules.categories.groups.map((g) => (
-                  <optgroup key={g.id} label={g.label}>
+                  <optgroup key={g.id} label={labelOf(g, lang)}>
                     {Object.keys(rules.categories.grid)
                       .filter((c) => c.startsWith(g.id))
                       .map((c) => (
                         <option key={c} value={c}>
-                          {c} · {rules.categories.examples[c]}
+                          {c} · {examples[c]}
                         </option>
                       ))}
                   </optgroup>
@@ -127,7 +149,7 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
               </select>
             )}
           </Field>
-          <Field label="Échelon">
+          <Field label={t('Échelon', 'Step')}>
             {(id) => (
               <select id={id} className="select" value={s.echelon} disabled={(rules.categories.grid[s.category]?.length ?? 0) < 2} onChange={(e) => set({ echelon: Number(e.target.value) })}>
                 {(rules.categories.grid[s.category] ?? [0]).map((_, i) => (
@@ -142,55 +164,73 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
         <p className="f-hint">
           {catMin ? (
             <>
-              Minimum de la catégorie : <strong>{fcfa(catMin)}</strong> par mois.
+              {t('Minimum de la catégorie :', 'Category minimum:')} <strong>{fcfa(catMin)}</strong> {t('par mois.', 'a month.')}
             </>
           ) : (
-            'De E1 (manœuvre, au SMIG) à C4 (doctorat, direction). La catégorie fixe votre salaire minimum et la base de la prime d’ancienneté.'
+            t(
+              'De E1 (manœuvre, au SMIG) à C4 (doctorat, direction). La catégorie fixe votre salaire minimum et la base de la prime d’ancienneté.',
+              'From E1 (labourer, at the minimum wage) to C4 (doctorate, management). The category sets your minimum wage and the base of the seniority bonus.',
+            )
           )}
         </p>
-        <Field label="Années dans l'entreprise" aside={senRate ? `prime de ${pct(senRate)}` : 'prime dès 2 ans'}>
+        <Field label={t("Années dans l'entreprise", 'Years with the company')} aside={senRate ? t(`prime de ${pct(senRate)}`, `bonus of ${pct(senRate)}`) : t('prime dès 2 ans', 'bonus from 2 years')}>
           {() => (
             <div className="stepper-row">
-              <Counter label="Ancienneté (ans)" value={s.seniorityYears} max={50} onChange={(seniorityYears) => set({ seniorityYears })} />
+              <Counter label={t('Ancienneté (ans)', 'Seniority (years)')} value={s.seniorityYears} max={50} onChange={(seniorityYears) => set({ seniorityYears })} />
             </div>
           )}
         </Field>
       </Section>
 
-      <Section title="Heures supplémentaires" icon={<Icon.clock />} badge={otHours ? `${otHours} h` : undefined}>
+      <Section title={t('Heures supplémentaires', 'Overtime')} icon={<Icon.clock />} badge={otHours ? `${otHours} h` : undefined}>
         {rules.overtime.rates.map((ot) => (
           <div className="item-row two" key={ot.id}>
             <label htmlFor={`ot-${ot.id}`}>
-              {ot.label}
-              <small>majorées de {Math.round(ot.rate * 100)} %</small>
+              {labelOf(ot, lang)}
+              <small>{t(`majorées de ${Math.round(ot.rate * 100)} %`, `paid ${Math.round(ot.rate * 100)} % extra`)}</small>
             </label>
             <MoneyInput id={`ot-${ot.id}`} unit="h" max={300} value={s.overtime[ot.id] || 0} onChange={(v) => set({ overtime: { ...s.overtime, [ot.id]: v } })} />
           </div>
         ))}
-        <p className="f-hint">Heures du mois. Taux horaire : salaire de base et sursalaire divisés par {rules.working_time.monthly_hours} h.</p>
+        <p className="f-hint">
+          {t(
+            `Heures du mois. Taux horaire : salaire de base et sursalaire divisés par ${rules.working_time.monthly_hours} h.`,
+            `Hours this month. Hourly rate: base salary and additional salary divided by ${rules.working_time.monthly_hours} h.`,
+          )}
+        </p>
       </Section>
 
-      <Section title="Ce mois-ci" icon={<Icon.calendar />} badge={monthCount ? `${monthCount}` : undefined}>
-        <Field label="Treizième mois ou prime exceptionnelle" hint="Imposé à part, sans le compter comme s'il était touché douze fois.">
+      <Section title={t('Ce mois-ci', 'This month')} icon={<Icon.calendar />} badge={monthCount ? `${monthCount}` : undefined}>
+        <Field label={t('Treizième mois ou prime exceptionnelle', '13th month or one-off bonus')} hint={t("Imposé à part, sans le compter comme s'il était touché douze fois.", 'Taxed separately, not as if it were received twelve times.')}>
           {(id) => <MoneyInput id={id} value={s.exceptional} onChange={(exceptional) => set({ exceptional })} />}
         </Field>
-        <Field label="Primes de panier" aside="3 × le taux horaire du manœuvre" hint="Après six heures de travail de nuit ou une très longue journée.">
+        <Field
+          label={t('Primes de panier', 'Meal allowances')}
+          aside={t('3 × le taux horaire du manœuvre', "3 × the labourer's hourly rate")}
+          hint={t('Après six heures de travail de nuit ou une très longue journée.', 'After six hours of night work or a very long day.')}
+        >
           {() => (
             <div className="stepper-row">
-              <Counter label="Nombre de primes" value={s.meals} max={31} onChange={(meals) => set({ meals })} />
+              <Counter label={t('Nombre de primes', 'Number of allowances')} value={s.meals} max={31} onChange={(meals) => set({ meals })} />
             </div>
           )}
         </Field>
-        <Field label="Jours de mission" hint="Barème minimum de la convention : 3, 5 ou 10 fois le taux horaire de votre catégorie. Non imposé.">
+        <Field
+          label={t('Jours de mission', 'Mission days')}
+          hint={t(
+            'Barème minimum de la convention : 3, 5 ou 10 fois le taux horaire de votre catégorie. Non imposé.',
+            "The agreement's minimum scale: 3, 5 or 10 times your category's hourly rate. Not taxed.",
+          )}
+        >
           {() => (
             <div className="family">
-              <Counter label="Un repas" value={s.missions.oneMeal} max={31} onChange={(v) => set({ missions: { ...s.missions, oneMeal: v } })} />
-              <Counter label="Deux repas" value={s.missions.twoMeals} max={31} onChange={(v) => set({ missions: { ...s.missions, twoMeals: v } })} />
-              <Counter label="Avec nuit" value={s.missions.night} max={31} onChange={(v) => set({ missions: { ...s.missions, night: v } })} />
+              <Counter label={t('Un repas', 'One meal')} value={s.missions.oneMeal} max={31} onChange={(v) => set({ missions: { ...s.missions, oneMeal: v } })} />
+              <Counter label={t('Deux repas', 'Two meals')} value={s.missions.twoMeals} max={31} onChange={(v) => set({ missions: { ...s.missions, twoMeals: v } })} />
+              <Counter label={t('Avec nuit', 'With a night')} value={s.missions.night} max={31} onChange={(v) => set({ missions: { ...s.missions, night: v } })} />
             </div>
           )}
         </Field>
-        <Field label="Frais réels remboursés" hint="Sur justificatifs : ni imposés, ni cotisés.">
+        <Field label={t('Frais réels remboursés', 'Actual expenses refunded')} hint={t('Sur justificatifs : ni imposés, ni cotisés.', 'Against receipts: neither taxed nor subject to contributions.')}>
           {(id) => (
             <MoneyInput
               id={id}
@@ -204,31 +244,41 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
             />
           )}
         </Field>
-        <Field label="Avances et autres retenues" hint="Avance sur salaire, prêt, mutuelle : retirées du net.">
+        <Field label={t('Avances et autres retenues', 'Advances and other deductions')} hint={t('Avance sur salaire, prêt, mutuelle : retirées du net.', 'Salary advance, loan, mutual insurance: taken out of the net.')}>
           {(id) => <MoneyInput id={id} value={s.otherDeductions} onChange={(otherDeductions) => set({ otherDeductions })} />}
         </Field>
       </Section>
 
-      <Section title="Épargne et côté employeur" icon={<Icon.shield />} badge={savings || s.workRisk ? '•' : undefined}>
-        <Field label="Épargne retraite volontaire" aside="par mois" hint="Retenue sur le salaire, elle réduit l'impôt dans la limite de 6 % du revenu net.">
+      <Section title={t('Épargne et côté employeur', 'Savings and employer side')} icon={<Icon.shield />} badge={savings || s.workRisk ? '•' : undefined}>
+        <Field
+          label={t('Épargne retraite volontaire', 'Voluntary pension savings')}
+          aside={t('par mois', 'a month')}
+          hint={t("Retenue sur le salaire, elle réduit l'impôt dans la limite de 6 % du revenu net.", 'Withheld from the salary, it reduces the tax within 6 % of net income.')}
+        >
           {(id) => <MoneyInput id={id} value={s.voluntaryPension} onChange={(voluntaryPension) => set({ voluntaryPension })} />}
         </Field>
         <Field
-          label="Primes d'assurance vie"
-          aside="par an"
-          hint={`Contrat d'au moins six ans. Déductible jusqu'à ${fcfa(rules.irpp.life_insurance.base_cap + rules.irpp.life_insurance.per_child * Math.min(s.children, rules.irpp.life_insurance.max_children))} pour vous (200 000 F plus 30 000 F par enfant).`}
+          label={t("Primes d'assurance vie", 'Life insurance premiums')}
+          aside={t('par an', 'a year')}
+          hint={t(
+            `Contrat d'au moins six ans. Déductible jusqu'à ${fcfa(liCap)} pour vous (200 000 F plus 30 000 F par enfant).`,
+            `Contract of at least six years. Deductible up to ${fcfa(liCap)} for you (200 000 F plus 30 000 F per child).`,
+          )}
         >
           {(id) => <MoneyInput id={id} value={s.lifeInsurance} onChange={(lifeInsurance) => set({ lifeInsurance })} />}
         </Field>
-        <Field label="Taux risques professionnels de l'employeur" hint="Majoré quand l'employeur n'a pas corrigé les risques relevés lors d'un contrôle.">
+        <Field
+          label={t("Taux risques professionnels de l'employeur", "Employer's work-risk rate")}
+          hint={t("Majoré quand l'employeur n'a pas corrigé les risques relevés lors d'un contrôle.", 'Increased when the employer has not fixed the risks found during an inspection.')}
+        >
           {() => (
             <Seg
               small
-              label="Majoration des risques professionnels"
+              label={t('Majoration des risques professionnels', 'Work-risk surcharge')}
               value={s.workRisk}
               onChange={(workRisk) => set({ workRisk })}
               options={[
-                { value: 0, label: 'Normal' },
+                { value: 0, label: t('Normal', 'Normal') },
                 { value: 1, label: '+50 %' },
                 { value: 2, label: '+100 %' },
               ]}
@@ -241,11 +291,13 @@ export function Controls({ s, set, rules, computedBase }: { s: AppState; set: Se
 }
 
 function Presets({ value, onPick }: { value: number; onPick: (n: number) => void }) {
+  const { t } = useRoute();
+  const label = (n: number) => (n === 52500 ? t('SMIG', 'Min. wage') : n >= 1000000 ? `${n / 1000000} M` : `${n / 1000} k`);
   return (
-    <div className="presets" role="group" aria-label="Montants courants">
+    <div className="presets" role="group" aria-label={t('Montants courants', 'Common amounts')}>
       {PRESETS.map((p) => (
         <button key={p} type="button" className="chip" aria-pressed={value === p} onClick={() => onPick(p)}>
-          {presetLabel(p)}
+          {label(p)}
         </button>
       ))}
     </div>
@@ -253,6 +305,7 @@ function Presets({ value, onPick }: { value: number; onPick: (n: number) => void
 }
 
 function ItemList({ list, s, set, placeholder }: { list: Rules['pay_items']; s: AppState; set: Set; placeholder: string }) {
+  const { t, lang } = useRoute();
   const [pick, setPick] = useState('');
   const present = list.filter((i) => i.id in s.items);
   const missing = list.filter((i) => !(i.id in s.items));
@@ -261,14 +314,14 @@ function ItemList({ list, s, set, placeholder }: { list: Rules['pay_items']; s: 
       {present.map((i) => (
         <div className="item-row" key={i.id}>
           <label htmlFor={`it-${i.id}`}>
-            {i.label}
-            {i.hint && <small>{i.hint}</small>}
+            {labelOf(i, lang)}
+            {(lang === 'en' ? i.hint_en : i.hint) && <small>{lang === 'en' ? i.hint_en : i.hint}</small>}
           </label>
           <MoneyInput id={`it-${i.id}`} value={s.items[i.id] || 0} onChange={(v) => set({ items: { ...s.items, [i.id]: v } })} />
           <button
             type="button"
             className="x-btn"
-            aria-label={`Retirer ${i.label}`}
+            aria-label={`${t('Retirer', 'Remove')} ${labelOf(i, lang)}`}
             onClick={() => {
               const items = { ...s.items };
               delete items[i.id];
@@ -294,7 +347,7 @@ function ItemList({ list, s, set, placeholder }: { list: Rules['pay_items']; s: 
           <option value="">+ {placeholder}</option>
           {missing.map((i) => (
             <option key={i.id} value={i.id}>
-              {i.label}
+              {labelOf(i, lang)}
             </option>
           ))}
         </select>

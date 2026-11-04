@@ -1,16 +1,28 @@
 import type { Ref, Rules } from './engine';
+import { useRoute, type Lang } from './i18n';
 
-const nf = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 });
+/** Number and date formats for a language: French spaces (250 000) or English commas (250,000). */
+export function makeFmt(lang: Lang) {
+  const loc = lang === 'en' ? 'en-GB' : 'fr-FR';
+  const nf = new Intl.NumberFormat(loc, { maximumFractionDigits: 0 });
+  const money = (n: number) => nf.format(Math.round(n));
+  return {
+    money,
+    fcfa: (n: number) => `${money(n)} F`,
+    pct: (r: number, digits = 2) => `${(r * 100).toLocaleString(loc, { maximumFractionDigits: digits })} %`,
+    date: (iso: string) => new Date(iso).toLocaleDateString(loc, { day: 'numeric', month: 'long', year: 'numeric' }),
+    monthLabel: (d = new Date()) => {
+      const s = d.toLocaleDateString(loc, { month: 'long', year: 'numeric' });
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    },
+  };
+}
 
-/** 250 000 (narrow no-break spaces, as French typography wants). */
-export const money = (n: number) => nf.format(Math.round(n));
-export const fcfa = (n: number) => `${money(n)} F`;
-export const pct = (r: number, digits = 2) => `${(r * 100).toLocaleString('fr-FR', { maximumFractionDigits: digits })} %`;
+export type Fmt = ReturnType<typeof makeFmt>;
 
-export const monthLabel = (d = new Date()) => {
-  const s = d.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
+export function useFmt(): Fmt {
+  return makeFmt(useRoute().lang);
+}
 
 export const parseMoney = (s: string) => {
   const digits = s.replace(/[^\d]/g, '');
@@ -25,9 +37,10 @@ export function refUrl(rules: Rules, ref?: Ref): string | null {
   return ref.page ? `${src.url}#page-${ref.page}` : src.url;
 }
 
-export function refLabel(rules: Rules, ref?: Ref): string | null {
+export function refLabel(rules: Rules, lang: Lang, ref?: Ref): string | null {
   if (!ref) return null;
   const src = rules.sources[ref.source];
   if (!src) return null;
-  return `${src.title}, ${ref.article}${ref.page ? `, p. ${ref.page}` : ''}`;
+  const title = lang === 'en' && src.title_en ? src.title_en : src.title;
+  return `${title}, ${ref.article}${ref.page ? `, p. ${ref.page}` : ''}`;
 }

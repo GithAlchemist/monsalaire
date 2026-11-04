@@ -166,3 +166,15 @@ describe('rules file', () => {
     }
   });
 });
+
+describe('languages', () => {
+  it('writes the payslip in English with the same figures', () => {
+    const input = { ...emptyInput(), baseSalary: 300000, spouses: 1, children: 2, items: { prime_transport: 20000 } };
+    const fr = computePayslip(input, rules, 'fr');
+    const en = computePayslip(input, rules, 'en');
+    expect(en.netPay).toBe(fr.netPay);
+    expect(en.lines.find((l) => l.id === 'base')!.label).toBe('Base salary');
+    expect(en.lines.find((l) => l.id === 'prime_transport')!.label).toBe('Transport allowance');
+    expect(en.lines.every((l) => !/[éèà]/.test(l.label))).toBe(true);
+  });
+});

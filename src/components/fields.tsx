@@ -1,5 +1,6 @@
 import { useId, type ReactNode } from 'react';
-import { money, parseMoney } from '../format';
+import { parseMoney, useFmt } from '../format';
+import { useRoute } from '../i18n';
 
 export function MoneyInput({
   value,
@@ -18,6 +19,7 @@ export function MoneyInput({
   unit?: string;
   max?: number;
 }) {
+  const { money } = useFmt();
   return (
     <div className={`money${big ? ' big' : ''}`}>
       <input
@@ -50,15 +52,16 @@ export function Field({ label, aside, hint, children }: { label: ReactNode; asid
 }
 
 export function Counter({ label, value, onChange, min = 0, max = 20, disabledPlus }: { label: string; value: number; onChange: (n: number) => void; min?: number; max?: number; disabledPlus?: boolean }) {
+  const { t } = useRoute();
   return (
     <div className="counter" role="group" aria-label={label}>
       <span className="c-label">{label}</span>
       <div className="c-row">
-        <button type="button" aria-label={`${label} : moins`} disabled={value <= min} onClick={() => onChange(Math.max(min, value - 1))}>
+        <button type="button" aria-label={`${label} : ${t('moins', 'fewer')}`} disabled={value <= min} onClick={() => onChange(Math.max(min, value - 1))}>
           −
         </button>
         <output aria-live="polite">{value}</output>
-        <button type="button" aria-label={`${label} : plus`} disabled={value >= max || disabledPlus} onClick={() => onChange(Math.min(max, value + 1))}>
+        <button type="button" aria-label={`${label} : ${t('plus', 'more')}`} disabled={value >= max || disabledPlus} onClick={() => onChange(Math.min(max, value + 1))}>
           +
         </button>
       </div>
@@ -121,4 +124,7 @@ export const Icon = {
   alert: () => <I d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01" />,
   book: () => <I d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15zM20 17v5H6.5A2.5 2.5 0 0 1 4 19.5" size={13} />,
   arrow: () => <I d="M5 12h14M13 6l6 6-6 6" size={14} />,
+  chevron: () => <I d="M9 6l6 6-6 6" size={15} />,
+  info: () => <I d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 16v-4M12 8h.01" />,
+  globe: () => <I d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" size={14} />,
 };

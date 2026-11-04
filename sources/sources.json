@@ -15,7 +15,9 @@
     "sha256": "7d0df3af53833e47266f4b77cf134ac3acb14bb3e8049d1bf92ac2438be4f4c3",
     "pages": 361,
     "short_fr": "Code général des impôts 2025",
-    "use_fr": "IRPP sur les salaires : art. 17 à 26, 72 à 74"
+    "use_fr": "IRPP sur les salaires : art. 17 à 26, 72 à 74",
+    "short_en": "Togo tax code 2025",
+    "use_en": "Income tax on wages: art. 17 to 26, 72 to 74"
   },
   {
     "id": "otr-cahier-fiscal-2026",
@@ -31,7 +33,9 @@
     "sha256": "7d34313a4a6f12696fe1d6745d19e77b0d05a97bbbff68578a493749c8f16db9",
     "pages": 24,
     "short_fr": "Cahier fiscal de la loi de finances 2026",
-    "use_fr": "Vérifie que 2026 ne change rien à l’impôt sur les salaires"
+    "use_fr": "Vérifie que 2026 ne change rien à l’impôt sur les salaires",
+    "short_en": "2026 finance law, OTR summary",
+    "use_en": "Checks that 2026 changes nothing on wage tax"
   },
   {
     "id": "ccit-2026",
@@ -53,7 +57,9 @@
     "sha256": "920b3666d5bb403d613e850cb3c9a288b92c7336b57527a95dcba452a8640138",
     "pages": 76,
     "short_fr": "Convention collective interprofessionnelle 2026",
-    "use_fr": "Grille des salaires, ancienneté, heures sup, primes"
+    "use_fr": "Grille des salaires, ancienneté, heures sup, primes",
+    "short_en": "2026 interprofessional collective agreement",
+    "use_en": "Wage grid, seniority, overtime, allowances"
   },
   {
     "id": "ccit-2011",
@@ -68,7 +74,9 @@
     "sha256": "426b6b327747e79a2fa85f46f631f6c1c0296c3684f851f8337ed146178a4e1b",
     "pages": 63,
     "short_fr": "Convention collective interprofessionnelle 2011",
-    "use_fr": "Historique"
+    "use_fr": "Historique",
+    "short_en": "2011 interprofessional collective agreement",
+    "use_en": "History"
   },
   {
     "id": "code-securite-sociale-2011",
@@ -87,7 +95,9 @@
     "sha256": "ce986dfb1dc3b5a3f05be99bfeed4a4e16494e8e9940acf78b24c9c7de0d0560",
     "pages": 43,
     "short_fr": "Code de sécurité sociale (loi 2011-006)",
-    "use_fr": "Assiette CNSS, plancher au SMIG, pas de plafond"
+    "use_fr": "Assiette CNSS, plancher au SMIG, pas de plafond",
+    "short_en": "Social Security Code (law 2011-006)",
+    "use_en": "CNSS base, minimum wage floor, no ceiling"
   },
   {
     "id": "decret-2012-038-taux-cnss",
@@ -103,7 +113,9 @@
     "sha256": "2467ce2dd77caf94692e7d8815aadb264d1a442ec47958c98bbaae476e266e4f",
     "pages": 1,
     "short_fr": "Décret 2012-038 sur les taux CNSS",
-    "use_fr": "4 % salarié, 17,5 % employeur"
+    "use_fr": "4 % salarié, 17,5 % employeur",
+    "short_en": "Decree 2012-038 on CNSS rates",
+    "use_en": "4 % employee, 17.5 % employer"
   },
   {
     "id": "arrete-2012-003-risques-professionnels",
@@ -119,7 +131,9 @@
     "sha256": "d9127bac621928a2ab5343bbfd7538676da932296dae001189698b09ad62d2f3",
     "pages": 2,
     "short_fr": "Arrêté 003/2012 sur les risques professionnels",
-    "use_fr": "Majoration du taux de l’employeur"
+    "use_fr": "Majoration du taux de l’employeur",
+    "short_en": "Order 003/2012 on work-related risks",
+    "use_en": "Surcharge on the employer rate"
   },
   {
     "id": "arrete-2012-002-application-css",
@@ -135,7 +149,9 @@
     "sha256": "d04b6ee5c4c4749da92e221f0413e8d3c946e1d4b53d6f427f55d0b427143a65",
     "pages": 43,
     "short_fr": "Arrêté 002/2012 d’application du Code",
-    "use_fr": "Pénalités, autres régimes"
+    "use_fr": "Pénalités, autres régimes",
+    "short_en": "Order 002/2012 applying the Code",
+    "use_en": "Penalties, other regimes"
   },
   {
     "id": "loi-2021-022-amu",
@@ -151,7 +167,9 @@
     "sha256": "dd0a6bfe70110549ece73873eb23750b8a3e4bf115317f2922797e9e07d8a062",
     "pages": 25,
     "short_fr": "Loi 2021-022 sur l’assurance maladie universelle",
-    "use_fr": "Fondement de l’AMU"
+    "use_fr": "Fondement de l’AMU",
+    "short_en": "Law 2021-022 on universal health insurance",
+    "use_en": "Legal basis of the AMU"
   },
   {
     "id": "decret-2023-096-taux-amu",
@@ -172,7 +190,9 @@
     "sha256": "c6de75843d99f0ce0c581cbc352849ea99c96469bc46c9ace0c60666616d1b99",
     "pages": 6,
     "short_fr": "Décret 2023-096 sur les cotisations AMU",
-    "use_fr": "Assiette et taux : 5 % et 5 %"
+    "use_fr": "Assiette et taux : 5 % et 5 %",
+    "short_en": "Decree 2023-096 on AMU contributions",
+    "use_en": "Base and rates: 5 % and 5 %"
   },
   {
     "id": "decret-2023-097-gestion-amu",
@@ -188,7 +208,9 @@
     "sha256": "8503b047bf3669c98b3eb50446f2f6f0ce6da08c6c0b5787d45d2361c644e7a9",
     "pages": 3,
     "short_fr": "Décret 2023-097 sur la gestion de l’AMU",
-    "use_fr": "CNSS pour le privé, INAM pour le public"
+    "use_fr": "CNSS pour le privé, INAM pour le public",
+    "short_en": "Decree 2023-097 on AMU management",
+    "use_en": "CNSS for the private sector, INAM for the public"
   },
   {
     "id": "code-travail-2021",
@@ -208,7 +230,9 @@
     "sha256": "29d1ac33c1eeec1cba7dfd8c63c85b7174a1f5311ee911c1fd8bc76d5987770d",
     "pages": 58,
     "short_fr": "Code du travail (loi 2021-012)",
-    "use_fr": "Salaire, SMIG, retenues permises, 40 h"
+    "use_fr": "Salaire, SMIG, retenues permises, 40 h",
+    "short_en": "Labour Code (law 2021-012)",
+    "use_en": "Wage, minimum wage, allowed deductions, 40 h"
   },
   {
     "id": "arrete-3790-smig-2022",
@@ -224,6 +248,8 @@
     "sha256": "8be592ee49073f59e3d5a841a0666ae0a19be15f9754bbe8b9a09b658e7dc689",
     "pages": 1,
     "short_fr": "Arrêté 3790 sur le SMIG",
-    "use_fr": "52 500 F par mois depuis 2023"
+    "use_fr": "52 500 F par mois depuis 2023",
+    "short_en": "Order 3790 on the minimum wage",
+    "use_en": "52 500 F a month since 2023"
   }
 ]

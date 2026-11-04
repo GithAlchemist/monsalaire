@@ -14,9 +14,17 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
 
 - `main` holds everything; no other branch. Rules version `2026.2`, verified on 4 November 2026 against the texts in
   `sources/` (13 official texts, 706 pages, original PDFs and page-by-page transcriptions).
-- 31 engine tests pass (`npm test`), including the three IRPP reference cases (150 000, 300 000 and 800 000 F).
-- UI checked in the browser on desktop, phone width (375 px, no horizontal scroll) and dark theme; gross to net and
-  net to gross both checked (400 000 F target gives exactly 400 000 F).
+- 32 engine tests pass (`npm test`), including the three IRPP reference cases (150 000, 300 000 and 800 000 F) and the
+  English payslip.
+- Four pages in French and English (`src/i18n.tsx`): simulator (compact hero, one-line disclaimer that opens, payslip,
+  then the site footer), How it works (`src/pages/Understand.tsx`: waterfall, 100 F dots, three amounts,
+  contributions table, tax steps and brackets, key rules), Legal texts (library, verification table, limits), Terms.
+  Language: `/en/...` addresses, first visit follows the device, choice remembered. The simulation is kept in the
+  home page hash and in localStorage, so the other pages use it.
+- Bilingual README (`README.md`, `README.fr.md`) with banner (`docs/banner.svg`) and screenshots
+  (`docs/screenshots/`, taken with headless Chrome at 2x), `CONTRIBUTING.md`, issue templates (rule error, new
+  country, bug), PR template. `vercel.json` rewrites every path to `index.html` for the day it is deployed.
+- UI checked in the browser on desktop, phone width (375 px, no horizontal scroll) and dark theme, in both languages.
 - Local preview: `npm run dev`, or the `monsalaire-dev` entry of `~/Codebase/.claude/launch.json` (port 3150).
 
 ## Decisions taken with Kévin (do not reopen without asking him)
@@ -26,7 +34,8 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
   site stays static. Legal parameters are data in `rules/`, never constants in the engine.
 - Look: Togolese flag and OTR colours (forest green, gold, a touch of red) on the structure of the Aconta design
   system (Geist, mono figures, Instrument Serif accents, documents on paper). No separate design system.
-- Code, comments, README and commit messages in English; the interface in French.
+- Bilingual from the start (Kévin, 4 November 2026): site, payslip and README in French and English.
+- Home page compact: it stops at the payslip; explanations live on How it works, sources on Legal texts.
 - Seniority bonus (CCIT 2026 art. 40) read as "2 % at 2 and 3 years, then one more point a year" (3 % at 4 years);
   the other reading is shown on the site as an open question.
 - AMU base excludes benefits in kind (decree 2023-096 art. 9 does not list them); CNSS includes them (code art. 12).
@@ -52,7 +61,10 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
   against the page image.
 - Verify UI changes in the browser pane before saying they work; `html { scroll-behavior: smooth }` delays scripted
   scrolls, use `behavior: 'instant'` when taking screenshots.
-- Pushing: this is Kévin's personal public repo; commit and push only when he asks.
+- Pushing: Kévin wants every piece of work ready to be picked up by his other Claude account at any time. Commit and
+  push to `main` at the end of each piece of work, with this file updated.
+- Screenshots for the README: headless Chrome with `--lang=fr-FR` or `en-US` (the home page follows the device
+  language on a first visit), `--force-device-scale-factor=2`, dev server running.
 
 ## Where else to look
 

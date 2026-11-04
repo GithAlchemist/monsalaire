@@ -1,10 +1,12 @@
 import { Fragment, useState } from 'react';
 import type { PayLine, Payslip as Slip, Rules } from '../engine';
-import { money, monthLabel, pct, refLabel, refUrl } from '../format';
+import { refLabel, refUrl, useFmt } from '../format';
+import { useRoute } from '../i18n';
 import { useChanged, useTweened } from '../hooks';
 import { Icon } from './fields';
 
 export function Amount({ value, className }: { value: number; className?: string }) {
+  const { money } = useFmt();
   const v = useTweened(value);
   return <span className={className}>{money(v)}</span>;
 }
@@ -12,12 +14,14 @@ export function Amount({ value, className }: { value: number; className?: string
 const dot = <span className="dim">·</span>;
 
 function Row({ l, rules, employer, open, onToggle }: { l: PayLine; rules: Rules; employer: boolean; open: boolean; onToggle: () => void }) {
+  const { lang } = useRoute();
+  const { money, pct } = useFmt();
   const flash = useChanged(l.employee + l.employer * 1e-3);
   const isGain = l.kind === 'earning' || l.kind === 'benefit' || l.kind === 'reimbursement';
   const rate =
     l.rate !== undefined
       ? l.id.startsWith('ot_')
-        ? `× ${l.rate.toLocaleString('fr-FR')}`
+        ? `× ${l.rate.toLocaleString(lang === 'en' ? 'en-GB' : 'fr-FR')}`
         : pct(l.rate)
       : l.employerRate !== undefined
         ? pct(l.employerRate)
@@ -33,7 +37,7 @@ function Row({ l, rules, employer, open, onToggle }: { l: PayLine; rules: Rules;
             {l.quantity !== undefined && (
               <span className="q">
                 {l.quantity}
-                {l.unit === 'h' ? ' h' : l.unit === 'j' ? ' j' : l.unit === '×' ? ' ×' : ''}
+                {l.unit === 'h' ? ' h' : l.unit === 'j' ? (lang === 'en' ? ' d' : ' j') : l.unit === '×' ? ' ×' : ''}
               </span>
             )}
           </button>
@@ -53,7 +57,7 @@ function Row({ l, rules, employer, open, onToggle }: { l: PayLine; rules: Rules;
                 <div>
                   <a className="cite" href={url} target="_blank" rel="noreferrer">
                     <Icon.book />
-                    {refLabel(rules, l.ref)}
+                    {refLabel(rules, lang, l.ref)}
                   </a>
                 </div>
               )}
@@ -66,6 +70,8 @@ function Row({ l, rules, employer, open, onToggle }: { l: PayLine; rules: Rules;
 }
 
 export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; rules: Rules; statusLabel: string; category: string }) {
+  const { t } = useRoute();
+  const { money, monthLabel, date } = useFmt();
   const [open, setOpen] = useState<string | null>(null);
   const [employer, setEmployer] = useState(() => typeof window === 'undefined' || window.innerWidth > 640);
   const net = useTweened(slip.netPay);
@@ -89,13 +95,13 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
 
   return (
     <div className="sheet-wrap">
-      <article className="sheet" aria-label="Bulletin de paie simulé">
+      <article className="sheet" aria-label={t('Bulletin de paie simulé', 'Simulated payslip')}>
         <div className="stamp" aria-hidden="true">
           SIMULATION
         </div>
         <header className="sheet-head">
           <div>
-            <div className="doc-type">Bulletin de paie</div>
+            <div className="doc-type">{t('Bulletin de paie', 'Payslip')}</div>
             <div className="period">{monthLabel()}</div>
           </div>
           <img className="sheet-logo" src="/logo.svg" alt="" width={40} height={40} />
@@ -103,17 +109,17 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
 
         <dl className="parties">
           <div>
-            <dt>Salarié</dt>
+            <dt>{t('Salarié', 'Employee')}</dt>
             <dd>{statusLabel}</dd>
           </div>
           <div>
-            <dt>Catégorie</dt>
-            <dd>{category || 'Non précisée'}</dd>
+            <dt>{t('Catégorie', 'Category')}</dt>
+            <dd>{category || t('Non précisée', 'Not set')}</dd>
           </div>
           <div>
-            <dt>Parts et taux horaire</dt>
+            <dt>{t('Personnes à charge, taux horaire', 'Dependents, hourly rate')}</dt>
             <dd className="num">
-              {slip.dependents} à charge · {money(slip.hourlyRate)} F/h
+              {slip.dependents} · {money(slip.hourlyRate)} F/h
             </dd>
           </div>
         </dl>
@@ -121,23 +127,23 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
         <table className="slip">
           <thead>
             <tr>
-              <th scope="col">Libellé</th>
+              <th scope="col">{t('Libellé', 'Item')}</th>
               <th scope="col" className="hide-sm">
-                Base
+                {t('Base', 'Base')}
               </th>
               <th scope="col" className="hide-sm">
-                Taux
+                {t('Taux', 'Rate')}
               </th>
-              <th scope="col">Gains</th>
-              <th scope="col">Retenues</th>
-              {employer && <th scope="col">Employeur</th>}
+              <th scope="col">{t('Gains', 'Earnings')}</th>
+              <th scope="col">{t('Retenues', 'Deductions')}</th>
+              {employer && <th scope="col">{t('Employeur', 'Employer')}</th>}
             </tr>
           </thead>
           <tbody>
-            {group('Rémunération', '#0d6b47')}
+            {group(t('Rémunération', 'Pay'), '#0d6b47')}
             {earnings.map(row)}
             <tr className={`total${grossFlash ? ' flash' : ''}`}>
-              <td>Salaire brut</td>
+              <td>{t('Salaire brut', 'Gross salary')}</td>
               <td className="hide-sm" />
               <td className="hide-sm" />
               <td>
@@ -146,14 +152,14 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
               <td />
               {employer && <td />}
             </tr>
-            {group('Cotisations sociales', '#e9b730')}
+            {group(t('Cotisations sociales', 'Social contributions'), '#e9b730')}
             {contributions.map(row)}
-            {group('Impôt sur le revenu', '#c8102e')}
+            {group(t('Impôt sur le revenu', 'Income tax'), '#c8102e')}
             {tax.map(row)}
-            {after.length > 0 && group('Hors brut', '#6a6255')}
+            {after.length > 0 && group(t('Hors brut', 'Outside gross'), '#6a6255')}
             {after.map(row)}
             <tr className={`total${totalFlash ? ' flash' : ''}`}>
-              <td>Totaux</td>
+              <td>{t('Totaux', 'Totals')}</td>
               <td className="hide-sm" />
               <td className="hide-sm" />
               <td>
@@ -173,8 +179,8 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
 
         <div className="netbox">
           <span className="label">
-            Net à payer
-            <small>versé sur votre compte</small>
+            {t('Net à payer', 'Net pay')}
+            <small>{t('versé sur votre compte', 'paid into your account')}</small>
           </span>
           <span className="value">{money(net)} F</span>
         </div>
@@ -183,11 +189,11 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
           <label className="toggle-line no-print">
             <input type="checkbox" checked={employer} onChange={(e) => setEmployer(e.target.checked)} />
             <span className="switch" aria-hidden="true" />
-            Part employeur
+            {t('Part employeur', 'Employer share')}
           </label>
-          <span>Touchez une ligne pour voir son calcul et son texte de loi.</span>
+          <span>{t('Touchez une ligne pour voir son calcul et son texte de loi.', 'Tap a line to see how it is computed and its legal text.')}</span>
           <span>
-            Règles {rules.version}, vérifiées le {new Date(rules.verified_on).toLocaleDateString('fr-FR')}
+            {t('Règles', 'Rules')} {rules.version}, {t('vérifiées le', 'checked on')} {date(rules.verified_on)}
           </span>
         </footer>
       </article>

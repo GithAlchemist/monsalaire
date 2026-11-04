@@ -1,0 +1,21 @@
+name: New country · Nouveau pays
+description: Suggest a country and its official texts · Proposer un pays et ses textes officiels
+labels: [country]
+body:
+  - type: input
+    id: country
+    attributes:
+      label: Country · Pays
+    validations:
+      required: true
+  - type: textarea
+    id: texts
+    attributes:
+      label: Official texts · Textes officiels
+      description: Tax code, social security, minimum wage, collective agreement (links) · Code des impôts, sécurité sociale, salaire minimum, convention collective (liens)
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Help · Aide
+      options:
+        - label: I can help check the rules · Je peux aider à vérifier les règles

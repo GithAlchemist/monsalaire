@@ -15,9 +15,12 @@ export interface Bracket {
   rate: number;
 }
 
+export type Lang = 'fr' | 'en';
+
 export interface PayItemRule {
   id: string;
   label: string;
+  label_en?: string;
   /** Subject to CNSS contributions. */
   cnss: boolean;
   /** Subject to AMU contributions. */
@@ -27,16 +30,19 @@ export interface PayItemRule {
   /** Paid in cash (false = benefit in kind: counted, not paid). */
   cash: boolean;
   hint?: string;
+  hint_en?: string;
 }
 
 export interface RateLine {
   id: string;
   label: string;
+  label_en?: string;
   rate: number;
 }
 
 export interface SourceRef {
   title: string;
+  title_en?: string;
   publisher: string;
   url: string;
 }
@@ -114,14 +120,17 @@ export interface Rules {
     ref: Ref;
     ref_definitions: Ref;
     status: string;
-    groups: { id: string; label: string }[];
+    groups: { id: string; label: string; label_en?: string }[];
     grid: Record<string, number[]>;
     examples: Record<string, string>;
+    examples_en?: Record<string, string>;
   };
   pay_items: PayItemRule[];
   pay_items_ref: { irpp: Ref; exempt: Ref; cnss: Ref; amu: Ref };
   not_modeled: string[];
+  not_modeled_en?: string[];
   open_questions: string[];
+  open_questions_en?: string[];
   sources: Record<string, SourceRef>;
 }
 

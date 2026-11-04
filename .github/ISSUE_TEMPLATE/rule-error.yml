@@ -1,0 +1,35 @@
+name: Rule error · Règle fausse
+description: A rate, a scale or a rule that is wrong or out of date · Un taux, un barème ou une règle faux ou dépassé
+labels: [rules]
+body:
+  - type: input
+    id: rule
+    attributes:
+      label: Rule · Règle
+      placeholder: "AMU employee rate · Taux AMU salarié"
+    validations:
+      required: true
+  - type: input
+    id: current
+    attributes:
+      label: Value in the simulator · Valeur du simulateur
+    validations:
+      required: true
+  - type: input
+    id: correct
+    attributes:
+      label: Correct value · Valeur juste
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Official text · Texte officiel
+      description: Title, article, date, and a link or a copy of the page · Titre, article, date, et un lien ou une copie de la page
+    validations:
+      required: true
+  - type: input
+    id: since
+    attributes:
+      label: In force since · En vigueur depuis
+      placeholder: "2027-01-01"

@@ -1,0 +1,15 @@
+name: Bug
+description: Something does not work on the site · Quelque chose ne marche pas sur le site
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened · Ce qui se passe
+      description: Steps, and the shared link of the simulation if possible · Étapes, et le lien partagé de la simulation si possible
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and browser · Appareil et navigateur

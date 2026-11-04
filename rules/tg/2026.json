@@ -7,38 +7,86 @@
   "status": "in_force",
   "verified_on": "2026-11-04",
   "notes": "Private-sector employees under the general regime (CNSS, AMU, IRPP on wages), CCIT 2026. Every value below was checked against the original text in /sources (source id, article, PDF page).",
-
   "minimum_wage": {
     "smig_monthly": 52500,
     "smig_hourly": 302.89,
     "valid_from": "2023-01-01",
-    "ref": { "source": "arrete-3790-smig-2022", "article": "art. 1", "page": 1 },
+    "ref": {
+      "source": "arrete-3790-smig-2022",
+      "article": "art. 1",
+      "page": 1
+    },
     "status": "verified"
   },
-
   "working_time": {
     "weekly_hours": 40,
     "monthly_hours": 173.33,
-    "hourly_base_items": ["sursalaire"],
-    "ref": { "source": "ccit-2026", "article": "art. 36", "page": 36 },
-    "ref_hours": { "source": "code-travail-2021", "article": "art. 180", "page": 29 },
+    "hourly_base_items": [
+      "sursalaire"
+    ],
+    "ref": {
+      "source": "ccit-2026",
+      "article": "art. 36",
+      "page": 36
+    },
+    "ref_hours": {
+      "source": "code-travail-2021",
+      "article": "art. 180",
+      "page": 29
+    },
     "status": "verified"
   },
-
   "social": {
     "cnss": {
-      "employee": [{ "id": "cnss_pension_employee", "label": "CNSS, retraite (part salariale)", "rate": 0.04 }],
-      "employer": [
-        { "id": "cnss_family", "label": "CNSS, prestations familiales et maternité", "rate": 0.03 },
-        { "id": "cnss_work_risk", "label": "CNSS, risques professionnels", "rate": 0.02 },
-        { "id": "cnss_pension_employer", "label": "CNSS, retraite (part patronale)", "rate": 0.125 }
+      "employee": [
+        {
+          "id": "cnss_pension_employee",
+          "label": "CNSS, retraite (part salariale)",
+          "rate": 0.04,
+          "label_en": "CNSS, pension (employee share)"
+        }
       ],
-      "work_risk_surcharges": [0.5, 1.0],
+      "employer": [
+        {
+          "id": "cnss_family",
+          "label": "CNSS, prestations familiales et maternité",
+          "rate": 0.03,
+          "label_en": "CNSS, family and maternity benefits"
+        },
+        {
+          "id": "cnss_work_risk",
+          "label": "CNSS, risques professionnels",
+          "rate": 0.02,
+          "label_en": "CNSS, work-related risks"
+        },
+        {
+          "id": "cnss_pension_employer",
+          "label": "CNSS, retraite (part patronale)",
+          "rate": 0.125,
+          "label_en": "CNSS, pension (employer share)"
+        }
+      ],
+      "work_risk_surcharges": [
+        0.5,
+        1.0
+      ],
       "floor": "smig_monthly",
       "ceiling": null,
-      "ref": { "source": "decret-2012-038-taux-cnss", "article": "art. 1 à 3", "page": 1 },
-      "ref_base": { "source": "code-securite-sociale-2011", "article": "art. 12", "page": 4 },
-      "ref_surcharge": { "source": "arrete-2012-003-risques-professionnels", "article": "art. 4 et 5", "page": 1 },
+      "ref": {
+        "source": "decret-2012-038-taux-cnss",
+        "article": "art. 1 à 3",
+        "page": 1
+      },
+      "ref_base": {
+        "source": "code-securite-sociale-2011",
+        "article": "art. 12",
+        "page": 4
+      },
+      "ref_surcharge": {
+        "source": "arrete-2012-003-risques-professionnels",
+        "article": "art. 4 et 5",
+        "page": 1
+      },
       "status": "verified"
     },
     "amu": {
@@ -47,63 +95,169 @@
       "floor": "smig_monthly",
       "ceiling": null,
       "valid_from": "2024-01-01",
-      "ref": { "source": "decret-2023-096-taux-amu", "article": "art. 12 et 29", "page": 4 },
-      "ref_base": { "source": "decret-2023-096-taux-amu", "article": "art. 9 et 10", "page": 3 },
+      "ref": {
+        "source": "decret-2023-096-taux-amu",
+        "article": "art. 12 et 29",
+        "page": 4
+      },
+      "ref_base": {
+        "source": "decret-2023-096-taux-amu",
+        "article": "art. 9 et 10",
+        "page": 3
+      },
       "status": "verified"
     }
   },
-
   "irpp": {
     "method": "annualized",
     "pension_deduction_cap": 0.06,
-    "flat_allowance": { "rate": 0.28, "cap_income": 10000000 },
+    "flat_allowance": {
+      "rate": 0.28,
+      "cap_income": 10000000
+    },
     "voluntary_pension_cap": 0.06,
-    "life_insurance": { "base_cap": 200000, "per_child": 30000, "max_children": 6 },
-    "dependents": { "amount_per_month": 10000, "max": 6 },
-    "rounding": { "taxable_income_down_to": 1000, "tax_down_to": 10 },
+    "life_insurance": {
+      "base_cap": 200000,
+      "per_child": 30000,
+      "max_children": 6
+    },
+    "dependents": {
+      "amount_per_month": 10000,
+      "max": 6
+    },
+    "rounding": {
+      "taxable_income_down_to": 1000,
+      "tax_down_to": 10
+    },
     "brackets": [
-      { "up_to": 900000, "rate": 0 },
-      { "up_to": 3000000, "rate": 0.03 },
-      { "up_to": 6000000, "rate": 0.1 },
-      { "up_to": 9000000, "rate": 0.15 },
-      { "up_to": 12000000, "rate": 0.2 },
-      { "up_to": 15000000, "rate": 0.25 },
-      { "up_to": 20000000, "rate": 0.3 },
-      { "up_to": null, "rate": 0.35 }
+      {
+        "up_to": 900000,
+        "rate": 0
+      },
+      {
+        "up_to": 3000000,
+        "rate": 0.03
+      },
+      {
+        "up_to": 6000000,
+        "rate": 0.1
+      },
+      {
+        "up_to": 9000000,
+        "rate": 0.15
+      },
+      {
+        "up_to": 12000000,
+        "rate": 0.2
+      },
+      {
+        "up_to": 15000000,
+        "rate": 0.25
+      },
+      {
+        "up_to": 20000000,
+        "rate": 0.3
+      },
+      {
+        "up_to": null,
+        "rate": 0.35
+      }
     ],
     "apprentice_exempt": true,
-    "ref": { "source": "cgi-lpf-2025", "article": "art. 74", "page": 41 },
-    "ref_deductions": { "source": "cgi-lpf-2025", "article": "art. 26", "page": 25 },
-    "ref_dependents": { "source": "cgi-lpf-2025", "article": "art. 72 et 73", "page": 40 },
-    "ref_apprentice": { "source": "cgi-lpf-2025", "article": "art. 23-4", "page": 24 },
-    "ref_withholding": { "source": "cgi-lpf-2025", "article": "LPF art. 26 et 27", "page": 223 },
-    "ref_2026": { "source": "otr-cahier-fiscal-2026", "article": "aperçu des modifications du CGI", "page": 5 },
+    "ref": {
+      "source": "cgi-lpf-2025",
+      "article": "art. 74",
+      "page": 41
+    },
+    "ref_deductions": {
+      "source": "cgi-lpf-2025",
+      "article": "art. 26",
+      "page": 25
+    },
+    "ref_dependents": {
+      "source": "cgi-lpf-2025",
+      "article": "art. 72 et 73",
+      "page": 40
+    },
+    "ref_apprentice": {
+      "source": "cgi-lpf-2025",
+      "article": "art. 23-4",
+      "page": 24
+    },
+    "ref_withholding": {
+      "source": "cgi-lpf-2025",
+      "article": "LPF art. 26 et 27",
+      "page": 223
+    },
+    "ref_2026": {
+      "source": "otr-cahier-fiscal-2026",
+      "article": "aperçu des modifications du CGI",
+      "page": 5
+    },
     "status": "verified"
   },
-
   "overtime": {
     "rates": [
-      { "id": "ot_20", "label": "41e à 48e heure de la semaine", "rate": 0.2 },
-      { "id": "ot_40", "label": "Au-delà de la 48e heure", "rate": 0.4 },
-      { "id": "ot_65", "label": "Dimanche, jour de repos ou férié", "rate": 0.65 },
-      { "id": "ot_night_65", "label": "Nuit en semaine (22 h à 5 h)", "rate": 0.65 },
-      { "id": "ot_night_100", "label": "Nuit, dimanche ou jour férié", "rate": 1.0 }
+      {
+        "id": "ot_20",
+        "label": "41e à 48e heure de la semaine",
+        "rate": 0.2,
+        "label_en": "41st to 48th hour of the week"
+      },
+      {
+        "id": "ot_40",
+        "label": "Au-delà de la 48e heure",
+        "rate": 0.4,
+        "label_en": "Beyond the 48th hour"
+      },
+      {
+        "id": "ot_65",
+        "label": "Dimanche, jour de repos ou férié",
+        "rate": 0.65,
+        "label_en": "Sunday, rest day or public holiday"
+      },
+      {
+        "id": "ot_night_65",
+        "label": "Nuit en semaine (22 h à 5 h)",
+        "rate": 0.65,
+        "label_en": "Night on a weekday (10 pm to 5 am)"
+      },
+      {
+        "id": "ot_night_100",
+        "label": "Nuit, dimanche ou jour férié",
+        "rate": 1.0,
+        "label_en": "Night on a Sunday or public holiday"
+      }
     ],
-    "ref": { "source": "ccit-2026", "article": "art. 36", "page": 35 },
+    "ref": {
+      "source": "ccit-2026",
+      "article": "art. 36",
+      "page": 35
+    },
     "status": "verified"
   },
-
   "allowances": {
-    "meal": { "hours_multiplier": 3, "base_category": "E1", "ref": { "source": "ccit-2026", "article": "art. 39", "page": 37 } },
+    "meal": {
+      "hours_multiplier": 3,
+      "base_category": "E1",
+      "ref": {
+        "source": "ccit-2026",
+        "article": "art. 39",
+        "page": 37
+      }
+    },
     "mission": {
       "one_meal": 3,
       "two_meals": 5,
       "two_meals_and_night": 10,
-      "ref": { "source": "ccit-2026", "article": "art. 38", "page": 37 }
+      "ref": {
+        "source": "ccit-2026",
+        "article": "art. 38",
+        "page": 37
+      }
     },
     "status": "verified"
   },
-
   "seniority": {
     "base": "category_minimum",
     "first_step_years": 2,
@@ -111,35 +265,112 @@
     "yearly_from_year": 4,
     "yearly_increment": 0.01,
     "cap": 0.35,
-    "ref": { "source": "ccit-2026", "article": "art. 40", "page": 39 },
+    "ref": {
+      "source": "ccit-2026",
+      "article": "art. 40",
+      "page": 39
+    },
     "interpretation": "« 2 % après deux années de présence ; 1 % par année de présence à partir de la quatrième année avec un maximum de 35 % ». Read as 2 % at 2 and 3 years, then one more point each year: 3 % at 4 years, 9 % at 10 years, 35 % at 36 years. The other possible reading is listed in open_questions.",
     "status": "verified"
   },
-
   "categories": {
-    "ref": { "source": "ccit-2026", "article": "annexe II", "page": 72 },
-    "ref_definitions": { "source": "ccit-2026", "article": "annexe I", "page": 63 },
+    "ref": {
+      "source": "ccit-2026",
+      "article": "annexe II",
+      "page": 72
+    },
+    "ref_definitions": {
+      "source": "ccit-2026",
+      "article": "annexe I",
+      "page": 63
+    },
     "status": "verified",
     "groups": [
-      { "id": "E", "label": "Agents d'exécution" },
-      { "id": "M", "label": "Agents de maîtrise" },
-      { "id": "C", "label": "Cadres" }
+      {
+        "id": "E",
+        "label": "Agents d'exécution",
+        "label_en": "Operatives and clerical staff"
+      },
+      {
+        "id": "M",
+        "label": "Agents de maîtrise",
+        "label_en": "Supervisors and technicians"
+      },
+      {
+        "id": "C",
+        "label": "Cadres",
+        "label_en": "Managers and professionals"
+      }
     ],
     "grid": {
-      "E1": [52500],
-      "E2": [57500, 60500, 63500],
-      "E3": [64500, 67500, 70500],
-      "E4": [71500, 75500, 79500],
-      "E5": [80500, 84500, 88500],
-      "E6": [89500, 93500, 97500],
-      "M1": [103500, 108500, 113500],
-      "M2": [115000, 120000, 125000],
-      "M3": [126500, 132500, 138500],
-      "M4": [140000, 146000, 152000],
-      "C1": [161500, 168500, 175500],
-      "C2": [181500, 188500, 195500],
-      "C3": [202500, 209500, 216500],
-      "C4": [226500, 236500, 246500]
+      "E1": [
+        52500
+      ],
+      "E2": [
+        57500,
+        60500,
+        63500
+      ],
+      "E3": [
+        64500,
+        67500,
+        70500
+      ],
+      "E4": [
+        71500,
+        75500,
+        79500
+      ],
+      "E5": [
+        80500,
+        84500,
+        88500
+      ],
+      "E6": [
+        89500,
+        93500,
+        97500
+      ],
+      "M1": [
+        103500,
+        108500,
+        113500
+      ],
+      "M2": [
+        115000,
+        120000,
+        125000
+      ],
+      "M3": [
+        126500,
+        132500,
+        138500
+      ],
+      "M4": [
+        140000,
+        146000,
+        152000
+      ],
+      "C1": [
+        161500,
+        168500,
+        175500
+      ],
+      "C2": [
+        181500,
+        188500,
+        195500
+      ],
+      "C3": [
+        202500,
+        209500,
+        216500
+      ],
+      "C4": [
+        226500,
+        236500,
+        246500
+      ]
     },
     "examples": {
       "E1": "Manœuvre ordinaire",
@@ -156,34 +387,196 @@
       "C2": "Bac + 4 professionnel, master recherche",
       "C3": "Master professionnel, ingénieur, DESS",
       "C4": "Doctorat, expert, directeur général"
+    },
+    "examples_en": {
+      "E1": "Ordinary labourer",
+      "E2": "Guard, cleaner, handler",
+      "E3": "Assistant worker, pump attendant, sales assistant",
+      "E4": "Skilled worker, cashier, driver (licence A, B, C), office clerk",
+      "E5": "Forwarding agent, driver (licence D or E)",
+      "E6": "Assistant accountant, holder of BEPC or CAP",
+      "M1": "Baccalaureate, archivist, documentalist",
+      "M2": "Technical baccalaureate, technician certificate, ENA cycle I",
+      "M3": "DEUG (2-year degree), team leader",
+      "M4": "Bachelor's degree, BTS or DUT",
+      "C1": "Professional bachelor's, master's (4 years), works engineer",
+      "C2": "Professional 4-year degree, research master",
+      "C3": "Professional master, engineer, DESS",
+      "C4": "Doctorate, expert, managing director"
     }
   },
-
   "pay_items": [
-    { "id": "sursalaire", "label": "Sursalaire", "cnss": true, "amu": true, "irpp": true, "cash": true },
-    { "id": "prime_rendement", "label": "Prime de rendement", "cnss": true, "amu": true, "irpp": true, "cash": true },
-    { "id": "prime_fonction", "label": "Indemnité de fonction ou de responsabilité", "cnss": true, "amu": true, "irpp": true, "cash": true },
-    { "id": "prime_technicite", "label": "Prime de technicité", "cnss": true, "amu": true, "irpp": true, "cash": true },
-    { "id": "indemnite_logement", "label": "Indemnité de logement", "cnss": true, "amu": true, "irpp": true, "cash": true },
-    { "id": "prime_transport", "label": "Prime de transport", "cnss": true, "amu": true, "irpp": true, "cash": true },
-    { "id": "prime_risque", "label": "Prime de risque ou de pénibilité", "cnss": true, "amu": true, "irpp": true, "cash": true },
-    { "id": "prime_assiduite", "label": "Prime d'assiduité", "cnss": true, "amu": true, "irpp": true, "cash": true },
-    { "id": "commissions", "label": "Commissions", "cnss": true, "amu": true, "irpp": true, "cash": true },
-    { "id": "autre_prime", "label": "Autre prime ou indemnité", "cnss": true, "amu": true, "irpp": true, "cash": true },
-    { "id": "frais_rembourses", "label": "Remboursement de frais réels", "cnss": false, "amu": false, "irpp": false, "cash": true },
-    { "id": "aen_logement", "label": "Logement fourni", "cnss": true, "amu": false, "irpp": true, "cash": false, "hint": "Valeur du loyer (CGI art. 20)" },
-    { "id": "aen_vehicule", "label": "Véhicule de fonction", "cnss": true, "amu": false, "irpp": true, "cash": false, "hint": "Un tiers des frais du véhicule (CGI art. 20)" },
-    { "id": "aen_utilites", "label": "Eau, électricité, téléphone", "cnss": true, "amu": false, "irpp": true, "cash": false },
-    { "id": "aen_domesticite", "label": "Personnel de maison", "cnss": true, "amu": false, "irpp": true, "cash": false },
-    { "id": "aen_nourriture", "label": "Nourriture", "cnss": true, "amu": false, "irpp": true, "cash": false }
+    {
+      "id": "sursalaire",
+      "label": "Sursalaire",
+      "cnss": true,
+      "amu": true,
+      "irpp": true,
+      "cash": true,
+      "label_en": "Additional salary (sursalaire)"
+    },
+    {
+      "id": "prime_rendement",
+      "label": "Prime de rendement",
+      "cnss": true,
+      "amu": true,
+      "irpp": true,
+      "cash": true,
+      "label_en": "Performance bonus"
+    },
+    {
+      "id": "prime_fonction",
+      "label": "Indemnité de fonction ou de responsabilité",
+      "cnss": true,
+      "amu": true,
+      "irpp": true,
+      "cash": true,
+      "label_en": "Function or responsibility allowance"
+    },
+    {
+      "id": "prime_technicite",
+      "label": "Prime de technicité",
+      "cnss": true,
+      "amu": true,
+      "irpp": true,
+      "cash": true,
+      "label_en": "Technical skill bonus"
+    },
+    {
+      "id": "indemnite_logement",
+      "label": "Indemnité de logement",
+      "cnss": true,
+      "amu": true,
+      "irpp": true,
+      "cash": true,
+      "label_en": "Housing allowance"
+    },
+    {
+      "id": "prime_transport",
+      "label": "Prime de transport",
+      "cnss": true,
+      "amu": true,
+      "irpp": true,
+      "cash": true,
+      "label_en": "Transport allowance"
+    },
+    {
+      "id": "prime_risque",
+      "label": "Prime de risque ou de pénibilité",
+      "cnss": true,
+      "amu": true,
+      "irpp": true,
+      "cash": true,
+      "label_en": "Risk or hardship bonus"
+    },
+    {
+      "id": "prime_assiduite",
+      "label": "Prime d'assiduité",
+      "cnss": true,
+      "amu": true,
+      "irpp": true,
+      "cash": true,
+      "label_en": "Attendance bonus"
+    },
+    {
+      "id": "commissions",
+      "label": "Commissions",
+      "cnss": true,
+      "amu": true,
+      "irpp": true,
+      "cash": true,
+      "label_en": "Commissions"
+    },
+    {
+      "id": "autre_prime",
+      "label": "Autre prime ou indemnité",
+      "cnss": true,
+      "amu": true,
+      "irpp": true,
+      "cash": true,
+      "label_en": "Other bonus or allowance"
+    },
+    {
+      "id": "frais_rembourses",
+      "label": "Remboursement de frais réels",
+      "cnss": false,
+      "amu": false,
+      "irpp": false,
+      "cash": true,
+      "label_en": "Refund of actual expenses"
+    },
+    {
+      "id": "aen_logement",
+      "label": "Logement fourni",
+      "cnss": true,
+      "amu": false,
+      "irpp": true,
+      "cash": false,
+      "hint": "Valeur du loyer (CGI art. 20)",
+      "label_en": "Housing provided",
+      "hint_en": "Value of the rent (CGI art. 20)"
+    },
+    {
+      "id": "aen_vehicule",
+      "label": "Véhicule de fonction",
+      "cnss": true,
+      "amu": false,
+      "irpp": true,
+      "cash": false,
+      "hint": "Un tiers des frais du véhicule (CGI art. 20)",
+      "label_en": "Company car",
+      "hint_en": "One third of the car costs (CGI art. 20)"
+    },
+    {
+      "id": "aen_utilites",
+      "label": "Eau, électricité, téléphone",
+      "cnss": true,
+      "amu": false,
+      "irpp": true,
+      "cash": false,
+      "label_en": "Water, electricity, phone"
+    },
+    {
+      "id": "aen_domesticite",
+      "label": "Personnel de maison",
+      "cnss": true,
+      "amu": false,
+      "irpp": true,
+      "cash": false,
+      "label_en": "Domestic staff"
+    },
+    {
+      "id": "aen_nourriture",
+      "label": "Nourriture",
+      "cnss": true,
+      "amu": false,
+      "irpp": true,
+      "cash": false,
+      "label_en": "Food"
+    }
   ],
   "pay_items_ref": {
-    "irpp": { "source": "cgi-lpf-2025", "article": "art. 19 et 20", "page": 22 },
-    "exempt": { "source": "cgi-lpf-2025", "article": "art. 23-1", "page": 24 },
-    "cnss": { "source": "code-securite-sociale-2011", "article": "art. 12", "page": 4 },
-    "amu": { "source": "decret-2023-096-taux-amu", "article": "art. 9", "page": 3 }
+    "irpp": {
+      "source": "cgi-lpf-2025",
+      "article": "art. 19 et 20",
+      "page": 22
+    },
+    "exempt": {
+      "source": "cgi-lpf-2025",
+      "article": "art. 23-1",
+      "page": 24
+    },
+    "cnss": {
+      "source": "code-securite-sociale-2011",
+      "article": "art. 12",
+      "page": 4
+    },
+    "amu": {
+      "source": "decret-2023-096-taux-amu",
+      "article": "art. 9",
+      "page": 3
+    }
   },
-
   "not_modeled": [
     "Agents publics (CRT, INAM), travailleurs indépendants (21,5 %) et de l'économie informelle (19,5 %) : autres régimes, pas encore couverts.",
     "Indemnités de fin de contrat : départ à la retraite imposé pour moitié (CGI art. 21), licenciement imposé en partie (art. 22).",
@@ -191,22 +584,77 @@
     "Taxe sur les salaires : elle n'existe pas dans le CGI de 2025. Aucune taxe sur la masse salariale n'est appliquée.",
     "Crédit d'impôt de 120 000 F par an pour l'embauche d'une personne handicapée (loi de finances 2026) : il réduit l'impôt de l'entreprise, pas le bulletin."
   ],
-
   "open_questions": [
     "Prime d'ancienneté (CCIT 2026, art. 40) : la phrase « 1 % par année de présence à partir de la quatrième année » admet deux lectures. Le simulateur ajoute un point par an (3 % à 4 ans) ; l'autre lecture donne un taux égal au nombre d'années (4 % à 4 ans).",
     "Assiette AMU : le décret 2023-096 (art. 9) vise le salaire de base et les primes et indemnités imposables, sans citer les avantages en nature, que le Code de sécurité sociale (art. 12) inclut pour la CNSS. Le simulateur ne soumet pas les avantages en nature à l'AMU.",
     "Apprentis : le CGI (art. 23-4) exonère d'impôt les salaires des apprentis sous contrat. Le simulateur garde les cotisations CNSS et AMU, faute de texte qui les écarte."
   ],
-
   "sources": {
-    "cgi-lpf-2025": { "title": "Code général des impôts 2025", "publisher": "OTR", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/cgi-lpf-2025.md" },
-    "otr-cahier-fiscal-2026": { "title": "Cahier fiscal, loi de finances 2026", "publisher": "OTR", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/otr-cahier-fiscal-2026.md" },
-    "ccit-2026": { "title": "Convention collective interprofessionnelle 2026", "publisher": "Tribunal du travail de Lomé, dépôt n° 001", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/ccit-2026.md" },
-    "code-securite-sociale-2011": { "title": "Code de sécurité sociale (loi 2011-006)", "publisher": "CNSS", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/code-securite-sociale-2011.md" },
-    "decret-2012-038-taux-cnss": { "title": "Décret 2012-038 sur les taux CNSS", "publisher": "Journal officiel", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/decret-2012-038-taux-cnss.md" },
-    "arrete-2012-003-risques-professionnels": { "title": "Arrêté 003/2012, majoration des risques professionnels", "publisher": "Ministère du Travail", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/arrete-2012-003-risques-professionnels.md" },
-    "decret-2023-096-taux-amu": { "title": "Décret 2023-096 sur les cotisations AMU", "publisher": "Journal officiel", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/decret-2023-096-taux-amu.md" },
-    "code-travail-2021": { "title": "Code du travail (loi 2021-012)", "publisher": "Journal officiel", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/code-travail-2021.md" },
-    "arrete-3790-smig-2022": { "title": "Arrêté 3790 sur le SMIG", "publisher": "Ministère du Travail", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/arrete-3790-smig-2022.md" }
-  }
+    "cgi-lpf-2025": {
+      "title": "Code général des impôts 2025",
+      "publisher": "OTR",
+      "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/cgi-lpf-2025.md",
+      "title_en": "Togo tax code 2025"
+    },
+    "otr-cahier-fiscal-2026": {
+      "title": "Cahier fiscal, loi de finances 2026",
+      "publisher": "OTR",
+      "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/otr-cahier-fiscal-2026.md",
+      "title_en": "2026 finance law, OTR summary"
+    },
+    "ccit-2026": {
+      "title": "Convention collective interprofessionnelle 2026",
+      "publisher": "Tribunal du travail de Lomé, dépôt n° 001",
+      "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/ccit-2026.md",
+      "title_en": "2026 interprofessional collective agreement"
+    },
+    "code-securite-sociale-2011": {
+      "title": "Code de sécurité sociale (loi 2011-006)",
+      "publisher": "CNSS",
+      "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/code-securite-sociale-2011.md",
+      "title_en": "Social Security Code (law 2011-006)"
+    },
+    "decret-2012-038-taux-cnss": {
+      "title": "Décret 2012-038 sur les taux CNSS",
+      "publisher": "Journal officiel",
+      "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/decret-2012-038-taux-cnss.md",
+      "title_en": "Decree 2012-038 on CNSS rates"
+    },
+    "arrete-2012-003-risques-professionnels": {
+      "title": "Arrêté 003/2012, majoration des risques professionnels",
+      "publisher": "Ministère du Travail",
+      "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/arrete-2012-003-risques-professionnels.md",
+      "title_en": "Order 003/2012, work-risk surcharge"
+    },
+    "decret-2023-096-taux-amu": {
+      "title": "Décret 2023-096 sur les cotisations AMU",
+      "publisher": "Journal officiel",
+      "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/decret-2023-096-taux-amu.md",
+      "title_en": "Decree 2023-096 on AMU contributions"
+    },
+    "code-travail-2021": {
+      "title": "Code du travail (loi 2021-012)",
+      "publisher": "Journal officiel",
+      "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/code-travail-2021.md",
+      "title_en": "Labour Code (law 2021-012)"
+    },
+    "arrete-3790-smig-2022": {
+      "title": "Arrêté 3790 sur le SMIG",
+      "publisher": "Ministère du Travail",
+      "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/arrete-3790-smig-2022.md",
+      "title_en": "Order 3790 on the minimum wage"
+    }
+  },
+  "not_modeled_en": [
+    "Public servants (CRT, INAM), self-employed (21.5 %) and informal workers (19.5 %): other regimes, not covered yet.",
+    "End-of-contract payments: retirement indemnity taxed at half (CGI art. 21), dismissal indemnity partly taxed (art. 22).",
+    "Mortgage interest on the main home and maintenance payments (CGI art. 26, items 5 to 7): rare on a payslip, not covered yet.",
+    "Payroll tax: it does not exist in the 2025 tax code. No tax on the wage bill is applied.",
+    "Tax credit of 120 000 F a year for hiring a person with a disability (2026 finance law): it reduces the company's tax, not the payslip."
+  ],
+  "open_questions_en": [
+    "Seniority bonus (CCIT 2026, art. 40): \"1 % per year of presence from the fourth year\" can be read two ways. The simulator adds one point a year (3 % at 4 years); the other reading gives a rate equal to the number of years (4 % at 4 years).",
+    "AMU base: decree 2023-096 (art. 9) lists the base salary and taxable bonuses and allowances, not benefits in kind, which the Social Security Code (art. 12) includes for the CNSS. The simulator leaves benefits in kind out of the AMU.",
+    "Apprentices: the tax code (art. 23-4) exempts their wages from income tax. The simulator keeps CNSS and AMU contributions, as no text removes them."
+  ]
 }

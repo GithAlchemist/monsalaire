@@ -19,7 +19,11 @@ Vite + React + TypeScript, plain CSS tokens (`src/styles.css`), no backend.
 
 ## Rules of this repo
 
-- Code, comments, README and commits in English (open source). The interface text is in French.
+- Code, comments and commits in English. The site is bilingual from day one: every interface text is a pair
+  `t('Français', 'English')`, every rule label has a `label_en`, the engine writes its explanations in the requested
+  language. READMEs: `README.md` (English) and `README.fr.md` (French), kept in step.
+- Pages: `/`, `/comprendre`, `/textes`, `/conditions` in French; `/en`, `/en/understand`, `/en/sources`,
+  `/en/terms` in English (`src/i18n.tsx`). The home page stops at the payslip, then the site footer.
 - Legal parameters live only in `rules/<country>/<year>.json`, each with `source`, `article`, `status`. Never
   hard-code a rate in the engine.
 - Every rule change comes with a test case in `src/engine/payroll.test.ts` worked out from the legal text.
