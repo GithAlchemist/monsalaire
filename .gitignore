@@ -6,3 +6,4 @@ dist
 *.tsbuildinfo
 sources/tools/.ocr-bin
 .astro
+.vercel
