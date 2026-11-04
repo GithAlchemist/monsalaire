@@ -1,0 +1,11 @@
+---
+import ThemeView from '../../../../blog/ThemeView.astro';
+import { THEMES } from '../../../../blog/themes';
+
+export function getStaticPaths() {
+  return THEMES.map((t) => ({ params: { theme: t.en.slug }, props: { theme: t.id } }));
+}
+const { theme } = Astro.props;
+---
+
+<ThemeView lang="en" theme={theme} />

@@ -1,0 +1,222 @@
+---
+import { getImage, Image, Picture } from 'astro:assets';
+import { render } from 'astro:content';
+import { PATHS } from '../i18n';
+import BlogLayout from '../layouts/BlogLayout.astro';
+import { ACONTA, SITE } from '../seo';
+import { allPosts, authorOf, translationOf, type Post } from './data';
+import { articlePath, articlesPath, formatDate, isoDate, minutesLabel, relatedTo, themePath, typo } from './lib';
+import PostCard from './PostCard.astro';
+import { themeName } from './themes';
+
+/** One article: cover, title, dates, author, reading time, table of contents, body, sources, related articles. */
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const { lang, entry } = post;
+const d = entry.data;
+const t = (fr: string, en: string) => (lang === 'en' ? en : fr);
+const other = lang === 'fr' ? 'en' : 'fr';
+
+const { Content, headings } = await render(entry);
+const author = await authorOf(post);
+const translation = await translationOf(post);
+const related = relatedTo(post, await allPosts());
+const path = articlePath(lang, post.slug);
+const url = SITE + path;
+const toc = headings.filter((h) => h.depth === 2);
+const showToc = toc.length >= 4;
+const modified = d.updated ?? d.date;
+const theme = themeName(post.theme, lang);
+
+// Social preview: the cover itself, as a 1200 x 630 JPEG (every network reads it, unlike AVIF).
+const og = await getImage({ src: d.cover, format: 'jpg', width: 1200, height: 630, quality: 82, layout: 'none' });
+const ogUrl = new URL(og.src, SITE).href;
+
+const graph = [
+  {
+    '@type': 'BlogPosting',
+    '@id': `${url}#article`,
+    headline: d.title,
+    description: d.description,
+    image: { '@type': 'ImageObject', url: ogUrl, width: 1200, height: 630, caption: d.coverAlt },
+    datePublished: isoDate(d.date),
+    dateModified: isoDate(modified),
+    inLanguage: lang,
+    url,
+    mainEntityOfPage: { '@id': `${url}#page` },
+    isPartOf: { '@id': `${SITE}/#website` },
+    author: { '@type': 'Person', name: author.data.name, url: author.data.url, ...(author.data.sameAs.length ? { sameAs: author.data.sameAs } : {}) },
+    publisher: { '@id': `${ACONTA}/#organization` },
+    articleSection: theme,
+    keywords: d.tags.join(', '),
+    timeRequired: `PT${post.minutes}M`,
+    citation: d.sources.map((s) => ({
+      '@type': 'CreativeWork',
+      name: [s.title, s.article, s.page ? `p. ${s.page}` : ''].filter(Boolean).join(', '),
+      url: s.url,
+      ...(s.publisher ? { publisher: { '@type': 'Organization', name: s.publisher } } : {}),
+    })),
+    ...(translation ? { workTranslation: { '@id': `${SITE}${articlePath(translation.lang, translation.slug)}#article` } } : {}),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Articles', item: SITE + articlesPath(lang) },
+      { '@type': 'ListItem', position: 2, name: theme, item: SITE + themePath(lang, post.theme) },
+      { '@type': 'ListItem', position: 3, name: d.title, item: url },
+    ],
+  },
+];
+---
+
+<BlogLayout
+  lang={lang}
+  title={`${d.title} · monsalaire`}
+  description={d.description}
+  path={path}
+  alternates={translation ? { [lang]: path, [translation.lang]: articlePath(translation.lang, translation.slug) } : { [lang]: path }}
+  altHref={translation ? articlePath(translation.lang, translation.slug) : PATHS[other].articles}
+  ogType="article"
+  ogImage={ogUrl}
+  ogImageAlt={d.coverAlt}
+  article={{ published: d.date.toISOString(), modified: modified.toISOString(), section: theme, tags: d.tags, author: author.data.name }}
+  graph={graph}
+>
+  <article class="post">
+    <nav class="crumbs" aria-label={t('Fil d’Ariane', 'Breadcrumb')}>
+      <a href={articlesPath(lang)}>{t('Articles', 'Articles')}</a>
+      <span aria-hidden="true">/</span>
+      <a href={themePath(lang, post.theme)}>{theme}</a>
+    </nav>
+
+    <header class="post-head">
+      <h1>{typo(d.title, lang)}</h1>
+      <p class="post-lead">{typo(d.description, lang)}</p>
+      <div class="post-meta">
+        {
+          author.data.avatar && (
+            <Image class="post-avatar" src={author.data.avatar} alt="" width={40} height={40} densities={[1, 2]} />
+          )
+        }
+        <div>
+          <p class="post-by">
+            {t('Par', 'By')}{' '}
+            <a href={author.data.url} rel="author" target="_blank">
+              {author.data.name}
+            </a>
+          </p>
+          <p class="post-dates">
+            <span>
+              {t('Publié le', 'Published')} <time datetime={isoDate(d.date)}>{formatDate(d.date, lang)}</time>
+            </span>
+            {
+              d.updated && (
+                <span>
+                  {t('mis à jour le', 'updated')} <time datetime={isoDate(d.updated)}>{formatDate(d.updated, lang)}</time>
+                </span>
+              )
+            }
+            <span>{minutesLabel(post.minutes, lang)}</span>
+          </p>
+        </div>
+      </div>
+      {
+        translation && (
+          <p class="post-translation">
+            <a href={articlePath(translation.lang, translation.slug)} hreflang={translation.lang} lang={translation.lang}>
+              {lang === 'fr' ? 'Read this article in English' : 'Lire cet article en français'}
+            </a>
+          </p>
+        )
+      }
+    </header>
+
+    <figure class="post-cover">
+      <Picture
+        src={d.cover}
+        alt={d.coverAlt}
+        formats={['avif', 'webp']}
+        fallbackFormat="jpg"
+        widths={[480, 800, 1200]}
+        sizes="(min-width: 1100px) 1040px, 100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </figure>
+
+    <div class={`post-layout${showToc ? ' has-toc' : ''}`}>
+      {
+        showToc && (
+          <aside class="toc" aria-labelledby="toc-title">
+            <details class="toc-box" open>
+              <summary id="toc-title">{t('Sommaire', 'Contents')}</summary>
+              <ol>
+                {toc.map((h) => (
+                  <li>
+                    <a href={`#${h.slug}`}>{typo(h.text, lang)}</a>
+                  </li>
+                ))}
+              </ol>
+            </details>
+          </aside>
+        )
+      }
+      <div class="post-body">
+        <Content />
+
+        <section class="post-sources" aria-labelledby="sources">
+          <h2 id="sources">{t('Sources', 'Sources')}</h2>
+          <ol>
+            {
+              d.sources.map((s) => (
+                <li>
+                  <a href={s.url} rel="noopener" target="_blank">
+                    {s.title}
+                  </a>
+                  {(s.publisher || s.article || s.page) && (
+                    <span class="src-meta">
+                      {[s.publisher, s.article, s.page ? `p. ${s.page}` : ''].filter(Boolean).join(' · ')}
+                    </span>
+                  )}
+                </li>
+              ))
+            }
+          </ol>
+          <p class="src-note">
+            {
+              t(
+                'Les textes officiels utilisés par monsalaire sont archivés, avec leur transcription page par page,',
+                'The official texts monsalaire relies on are archived, with a page-by-page transcription,',
+              )
+            }{' '}
+            <a href={PATHS[lang].sources}>{t('sur la page des textes', 'on the sources page')}</a>.
+          </p>
+        </section>
+
+        <aside class="post-sim">
+          <p>
+            {t('Pour un autre salaire, le simulateur fait le calcul ligne par ligne.', 'For any other salary, the simulator works it out line by line.')}{' '}
+            <a href={PATHS[lang].home}>{t('Calculer un salaire net au Togo', 'Work out a net salary in Togo')}</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  {
+    related.length > 0 && (
+      <section class="blog-block related" aria-labelledby="a-lire">
+        <h2 class="blog-h" id="a-lire">
+          {t('À lire aussi', 'Read next')}
+        </h2>
+        <div class="pgrid">
+          {related.map((p) => (
+            <PostCard post={p} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</BlogLayout>

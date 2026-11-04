@@ -1,3 +1,6 @@
+import { allPosts } from '../blog/data';
+import { articlePath, isoDate, rssPath } from '../blog/lib';
+import { themeName } from '../blog/themes';
 import { rulesFor, type Ref } from '../engine';
 import { SITE } from '../seo';
 
@@ -5,7 +8,7 @@ import { SITE } from '../seo';
  * llms.txt: a plain summary of the site for AI assistants, with the current key figures generated from the rules
  * file (never typed by hand here), each followed by the official text, article and page it comes from.
  */
-export function GET() {
+export async function GET() {
   const r = rulesFor(new Date().toISOString().slice(0, 10));
   const pct = (x: number) => `${+(x * 100).toFixed(2)}%`;
   const f = (n: number) => `${n.toLocaleString('en-GB')} FCFA`;
@@ -25,6 +28,22 @@ export function GET() {
     })
     .join('\n');
 
+  // Every published article, English first, with its date, theme and summary.
+  const posts = (await allPosts()).sort((a, b) => (a.lang === b.lang ? 0 : a.lang === 'en' ? -1 : 1));
+  const articles = posts.length
+    ? `
+## Articles
+
+${posts
+  .map((p) => {
+    const d = p.entry.data;
+    const dates = `${isoDate(d.date)}${d.updated ? `, updated ${isoDate(d.updated)}` : ''}`;
+    return `- [${d.title}](${SITE}${articlePath(p.lang, p.slug)}) (${p.lang === 'en' ? 'English' : 'French'}, ${themeName(p.theme, 'en')}, ${dates}): ${d.description}`;
+  })
+  .join('\n')}
+`
+    : '';
+
   const body = `# monsalaire
 
 > Free, open-source payslip simulator for Togo, published by Aconta (${'https://aconta.io'}). It computes gross to net pay, income tax (IRPP), CNSS and AMU contributions and the employer cost, and cites the article and page of the official text behind every line. French at ${SITE}, English at ${SITE}/en.
@@ -37,6 +56,7 @@ Rules version ${r.version}, checked against the official texts on ${r.verified_o
 - [Simulator (English)](${SITE}/en)
 - [How it is computed](${SITE}/en/understand) ([French](${SITE}/comprendre)): from gross to net, step by step.
 - [Official texts](${SITE}/en/sources) ([French](${SITE}/textes)): the archived texts and the page of each rule.
+- [Articles (French)](${SITE}/articles) and [articles (English)](${SITE}/en/articles): dated, sourced articles on pay in Togo and French-speaking Africa. RSS: ${SITE}${rssPath('fr')} and ${SITE}${rssPath('en')}.
 - [Source code and rules file](https://github.com/GithAlchemist/monsalaire): MIT licence; the legal parameters live in rules/tg/${r.valid_from.slice(0, 4)}.json.
 
 ## Key figures for Togo (${r.valid_from.slice(0, 4)})
@@ -47,6 +67,6 @@ Rules version ${r.version}, checked against the official texts on ${r.verified_o
 - Income tax (IRPP), computed over the year and withheld monthly. Taxable income = yearly salary minus the employee contributions, minus a ${pct(r.irpp.flat_allowance.rate)} standard deduction for work expenses (on the part up to ${f(r.irpp.flat_allowance.cap_income)}), minus ${f(r.irpp.dependents.amount_per_month)} a month per dependant (${r.irpp.dependents.max} at most)${cite(r.irpp.ref_deductions)}. Yearly brackets:
 ${brackets}
   Brackets${cite(r.irpp.ref)}.
-`;
+${articles}`;
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 }

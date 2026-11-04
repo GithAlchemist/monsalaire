@@ -1,0 +1,81 @@
+---
+import type { Lang } from '../i18n';
+import BlogLayout from '../layouts/BlogLayout.astro';
+import { SITE } from '../seo';
+import { postsIn, themeCounts } from './data';
+import { articlePath, articlesPath, themePath } from './lib';
+import PostCard from './PostCard.astro';
+import ThemeNav from './ThemeNav.astro';
+import { themeOf, type ThemeId } from './themes';
+
+/** /articles/theme/<slug>: every article of one theme. A theme without articles is built but not indexed. */
+interface Props {
+  lang: Lang;
+  theme: ThemeId;
+}
+const { lang, theme } = Astro.props;
+const t = (fr: string, en: string) => (lang === 'en' ? en : fr);
+const other: Lang = lang === 'fr' ? 'en' : 'fr';
+const posts = await postsIn(lang);
+const otherPosts = await postsIn(other);
+const list = posts.filter((p) => p.theme === theme);
+const th = themeOf(theme)[lang];
+const otherHas = otherPosts.some((p) => p.theme === theme);
+const path = themePath(lang, theme);
+const alternates = list.length > 0 && otherHas ? { [lang]: path, [other]: themePath(other, theme) } : { [lang]: path };
+const graph = [
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Articles', item: SITE + articlesPath(lang) },
+      { '@type': 'ListItem', position: 2, name: th.name, item: SITE + path },
+    ],
+  },
+  {
+    '@type': 'ItemList',
+    itemListElement: list.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: SITE + articlePath(lang, p.slug), name: p.entry.data.title })),
+  },
+];
+---
+
+<BlogLayout
+  lang={lang}
+  title={`${th.name} · ${t('articles', 'articles')} · monsalaire`}
+  description={`${th.blurb} ${t('Articles datés et sourcés sur monsalaire.', 'Dated, sourced articles on monsalaire.')}`}
+  path={path}
+  alternates={alternates}
+  altHref={themePath(other, theme)}
+  pageType="CollectionPage"
+  graph={graph}
+  noindex={list.length === 0}
+>
+  <nav class="crumbs" aria-label={t('Fil d’Ariane', 'Breadcrumb')}>
+    <a href={articlesPath(lang)}>{t('Articles', 'Articles')}</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{th.name}</span>
+  </nav>
+  <header class="page-hero blog-hero">
+    <div class="kicker">{t('Thème', 'Theme')}</div>
+    <h1>{th.name}</h1>
+    <p class="lead">{th.blurb}</p>
+  </header>
+
+  <ThemeNav lang={lang} counts={themeCounts(posts)} total={posts.length} current={theme} />
+
+  {
+    list.length > 0 ? (
+      <div class="pgrid">
+        {list.map((p, i) => (
+          <PostCard post={p} eager={i === 0} heading="h2" />
+        ))}
+      </div>
+    ) : (
+      <div class="blog-empty">
+        <p>{t('Pas encore d’article dans ce thème.', 'No articles on this theme yet.')}</p>
+        <p>
+          <a href={articlesPath(lang)}>{t('Voir tous les articles', 'See all articles')}</a>
+        </p>
+      </div>
+    )
+  }
+</BlogLayout>

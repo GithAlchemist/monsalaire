@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Rules } from '../engine';
 import { useFmt } from '../format';
 import { useTheme, type Theme } from '../hooks';
-import { Link, useRoute, type Lang, type Page } from '../i18n';
+import { Link, PATHS, useRoute, type Lang, type Page } from '../i18n';
 import { acontaLink } from '../seo';
 import { Icon } from './fields';
 
@@ -35,8 +35,16 @@ export function ByAconta({ place, className = '' }: { place: string; className?:
 }
 
 export function LangSwitch({ compact }: { compact?: boolean }) {
-  const { lang, page, t } = useRoute();
+  const { lang, page, t, altHref } = useRoute();
   const other: Lang = lang === 'fr' ? 'en' : 'fr';
+  // An article page links to its translation, or to the articles in the other language when there is none.
+  if (altHref)
+    return (
+      <a href={altHref} className={`btn lang-btn${compact ? ' icon' : ''}`} hrefLang={other} lang={other} title={t('Read in English', 'Lire en français')}>
+        <Icon.globe />
+        <span>{other === 'en' ? 'EN' : 'FR'}</span>
+      </a>
+    );
   return (
     <Link to={page} lang={other} className={`btn lang-btn${compact ? ' icon' : ''}`} hrefLang={other} title={t('Read in English', 'Lire en français')}>
       <Icon.globe />
@@ -64,6 +72,7 @@ export function Header({ onShare, copied }: { onShare?: () => void; copied?: boo
   const nav: { to: Page; label: string }[] = [
     { to: 'home', label: t('Simulateur', 'Simulator') },
     { to: 'understand', label: t('Comprendre', 'How it works') },
+    { to: 'articles', label: t('Articles', 'Articles') },
     { to: 'sources', label: t('Les textes', 'Sources') },
   ];
   return (
@@ -114,8 +123,9 @@ export function Header({ onShare, copied }: { onShare?: () => void; copied?: boo
   );
 }
 
-export function Footer({ rules }: { rules: Rules }) {
-  const { t } = useRoute();
+export function Footer({ rules }: { rules: Pick<Rules, 'version' | 'verified_on'> }) {
+  const { t, lang } = useRoute();
+  const rss = `${PATHS[lang].articles}/rss.xml`;
   const { date } = useFmt();
   const issue = (template: string) => `${REPO}/issues/new?template=${template}`;
   return (
@@ -147,6 +157,22 @@ export function Footer({ rules }: { rules: Rules }) {
               </li>
               <li>
                 <Link to="sources">{t('Les textes officiels', 'Official texts')}</Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3>{t('Articles', 'Articles')}</h3>
+            <ul>
+              <li>
+                <Link to="articles">{t('Derniers articles', 'Latest articles')}</Link>
+              </li>
+              <li>
+                <a href={`${PATHS[lang].articles}#themes`}>{t('Par thème', 'By theme')}</a>
+              </li>
+              <li>
+                <a href={rss} type="application/rss+xml">
+                  {t('Flux RSS', 'RSS feed')}
+                </a>
               </li>
             </ul>
           </div>

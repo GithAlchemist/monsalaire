@@ -52,6 +52,7 @@ négocier. Touchez une ligne, il vous dit pourquoi, avec l'article et la page.
 | **Expliqué** | Une page Comprendre : où va chaque franc, l'impôt pas à pas, les cotisations et ce qu'elles financent. |
 | **Sourcé** | 13 textes officiels archivés dans le dépôt, transcrits page par page ; chaque règle cite `{ source, article, page }`. |
 | **Confidentiel** | Ni compte, ni serveur, ni cookie. Les montants saisis ne quittent pas le navigateur ; seules les pages vues et leur vitesse sont comptées, de façon anonyme et sans cookie (Vercel Web Analytics et Speed Insights). Un lien partagé contient la simulation. |
+| **Articles** | Des articles datés et sourcés sur les salaires au Togo et en Afrique francophone (SMIG, impôt, comparaisons entre pays), avec un flux RSS par langue. |
 | **Bilingue** | Français et anglais, site et bulletin. Thème clair ou sombre, pensé pour le téléphone, prêt à imprimer. |
 
 <p align="center">
@@ -114,19 +115,25 @@ slip.irpp;     // 2745
 rules/tg/2026.json        la loi en données : chaque valeur avec sa source, son article et sa page
 sources/                  la bibliothèque : originals/ (PDF), text/ (transcriptions), sources.json, tools/
 src/engine/               le moteur de paie en TypeScript pur et ses tests
-src/pages/                routes Astro, sitemap.xml et llms.txt
+src/pages/                routes Astro, sitemap.xml, llms.txt et les flux RSS des articles
 src/views/                Simulateur, Comprendre, Les textes, Conditions (React)
 src/components/           paramètres, bulletin, graphiques, en-tête et pied de page
+src/content/articles/     les articles, en Markdown : fr/<slug>.md et en/<slug>.md
+src/content/authors/      les auteurs des articles (un fichier JSON chacun)
+src/blog/                 la rubrique Articles : thèmes, pages, règles de construction pour les images et le texte
+src/assets/articles/      couvertures et images des articles (optimisées à la construction)
 ```
 
-Le site a quatre pages, dans les deux langues : `/` et `/en` (simulateur), `/comprendre` et `/en/understand`,
-`/textes` et `/en/sources`, `/conditions` et `/en/terms`.
+Le site a cinq rubriques, dans les deux langues : `/` et `/en` (simulateur), `/comprendre` et `/en/understand`,
+`/articles` et `/en/articles`, `/textes` et `/en/sources`, `/conditions` et `/en/terms`. Pour publier un article :
+[`docs/PUBLIER_UN_ARTICLE.md`](docs/PUBLIER_UN_ARTICLE.md).
 
 ## Feuille de route
 
 - [x] Togo, secteur privé, régime général : CNSS, AMU, IRPP, convention collective 2026
 - [x] Bibliothèque juridique : 13 textes officiels, transcrits page par page
 - [x] Français et anglais
+- [x] Articles datés et sourcés, classés par thème, avec flux RSS et données structurées pour les moteurs de recherche et les assistants IA
 - [ ] Agents publics (CRT, INAM), indépendants et économie informelle
 - [ ] Indemnités de fin de contrat (retraite, licenciement)
 - [ ] **D'autres pays** : Bénin, Sénégal, Côte d'Ivoire, Burkina Faso, Ghana

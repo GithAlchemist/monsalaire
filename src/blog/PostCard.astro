@@ -1,0 +1,50 @@
+---
+import { Picture } from 'astro:assets';
+import type { Post } from './data';
+import { articlePath, formatDate, isoDate, minutesLabel, themePath, typo } from './lib';
+import { themeName } from './themes';
+
+/** An article in a list: `featured` (large, cover beside the text), `card` (cover above) or `line` (text only). */
+interface Props {
+  post: Post;
+  variant?: 'featured' | 'card' | 'line';
+  /** The first image of the page loads at once; the others wait until they scroll into view. */
+  eager?: boolean;
+  heading?: 'h2' | 'h3';
+}
+const { post, variant = 'card', eager = false, heading = 'h3' } = Astro.props;
+const { lang } = post;
+const d = post.entry.data;
+const url = articlePath(lang, post.slug);
+const H = heading;
+const sizes = variant === 'featured' ? '(min-width: 1021px) 640px, (min-width: 700px) 60vw, 100vw' : '(min-width: 1021px) 400px, (min-width: 700px) 45vw, 100vw';
+---
+
+<article class={`pcard pcard-${variant}`}>
+  {
+    variant !== 'line' && (
+      <div class="pcard-media">
+        <Picture
+          src={d.cover}
+          alt=""
+          formats={['avif', 'webp']}
+          fallbackFormat="jpg"
+          widths={variant === 'featured' ? [480, 800, 1200] : [400, 640, 800]}
+          sizes={sizes}
+          loading={eager ? 'eager' : 'lazy'}
+          fetchpriority={eager ? 'high' : 'auto'}
+        />
+      </div>
+    )
+  }
+  <div class="pcard-body">
+    <a class="pcard-theme" href={themePath(lang, post.theme)}>{themeName(post.theme, lang)}</a>
+    <H class="pcard-title"><a href={url}>{typo(d.title, lang)}</a></H>
+    {variant !== 'line' && <p class="pcard-desc">{typo(d.description, lang)}</p>}
+    <p class="pcard-meta">
+      <time datetime={isoDate(d.date)}>{formatDate(d.date, lang)}</time>
+      <span aria-hidden="true">·</span>
+      <span>{minutesLabel(post.minutes, lang)}</span>
+    </p>
+  </div>
+</article>
