@@ -69,7 +69,7 @@ function Row({ l, rules, employer, open, onToggle }: { l: PayLine; rules: Rules;
   );
 }
 
-export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; rules: Rules; statusLabel: string; category: string }) {
+export function Payslip({ slip, rules, statusLabel, category, shareUrl = '' }: { slip: Slip; rules: Rules; statusLabel: string; category: string; shareUrl?: string }) {
   const { t } = useRoute();
   const { money, monthLabel, date } = useFmt();
   const [open, setOpen] = useState<string | null>(null);
@@ -200,6 +200,11 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
           <span>
             {t('Règles', 'Rules')} {rules.version}, {t('vérifiées le', 'checked on')} {date(rules.verified_on)}
           </span>
+          {shareUrl && (
+            <a className="sheet-link print-only" href={shareUrl}>
+              {t('Revoir cette simulation :', 'Open this simulation again:')} {shareUrl}
+            </a>
+          )}
         </footer>
       </article>
     </div>

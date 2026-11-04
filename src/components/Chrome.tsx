@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { AccountButton } from './Account';
 import type { Rules } from '../engine';
 import { useFmt } from '../format';
 import { useTheme, type Theme } from '../hooks';
@@ -53,7 +54,86 @@ export function LangSwitch({ compact }: { compact?: boolean }) {
   );
 }
 
-export function Header({ onShare, copied }: { onShare?: () => void; copied?: boolean }) {
+export type ShareInfo = { url: string; title: string; text: string; fileName: string };
+
+/** "Partager": copy (or share) the link, print, or share as PDF; the PDF and the print carry the way back. */
+function ShareMenu({ share }: { share: ShareInfo }) {
+  const { t, lang } = useRoute();
+  const [open, setOpen] = useState(false);
+  const [note, setNote] = useState('');
+  const box = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: MouseEvent) => {
+      if (box.current && !box.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', close);
+    return () => document.removeEventListener('mousedown', close);
+  }, [open]);
+  const flash = (m: string) => {
+    setNote(m);
+    setTimeout(() => setNote(''), 2000);
+  };
+  const touch = typeof window !== 'undefined' && !!navigator.share && window.matchMedia('(pointer: coarse)').matches;
+  const link = async () => {
+    setOpen(false);
+    try {
+      if (touch) await navigator.share({ title: share.title, text: share.text, url: share.url });
+      else {
+        await navigator.clipboard.writeText(share.url);
+        flash(t('Lien copié', 'Link copied'));
+      }
+    } catch {
+      /* share sheet closed or clipboard blocked */
+    }
+  };
+  const pdf = async () => {
+    setOpen(false);
+    flash(t('PDF en cours…', 'Making the PDF…'));
+    try {
+      const { payslipPdf } = await import('../pdf');
+      const r = await payslipPdf({ url: share.url, fileName: share.fileName, title: share.title, lang, linkText: t('Revoir cette simulation sur monsalaire.aconta.io', 'Open this simulation again on monsalaire.aconta.io') });
+      flash(r === 'saved' ? t('PDF enregistré', 'PDF saved') : '');
+    } catch {
+      flash(t('Le PDF n’a pas pu être créé', 'The PDF could not be made'));
+    }
+  };
+  return (
+    <div className="share-menu" ref={box}>
+      <button type="button" className="btn has-label" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(!open)} aria-label={t('Partager cette simulation', 'Share this simulation')}>
+        <Icon.share />
+        <span className="label-md">{note || t('Partager', 'Share')}</span>
+      </button>
+      {open && (
+        <div className="share-pop" role="menu">
+          <button type="button" role="menuitem" onClick={link}>
+            <Icon.link />
+            <span>
+              <b>{touch ? t('Partager le lien', 'Share the link') : t('Copier le lien', 'Copy the link')}</b>
+              <small>{t('La simulation s’ouvre avec vos chiffres', 'Opens the simulation with your figures')}</small>
+            </span>
+          </button>
+          <button type="button" role="menuitem" onClick={() => { setOpen(false); window.print(); }}>
+            <Icon.print />
+            <span>
+              <b>{t('Imprimer', 'Print')}</b>
+              <small>{t('Le bulletin, avec le lien pour y revenir', 'The payslip, with the link back to it')}</small>
+            </span>
+          </button>
+          <button type="button" role="menuitem" onClick={pdf}>
+            <Icon.pdf />
+            <span>
+              <b>{touch ? t('Partager en PDF', 'Share as PDF') : t('Télécharger en PDF', 'Download as PDF')}</b>
+              <small>{t('Un fichier avec un lien qui rouvre la simulation', 'A file with a link that reopens the simulation')}</small>
+            </span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function Header({ share }: { share?: ShareInfo }) {
   const { t, page } = useRoute();
   const [theme, setTheme] = useTheme();
   const [scrolled, setScrolled] = useState(false);
@@ -90,19 +170,10 @@ export function Header({ onShare, copied }: { onShare?: () => void; copied?: boo
           ))}
         </nav>
         <div className="h-start">
-          {onShare && (
-            <button type="button" className="btn has-label" onClick={onShare} aria-label={t('Partager cette simulation', 'Share this simulation')}>
-              <Icon.share />
-              <span className="label-md">{copied ? t('Lien copié', 'Link copied') : t('Partager', 'Share')}</span>
-            </button>
-          )}
+          {share && <ShareMenu share={share} />}
         </div>
         <div className="header-actions">
-          {onShare && (
-            <button type="button" className="btn icon hide-xs" onClick={() => window.print()} aria-label={t('Imprimer le bulletin', 'Print the payslip')}>
-              <Icon.print />
-            </button>
-          )}
+          <AccountButton />
           <LangSwitch />
           <button type="button" className="btn icon hide-xs" onClick={() => setTheme(next[theme])} aria-label={label[theme]} title={label[theme]}>
             {theme === 'light' ? <Icon.sun /> : theme === 'dark' ? <Icon.moon /> : <Icon.auto />}

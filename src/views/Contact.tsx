@@ -53,7 +53,7 @@ export function ContactForm() {
           </label>
           <label className="acct-field wide">
             <span>{t('Votre message', 'Your message')}</span>
-            <textarea name="message" required minLength={10} maxLength={5000} rows={7} />
+            <textarea name="message" required minLength={10} maxLength={5000} rows={3} />
           </label>
           <input className="hp" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
           <div className="wide">

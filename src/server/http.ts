@@ -31,16 +31,29 @@ export async function openSession(ctx: APIContext, accountId: string) {
   ctx.cookies.set(COOKIE, token, { httpOnly: true, secure: true, sameSite: 'lax', path: '/', maxAge: DAYS * 86400 });
 }
 
-export type Account = { id: string; email: string; lang: string; newsletter: boolean };
+export type Account = { id: string; email: string; lang: string; newsletter: boolean; picture: string | null };
 
 export async function currentAccount(ctx: APIContext): Promise<Account | null> {
   const token = ctx.cookies.get(COOKIE)?.value;
   if (!token) return null;
   const { rows } = await db().query(
-    'select a.id, a.email, a.lang, a.newsletter from sessions s join accounts a on a.id = s.account_id where s.token_hash = $1 and s.expires_at > now() and a.verified_at is not null',
+    // to_jsonb(a) reads optional columns (picture_url) without failing before their migration has run.
+    "select a.id, a.email, a.lang, a.newsletter, to_jsonb(a)->>'picture_url' as picture from sessions s join accounts a on a.id = s.account_id where s.token_hash = $1 and s.expires_at > now() and a.verified_at is not null",
     [tokenHash(token)],
   );
   return rows[0] ?? null;
+}
+
+/** Per-member visit stats: one visit counted per 30 minutes of activity (docs/db/003). Silent if not migrated yet. */
+export async function countVisit(accountId: string) {
+  try {
+    await db().query(
+      "update accounts set visits = visits + 1, last_seen_at = now() where id = $1 and (last_seen_at is null or last_seen_at < now() - interval '30 minutes')",
+      [accountId],
+    );
+  } catch {
+    /* columns not there yet */
+  }
 }
 
 export async function closeSession(ctx: APIContext) {

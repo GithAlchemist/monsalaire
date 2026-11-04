@@ -1,7 +1,7 @@
 import type { APIContext } from 'astro';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { db } from '../../../server/db';
-import { clientIp, closeSession, currentAccount, json, langOf, openSession, readBody, sendCode, useCode } from '../../../server/http';
+import { clientIp, closeSession, countVisit, currentAccount, json, langOf, openSession, readBody, sendCode, useCode } from '../../../server/http';
 import { allow, checkPassword, DUMMY_HASH, EMAIL_RE, hashPassword, ipHash, normEmail, str } from '../../../server/security';
 
 export const prerender = false;
@@ -24,7 +24,7 @@ export const prerender = false;
 const fail = (error: string, status = 400) => json({ error }, status);
 const GOOGLE_KEYS = createRemoteJWKSet(new URL('https://www.googleapis.com/oauth2/v3/certs'));
 const goodPassword = (p: string) => p.length >= 8 && p.length <= 200;
-const pub = (a: { email: string; lang: string; newsletter: boolean }) => ({ email: a.email, lang: a.lang, newsletter: a.newsletter });
+const pub = (a: { email: string; lang: string; newsletter: boolean; picture?: string | null }) => ({ email: a.email, lang: a.lang, newsletter: a.newsletter, picture: a.picture ?? null });
 
 export async function GET(ctx: APIContext) {
   if (ctx.params.action !== 'me') return fail('not_found', 404);
@@ -33,6 +33,7 @@ export async function GET(ctx: APIContext) {
   const google = process.env.GOOGLE_CLIENT_ID || null;
   try {
     const a = await currentAccount(ctx);
+    if (a) await countVisit(a.id);
     return json({ account: a ? pub(a) : null, google });
   } catch {
     return json({ account: null });
@@ -136,8 +137,16 @@ export async function POST(ctx: APIContext) {
           [gEmail, sub, lang],
         );
         if (rows[0].google_sub !== sub) return fail('google', 401);
+        const picture = typeof claims.picture === 'string' && claims.picture.startsWith('https://') ? claims.picture.slice(0, 500) : null;
+        if (picture) {
+          try {
+            await db().query('update accounts set picture_url = $2 where id = $1', [rows[0].id, picture]);
+          } catch {
+            /* column not there yet (docs/db/003) */
+          }
+        }
         await openSession(ctx, rows[0].id);
-        return json({ account: pub(rows[0]) });
+        return json({ account: pub({ ...rows[0], picture }) });
       }
 
       case 'logout': {

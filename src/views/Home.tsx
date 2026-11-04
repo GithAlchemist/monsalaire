@@ -9,7 +9,7 @@ import { useTweened } from '../hooks';
 import { Link, useRoute } from '../i18n';
 import type { AppState } from '../state';
 
-export function Home({ s, set, rules, slip, computedBase }: { s: AppState; set: (p: Partial<AppState>) => void; rules: Rules; slip: Slip; computedBase: number }) {
+export function Home({ s, set, rules, slip, computedBase, shareUrl }: { s: AppState; set: (p: Partial<AppState>) => void; rules: Rules; slip: Slip; computedBase: number; shareUrl: string }) {
   const { t } = useRoute();
   const { fcfa, pct } = useFmt();
   const [period, setPeriod] = useState<'month' | 'year'>('month');
@@ -100,7 +100,7 @@ export function Home({ s, set, rules, slip, computedBase }: { s: AppState; set: 
             </div>
           ))}
 
-          <Payslip slip={slip} rules={rules} statusLabel={s.status === 'apprentice' ? t('Apprenti sous contrat', 'Apprentice under contract') : t('Salarié du secteur privé', 'Private-sector employee')} category={categoryText} />
+          <Payslip slip={slip} rules={rules} statusLabel={s.status === 'apprentice' ? t('Apprenti sous contrat', 'Apprentice under contract') : t('Salarié du secteur privé', 'Private-sector employee')} category={categoryText} shareUrl={shareUrl} />
 
           <Link to="understand" className="next-link">
             <span>
