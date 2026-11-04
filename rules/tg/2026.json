@@ -1,0 +1,394 @@
+{
+  "country": "TG",
+  "currency": "XOF",
+  "version": "2026.1",
+  "valid_from": "2026-05-20",
+  "valid_to": null,
+  "status": "in_force",
+  "notes": "Private-sector employees under the general regime (CNSS + AMU + IRPP on wages). Collective agreement: CCIT 2026, in force since 20 May 2026.",
+  "minimum_wage": {
+    "smig_monthly": 52500,
+    "smig_hourly": 302.89,
+    "valid_from": "2023-01-01",
+    "source": "smig-2023",
+    "status": "in_force"
+  },
+  "working_time": {
+    "weekly_hours": 40,
+    "monthly_hours": 173.33,
+    "source": "ccit-2026",
+    "article": "Hourly rate = monthly base salary / 173.33 (40 h x 52 / 12)",
+    "status": "in_force"
+  },
+  "social": {
+    "cnss": {
+      "employee": [
+        {
+          "id": "cnss_pension_employee",
+          "label": "CNSS, retraite (part salariale)",
+          "rate": 0.04
+        }
+      ],
+      "employer": [
+        {
+          "id": "cnss_family",
+          "label": "CNSS, prestations familiales",
+          "rate": 0.03
+        },
+        {
+          "id": "cnss_work_risk",
+          "label": "CNSS, risques professionnels",
+          "rate": 0.02
+        },
+        {
+          "id": "cnss_pension_employer",
+          "label": "CNSS, retraite (part patronale)",
+          "rate": 0.125
+        }
+      ],
+      "base": "all pay incl. allowances, bonuses, commissions and benefits in kind; excludes expense reimbursements and family benefits",
+      "floor": "smig_monthly",
+      "ceiling": null,
+      "ceiling_status": "to_verify",
+      "source": "cnss-taux",
+      "status": "in_force"
+    },
+    "amu": {
+      "employee_rate": 0.05,
+      "employer_rate": 0.05,
+      "base": "same as CNSS (remunerations subject to contributions)",
+      "ceiling": null,
+      "ceiling_status": "to_verify",
+      "note": "Total 10 % since 1 January 2024, at least half paid by the employer (decree 2023-096/PR, art. 12 and 29). 5/5 is the usual split.",
+      "source": "amu-decret-2023-096",
+      "status": "in_force"
+    }
+  },
+  "irpp": {
+    "method": "annualized",
+    "deduct_social_contributions": true,
+    "flat_allowance": {
+      "rate": 0.28,
+      "cap_income": 10000000,
+      "applies_to": "gross taxable income minus employee pension and social/health contributions (art. 26 al. 1-3)",
+      "source": "cgi",
+      "article": "art. 26"
+    },
+    "dependents": {
+      "amount_per_month": 10000,
+      "max": 6,
+      "applies_to": "taxable income (deduction, not a tax credit)",
+      "source": "cgi",
+      "article": "art. 72 et 73"
+    },
+    "rounding": {
+      "taxable_income_down_to": 1000,
+      "tax_down_to": 10,
+      "source": "cgi",
+      "article": "art. 74"
+    },
+    "brackets": [
+      {
+        "up_to": 900000,
+        "rate": 0
+      },
+      {
+        "up_to": 3000000,
+        "rate": 0.03
+      },
+      {
+        "up_to": 6000000,
+        "rate": 0.1
+      },
+      {
+        "up_to": 9000000,
+        "rate": 0.15
+      },
+      {
+        "up_to": 12000000,
+        "rate": 0.2
+      },
+      {
+        "up_to": 15000000,
+        "rate": 0.25
+      },
+      {
+        "up_to": 20000000,
+        "rate": 0.3
+      },
+      {
+        "up_to": null,
+        "rate": 0.35
+      }
+    ],
+    "source": "cgi",
+    "article": "art. 74",
+    "status": "in_force"
+  },
+  "overtime": {
+    "rates": [
+      {
+        "id": "ot_20",
+        "label": "41e à 48e heure",
+        "rate": 0.2
+      },
+      {
+        "id": "ot_40",
+        "label": "Au-delà de la 48e heure",
+        "rate": 0.4
+      },
+      {
+        "id": "ot_65",
+        "label": "Dimanche, repos ou jour férié",
+        "rate": 0.65
+      },
+      {
+        "id": "ot_night_65",
+        "label": "Nuit en semaine (22 h à 5 h)",
+        "rate": 0.65
+      },
+      {
+        "id": "ot_night_100",
+        "label": "Nuit, dimanche ou jour férié",
+        "rate": 1.0
+      }
+    ],
+    "source": "ccit-2026",
+    "article": "art. 36",
+    "status": "in_force"
+  },
+  "seniority": {
+    "base": "category_minimum",
+    "first_step_years": 2,
+    "first_step_rate": 0.02,
+    "yearly_from_year": 4,
+    "yearly_increment": 0.01,
+    "cap": 0.35,
+    "source": "ccit-2026",
+    "article": "art. 40",
+    "status": "in_force"
+  },
+  "categories": {
+    "source": "ccit-2026",
+    "article": "annexe II",
+    "status": "to_verify",
+    "groups": [
+      {
+        "id": "E",
+        "label": "Employés et ouvriers"
+      },
+      {
+        "id": "M",
+        "label": "Agents de maîtrise"
+      },
+      {
+        "id": "C",
+        "label": "Cadres"
+      }
+    ],
+    "grid": {
+      "E1": [
+        52500
+      ],
+      "E2": [
+        57500,
+        60500,
+        63500
+      ],
+      "E3": [
+        64500,
+        67500,
+        70500
+      ],
+      "E4": [
+        71500,
+        75500,
+        79500
+      ],
+      "E5": [
+        80500,
+        84500,
+        88500
+      ],
+      "E6": [
+        89500,
+        93500,
+        97500
+      ],
+      "M1": [
+        103500,
+        108500,
+        113500
+      ],
+      "M2": [
+        115000,
+        120000,
+        125000
+      ],
+      "M3": [
+        126500,
+        132500,
+        138500
+      ],
+      "M4": [
+        140000,
+        146000,
+        152000
+      ],
+      "C1": [
+        161500,
+        168500,
+        175500
+      ],
+      "C2": [
+        181500,
+        188500,
+        195500
+      ],
+      "C3": [
+        202500,
+        209500,
+        216500
+      ],
+      "C4": [
+        226500,
+        236500,
+        246500
+      ]
+    }
+  },
+  "pay_items": [
+    {
+      "id": "sursalaire",
+      "label": "Sursalaire",
+      "cnss": true,
+      "irpp": true,
+      "cash": true
+    },
+    {
+      "id": "prime_rendement",
+      "label": "Prime de rendement",
+      "cnss": true,
+      "irpp": true,
+      "cash": true
+    },
+    {
+      "id": "prime_fonction",
+      "label": "Indemnité de fonction ou de responsabilité",
+      "cnss": true,
+      "irpp": true,
+      "cash": true
+    },
+    {
+      "id": "prime_technicite",
+      "label": "Prime de technicité",
+      "cnss": true,
+      "irpp": true,
+      "cash": true
+    },
+    {
+      "id": "indemnite_logement",
+      "label": "Indemnité de logement",
+      "cnss": true,
+      "irpp": true,
+      "cash": true
+    },
+    {
+      "id": "prime_transport",
+      "label": "Prime de transport",
+      "cnss": true,
+      "irpp": true,
+      "cash": true
+    },
+    {
+      "id": "prime_panier",
+      "label": "Prime de panier ou de repas",
+      "cnss": true,
+      "irpp": true,
+      "cash": true
+    },
+    {
+      "id": "prime_risque",
+      "label": "Prime de risque ou de pénibilité",
+      "cnss": true,
+      "irpp": true,
+      "cash": true
+    },
+    {
+      "id": "commissions",
+      "label": "Commissions",
+      "cnss": true,
+      "irpp": true,
+      "cash": true
+    },
+    {
+      "id": "autre_prime",
+      "label": "Autre prime",
+      "cnss": true,
+      "irpp": true,
+      "cash": true
+    },
+    {
+      "id": "frais_rembourses",
+      "label": "Remboursement de frais réels (justifiés)",
+      "cnss": false,
+      "irpp": false,
+      "cash": true
+    },
+    {
+      "id": "aen_logement",
+      "label": "Logement fourni (avantage en nature)",
+      "cnss": true,
+      "irpp": true,
+      "cash": false
+    },
+    {
+      "id": "aen_vehicule",
+      "label": "Véhicule de fonction (avantage en nature)",
+      "cnss": true,
+      "irpp": true,
+      "cash": false
+    },
+    {
+      "id": "aen_autre",
+      "label": "Autre avantage en nature (eau, électricité, téléphone...)",
+      "cnss": true,
+      "irpp": true,
+      "cash": false
+    }
+  ],
+  "not_modeled": [
+    "Taxe sur les salaires (TS) : un communiqué officiel de 2018 indique sa suppression par le nouveau CGI. Elle n'est pas appliquée tant qu'aucun texte en vigueur ne dit le contraire.",
+    "Plafond CNSS et AMU : aucun plafond général fiable n'est publié par la CNSS. Aucun plafond n'est appliqué.",
+    "Agents publics (CRT, INAM), travailleurs indépendants (21,5 %) et de l'économie informelle (19,5 %) : autres régimes, pas encore couverts.",
+    "Déduction des primes d'assurance vie (art. 26) : pas encore prise en compte.",
+    "Répartition de l'AMU : 10 % au total, dont au moins la moitié pour l'employeur. Le partage 5 % et 5 % est le plus courant."
+  ],
+  "sources": {
+    "cgi": {
+      "title": "Code général des impôts du Togo (version consolidée OTR)",
+      "publisher": "Office Togolais des Recettes",
+      "url": "https://www.otr.tg/index.php/fr/impots/reglementations-fiscales/code-general-des-impots.html"
+    },
+    "cnss-taux": {
+      "title": "Cotisations sociales, taux et assiette",
+      "publisher": "Caisse Nationale de Sécurité Sociale du Togo",
+      "url": "https://cnss.tg/employeurs/cotisations-sociales/"
+    },
+    "amu-decret-2023-096": {
+      "title": "Décret n° 2023-096/PR (AMU), avis sur le taux de 10 % au 1er janvier 2024",
+      "publisher": "République togolaise",
+      "url": "https://www.republicoftogo.com/content/download/112742/2907809/1"
+    },
+    "ccit-2026": {
+      "title": "Convention collective interprofessionnelle du Togo (2026), déposée le 19 mai 2026",
+      "publisher": "Greffe du Tribunal du travail de Lomé, n° 001",
+      "url": "https://www.lqdd.org/textes-de-loi/convention-collective-interprofessionnelle-du-togo-ccit/"
+    },
+    "smig-2023": {
+      "title": "SMIG à 52 500 FCFA au 1er janvier 2023",
+      "publisher": "République togolaise",
+      "url": "https://www.lqdd.org/smig-salaire-minimum-togo-montant-droits/"
+    }
+  }
+}
