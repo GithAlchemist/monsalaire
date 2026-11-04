@@ -2796,3 +2796,22 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.acct-google {
+  min-height: 44px;
+}
+.acct-or {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.acct-or::before,
+.acct-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}

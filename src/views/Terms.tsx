@@ -42,8 +42,8 @@ export function Terms() {
           </li>
           <li>
             {t(
-              'Si vous créez un compte pour recevoir nos analyses, nous gardons votre email, votre mot de passe sous forme chiffrée irréversible et votre langue, et rien d’autre : aucun montant de vos simulations. Un cookie de session vous garde connecté. Vous pouvez supprimer votre compte à tout moment, sous le bulletin. Si vous nous écrivez, nous gardons votre nom, votre email et votre message pour vous répondre.',
-              'If you create an account to receive our analyses, we keep your email, your password in irreversibly hashed form and your language, and nothing else: none of your simulation figures. A session cookie keeps you logged in. You can delete your account at any time, under the payslip. If you write to us, we keep your name, email and message so we can reply.',
+              'Si vous créez un compte pour recevoir nos analyses, nous gardons votre email, votre mot de passe sous forme chiffrée irréversible (ou, avec Google, l’identifiant de votre compte Google) et votre langue, et rien d’autre : aucun montant de vos simulations. Un cookie de session vous garde connecté. Vous pouvez supprimer votre compte à tout moment, sous le bulletin. Si vous nous écrivez, nous gardons votre nom, votre email et votre message pour vous répondre.',
+              'If you create an account to receive our analyses, we keep your email, your password in irreversibly hashed form (or, with Google, your Google account ID) and your language, and nothing else: none of your simulation figures. A session cookie keeps you logged in. You can delete your account at any time, under the payslip. If you write to us, we keep your name, email and message so we can reply.',
             )}
           </li>
           <li>

@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useRoute } from '../i18n';
 import { Icon } from './fields';
 
@@ -18,6 +18,8 @@ export function AccountOffer() {
   const { t, lang } = useRoute();
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
   const [off, setOff] = useState(false);
+  const [googleId, setGoogleId] = useState<string | null>(null);
+  const googleBox = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<Step>('signup');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,6 +32,7 @@ export function AccountOffer() {
       .then((r) => (r.ok ? r.json() : { account: null, off: true }))
       .then((d) => {
         setOff(Boolean(d.off));
+        setGoogleId(d.google ?? null);
         setAccount(d.account ?? null);
       })
       .catch(() => setOff(true));
@@ -42,7 +45,41 @@ export function AccountOffer() {
     credentials: t('Email ou mot de passe incorrect.', 'Wrong email or password.'),
     too_many: t('Trop d’essais. Réessayez dans quelques minutes.', 'Too many attempts. Try again in a few minutes.'),
     server: t('Le service ne répond pas. Réessayez plus tard.', 'The service is not responding. Try again later.'),
+    google: t('La connexion avec Google n’a pas abouti.', 'Signing in with Google did not work.'),
   };
+
+  // "Continue with Google": Google's own button; its ID token is checked by our server (not by Supabase Auth).
+  const showGoogle = Boolean(googleId) && (step === 'signup' || step === 'login') && !account;
+  useEffect(() => {
+    if (!showGoogle || !googleId || !googleBox.current) return;
+    const box = googleBox.current;
+    const render = () => {
+      const g = (window as unknown as { google?: { accounts: { id: { initialize: (o: object) => void; renderButton: (el: HTMLElement, o: object) => void } } } }).google;
+      if (!g) return;
+      g.accounts.id.initialize({
+        client_id: googleId,
+        callback: async (res: { credential: string }) => {
+          setBusy(true);
+          setError('');
+          const { data } = await call('google', { credential: res.credential, lang });
+          if (data.account) {
+            setAccount(data.account);
+            setStep('done');
+          } else setError(messages[data.error ?? ''] ?? messages.google);
+          setBusy(false);
+        },
+      });
+      g.accounts.id.renderButton(box, { theme: 'outline', size: 'large', text: step === 'login' ? 'signin_with' : 'continue_with', locale: lang, width: 280 });
+    };
+    if ((window as unknown as { google?: unknown }).google) render();
+    else {
+      const sc = document.createElement('script');
+      sc.src = 'https://accounts.google.com/gsi/client';
+      sc.async = true;
+      sc.onload = render;
+      document.head.appendChild(sc);
+    }
+  }, [showGoogle, googleId, step, lang]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const go = async (e: FormEvent, action: string, body: Record<string, unknown>) => {
     e.preventDefault();
@@ -126,14 +163,20 @@ export function AccountOffer() {
         </h2>
         <p>
           {t(
-            'SMIG, impôts, comparaisons entre pays : nos articles et nos analyses par email, deux fois par mois au plus. Il suffit d’un email et d’un mot de passe, et vous pouvez supprimer votre compte en un clic. Le simulateur reste libre, sans compte.',
-            'Minimum wages, tax, country comparisons: our articles and analyses by email, twice a month at most. All it takes is an email and a password, and you can delete your account in one click. The simulator stays free, with no account.',
+            'SMIG, impôts, comparaisons entre pays : nos articles et nos analyses par email, deux fois par mois au plus. Il suffit de votre compte Google ou d’un email et d’un mot de passe, et vous pouvez supprimer votre compte en un clic. Le simulateur reste libre, sans compte.',
+            'Minimum wages, tax, country comparisons: our articles and analyses by email, twice a month at most. All it takes is your Google account or an email and a password, and you can delete your account in one click. The simulator stays free, with no account.',
           )}
         </p>
       </div>
 
       {step === 'signup' && (
         <form className="acct-form" onSubmit={(e) => go(e, 'signup', { email, password, website: (e.currentTarget.elements.namedItem('website') as HTMLInputElement)?.value })}>
+          {googleId && (
+            <>
+              <div className="acct-google" ref={googleBox} />
+              <p className="acct-or">{t('ou avec votre email', 'or with your email')}</p>
+            </>
+          )}
           {emailField}
           {passwordField(t('Mot de passe (8 caractères au moins)', 'Password (at least 8 characters)'), 'new-password')}
           {honeypot}
@@ -151,6 +194,12 @@ export function AccountOffer() {
 
       {step === 'login' && (
         <form className="acct-form" onSubmit={(e) => go(e, 'login', { email, password })}>
+          {googleId && (
+            <>
+              <div className="acct-google" ref={googleBox} />
+              <p className="acct-or">{t('ou avec votre email', 'or with your email')}</p>
+            </>
+          )}
           {emailField}
           {passwordField(t('Mot de passe', 'Password'), 'current-password')}
           <button className="btn primary" disabled={busy}>
