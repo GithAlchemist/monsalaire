@@ -1,0 +1,229 @@
+[
+  {
+    "id": "cgi-lpf-2025",
+    "title": "Code général des impôts et Livre des procédures fiscales, mis à jour septembre 2025",
+    "publisher": "Office Togolais des Recettes (OTR)",
+    "date": "2025-09-18",
+    "official_page": "https://www.otr.tg",
+    "download_url": "https://www.lqdd.org/wp-content/uploads/2026/03/code_general_impots_togo_2025.pdf",
+    "download_note": "Copy of the OTR file (2.96 MB, published 18/09/2025). The former OTR download link no longer works since the site moved; this mirror is byte-for-byte the OTR document.",
+    "method": "text",
+    "used_for": [
+      "IRPP on wages: art. 17 to 26, 72 to 74",
+      "LPF art. 26 to 28: withholding, payment by the 15th, annual return"
+    ],
+    "sha256": "7d0df3af53833e47266f4b77cf134ac3acb14bb3e8049d1bf92ac2438be4f4c3",
+    "pages": 361,
+    "short_fr": "Code général des impôts 2025",
+    "use_fr": "IRPP sur les salaires : art. 17 à 26, 72 à 74"
+  },
+  {
+    "id": "otr-cahier-fiscal-2026",
+    "title": "Cahier fiscal : principales dispositions de la loi de finances 2026",
+    "publisher": "Office Togolais des Recettes (OTR)",
+    "date": "2026-10-30",
+    "official_page": "https://www.otr.tg",
+    "download_url": "https://www.otr.tg/wp-content/uploads/2026/10/cahier-fiscal-2026.pdf",
+    "method": "ocr",
+    "used_for": [
+      "Check that the 2026 finance law does not change the wage tax articles (it does not)"
+    ],
+    "sha256": "7d34313a4a6f12696fe1d6745d19e77b0d05a97bbbff68578a493749c8f16db9",
+    "pages": 24,
+    "short_fr": "Cahier fiscal de la loi de finances 2026",
+    "use_fr": "Vérifie que 2026 ne change rien à l’impôt sur les salaires"
+  },
+  {
+    "id": "ccit-2026",
+    "title": "Convention collective interprofessionnelle du Togo (2026), déposée au greffe du Tribunal du travail de Lomé le 19 mai 2026 sous le n° 001",
+    "publisher": "Partenaires sociaux, Direction générale du travail",
+    "date": "2026-05-19",
+    "official_page": "https://jo.gouv.tg",
+    "download_url": "https://www.lqdd.org/wp-content/uploads/2026/07/Convention-Collective-Interprofessionnelle-Togo-2026.pdf",
+    "method": "ocr",
+    "used_for": [
+      "Overtime: art. 36",
+      "Mission allowances: art. 38",
+      "Meal allowance: art. 39",
+      "Seniority: art. 40",
+      "13th month: art. 42",
+      "Classifications: annex I",
+      "Minimum wage grid: annex II"
+    ],
+    "sha256": "920b3666d5bb403d613e850cb3c9a288b92c7336b57527a95dcba452a8640138",
+    "pages": 76,
+    "short_fr": "Convention collective interprofessionnelle 2026",
+    "use_fr": "Grille des salaires, ancienneté, heures sup, primes"
+  },
+  {
+    "id": "ccit-2011",
+    "title": "Convention collective interprofessionnelle du Togo (2011), remplacée le 20 mai 2026",
+    "publisher": "Partenaires sociaux",
+    "date": "2011-12-12",
+    "download_url": "https://legaltech-miabeloya.com/res/CCIT.pdf",
+    "method": "text",
+    "used_for": [
+      "History: seniority capped at 30 % (art. 36), for comparison with 2026"
+    ],
+    "sha256": "426b6b327747e79a2fa85f46f631f6c1c0296c3684f851f8337ed146178a4e1b",
+    "pages": 63,
+    "short_fr": "Convention collective interprofessionnelle 2011",
+    "use_fr": "Historique"
+  },
+  {
+    "id": "code-securite-sociale-2011",
+    "title": "Loi n° 2011-006 du 21 février 2011 portant Code de sécurité sociale au Togo",
+    "publisher": "CNSS",
+    "date": "2011-02-21",
+    "official_page": "https://cnss.tg/documentation/textes-reglementaires/",
+    "download_url": "https://cnss.tg/cnss-media/2018/08/code_securite_sociale_21_fev_2011.pdf",
+    "method": "ocr",
+    "used_for": [
+      "Contribution base, SMIG floor, no ceiling: art. 12",
+      "Rates set by decree: art. 13",
+      "Single work-risk rate, may be doubled: art. 14",
+      "Employer-only branches, pension split: art. 16"
+    ],
+    "sha256": "ce986dfb1dc3b5a3f05be99bfeed4a4e16494e8e9940acf78b24c9c7de0d0560",
+    "pages": 43,
+    "short_fr": "Code de sécurité sociale (loi 2011-006)",
+    "use_fr": "Assiette CNSS, plancher au SMIG, pas de plafond"
+  },
+  {
+    "id": "decret-2012-038-taux-cnss",
+    "title": "Décret n° 2012-038/PR du 27 juin 2012 portant révision des taux de cotisations à la CNSS (JORT du 21 septembre 2012)",
+    "publisher": "Journal officiel de la République togolaise",
+    "date": "2012-06-27",
+    "official_page": "http://legitogo.gouv.tg",
+    "download_url": "http://legitogo.gouv.tg/be/wp-content/uploads/2017/03/Pages-from-jo_2012-043Ter-1.pdf",
+    "method": "text",
+    "used_for": [
+      "CNSS rates: 3 % family, 2 % work risk, 16.5 % pension (12.5 % employer, 4 % employee), 21.5 % in all"
+    ],
+    "sha256": "2467ce2dd77caf94692e7d8815aadb264d1a442ec47958c98bbaae476e266e4f",
+    "pages": 1,
+    "short_fr": "Décret 2012-038 sur les taux CNSS",
+    "use_fr": "4 % salarié, 17,5 % employeur"
+  },
+  {
+    "id": "arrete-2012-003-risques-professionnels",
+    "title": "Arrêté n° 003/2012/MTESS/CAB/DGTLS du 19 janvier 2012 : majoration du taux de la branche risques professionnels",
+    "publisher": "Ministère du Travail (CNSS)",
+    "date": "2012-01-19",
+    "official_page": "https://cnss.tg/documentation/textes-reglementaires/",
+    "download_url": "https://cnss.tg/cnss-media/2018/08/arr_portant_majoration_du_taux_de_cotisations_des_risques_prof.pdf",
+    "method": "text",
+    "used_for": [
+      "Work-risk rate is single; +50 % then +100 % for employers who ignore prevention orders"
+    ],
+    "sha256": "d9127bac621928a2ab5343bbfd7538676da932296dae001189698b09ad62d2f3",
+    "pages": 2,
+    "short_fr": "Arrêté 003/2012 sur les risques professionnels",
+    "use_fr": "Majoration du taux de l’employeur"
+  },
+  {
+    "id": "arrete-2012-002-application-css",
+    "title": "Arrêté n° 002/2012/MTESS d'application du Code de sécurité sociale",
+    "publisher": "Ministère du Travail (CNSS)",
+    "date": "2012",
+    "official_page": "https://cnss.tg/documentation/textes-reglementaires/",
+    "download_url": "https://cnss.tg/cnss-media/2018/08/arrete_d_application_du_code_de_securite_sociale.pdf",
+    "method": "text",
+    "used_for": [
+      "Late-payment surcharges (art. 40), self-employed and informal workers (art. 44 to 48)"
+    ],
+    "sha256": "d04b6ee5c4c4749da92e221f0413e8d3c946e1d4b53d6f427f55d0b427143a65",
+    "pages": 43,
+    "short_fr": "Arrêté 002/2012 d’application du Code",
+    "use_fr": "Pénalités, autres régimes"
+  },
+  {
+    "id": "loi-2021-022-amu",
+    "title": "Loi n° 2021-022 du 18 octobre 2021 instituant l'assurance maladie universelle",
+    "publisher": "Assemblée nationale (copie CNSS)",
+    "date": "2021-10-18",
+    "official_page": "https://cnss.tg/documentation/textes-reglementaires/",
+    "download_url": "https://cnss.tg/cnss-media/2024/01/assurance-maladie-loi-AN.pdf",
+    "method": "text",
+    "used_for": [
+      "Legal basis of AMU contributions"
+    ],
+    "sha256": "dd0a6bfe70110549ece73873eb23750b8a3e4bf115317f2922797e9e07d8a062",
+    "pages": 25,
+    "short_fr": "Loi 2021-022 sur l’assurance maladie universelle",
+    "use_fr": "Fondement de l’AMU"
+  },
+  {
+    "id": "decret-2023-096-taux-amu",
+    "title": "Décret n° 2023-096/PR du 4 octobre 2023 fixant les taux, montants et modalités de recouvrement des cotisations AMU (JORT du 25 novembre 2023)",
+    "publisher": "Journal officiel de la République togolaise",
+    "date": "2023-10-04",
+    "official_page": "https://cnss.tg/cnss-media/2024/01/DECRET-2023-096-fixant-les-taux-de-cotisations-AMU.pdf",
+    "download_url": "https://extranet.who.int/cpcd/sites/default/files/public_file_repository/TGO_Togo_Decret-No2023-096-PR-fixant-les-taux-montant-et-modalites-de-recourvrement-des-cotisations-sociales-et-autres-contributions-dues-au-titre-de-l_Assurance-Maladie-Universelle_2023.pdf",
+    "download_note": "Journal officiel pages (searchable text). The CNSS copy at the official page is a scan of the same decree.",
+    "method": "text",
+    "used_for": [
+      "AMU base: art. 9",
+      "SMIG floor: art. 10",
+      "10 % rate: art. 12",
+      "5 % employer, 5 % employee: art. 29",
+      "In force on 1 January 2024"
+    ],
+    "sha256": "c6de75843d99f0ce0c581cbc352849ea99c96469bc46c9ace0c60666616d1b99",
+    "pages": 6,
+    "short_fr": "Décret 2023-096 sur les cotisations AMU",
+    "use_fr": "Assiette et taux : 5 % et 5 %"
+  },
+  {
+    "id": "decret-2023-097-gestion-amu",
+    "title": "Décret n° 2023-097/PR confiant la gestion de l'AMU à l'INAM et à la CNSS",
+    "publisher": "CNSS",
+    "date": "2023-10-04",
+    "official_page": "https://cnss.tg/documentation/textes-reglementaires/",
+    "download_url": "https://cnss.tg/cnss-media/2024/01/DECRET-2023-097-confiant-la-gestion-de-lAMU-a-INAM-et-CNSS.pdf",
+    "method": "ocr",
+    "used_for": [
+      "Who collects AMU: CNSS for private-sector employees, INAM for public agents"
+    ],
+    "sha256": "8503b047bf3669c98b3eb50446f2f6f0ce6da08c6c0b5787d45d2361c644e7a9",
+    "pages": 3,
+    "short_fr": "Décret 2023-097 sur la gestion de l’AMU",
+    "use_fr": "CNSS pour le privé, INAM pour le public"
+  },
+  {
+    "id": "code-travail-2021",
+    "title": "Loi n° 2021-012 du 18 juin 2021 portant Code du travail (JORT du 18 juin 2021)",
+    "publisher": "Journal officiel de la République togolaise",
+    "date": "2021-06-18",
+    "official_page": "https://jo.gouv.tg",
+    "download_url": "https://faolex.fao.org/docs/pdf/tog213551.pdf",
+    "download_note": "Amended by law n° 2022-019 of 15 November 2022 (art. 190, pregnant workers), which does not affect pay calculation.",
+    "method": "text",
+    "used_for": [
+      "Definition of wage: art. 154",
+      "SMIG set by order: art. 158",
+      "Deductions allowed from wages: art. 173 and 174",
+      "40-hour week, 2 400 h a year in agriculture: art. 180"
+    ],
+    "sha256": "29d1ac33c1eeec1cba7dfd8c63c85b7174a1f5311ee911c1fd8bc76d5987770d",
+    "pages": 58,
+    "short_fr": "Code du travail (loi 2021-012)",
+    "use_fr": "Salaire, SMIG, retenues permises, 40 h"
+  },
+  {
+    "id": "arrete-3790-smig-2022",
+    "title": "Arrêté n° 3790/MFPTDS/DGT du 31 décembre 2022 portant révision du SMIG et du SMAG",
+    "publisher": "Ministère de la Fonction publique, du Travail et du Dialogue social",
+    "date": "2022-12-31",
+    "official_page": "https://jo.gouv.tg",
+    "download_url": "https://www.lqdd.org/wp-content/uploads/2026/08/arrete-3790-smig-smag-togo-2022.pdf",
+    "method": "text",
+    "used_for": [
+      "SMIG and SMAG: 302.89 F an hour, 52 500 F a month from 1 January 2023"
+    ],
+    "sha256": "8be592ee49073f59e3d5a841a0666ae0a19be15f9754bbe8b9a09b658e7dc689",
+    "pages": 1,
+    "short_fr": "Arrêté 3790 sur le SMIG",
+    "use_fr": "52 500 F par mois depuis 2023"
+  }
+]

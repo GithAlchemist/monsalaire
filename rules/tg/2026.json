@@ -1,162 +1,109 @@
 {
   "country": "TG",
   "currency": "XOF",
-  "version": "2026.1",
+  "version": "2026.2",
   "valid_from": "2026-05-20",
   "valid_to": null,
   "status": "in_force",
-  "notes": "Private-sector employees under the general regime (CNSS + AMU + IRPP on wages). Collective agreement: CCIT 2026, in force since 20 May 2026.",
+  "verified_on": "2026-11-04",
+  "notes": "Private-sector employees under the general regime (CNSS, AMU, IRPP on wages), CCIT 2026. Every value below was checked against the original text in /sources (source id, article, PDF page).",
+
   "minimum_wage": {
     "smig_monthly": 52500,
     "smig_hourly": 302.89,
     "valid_from": "2023-01-01",
-    "source": "smig-2023",
-    "status": "in_force"
+    "ref": { "source": "arrete-3790-smig-2022", "article": "art. 1", "page": 1 },
+    "status": "verified"
   },
+
   "working_time": {
     "weekly_hours": 40,
     "monthly_hours": 173.33,
-    "source": "ccit-2026",
-    "article": "Hourly rate = monthly base salary / 173.33 (40 h x 52 / 12)",
-    "status": "in_force"
+    "hourly_base_items": ["sursalaire"],
+    "ref": { "source": "ccit-2026", "article": "art. 36", "page": 36 },
+    "ref_hours": { "source": "code-travail-2021", "article": "art. 180", "page": 29 },
+    "status": "verified"
   },
+
   "social": {
     "cnss": {
-      "employee": [
-        {
-          "id": "cnss_pension_employee",
-          "label": "CNSS, retraite (part salariale)",
-          "rate": 0.04
-        }
-      ],
+      "employee": [{ "id": "cnss_pension_employee", "label": "CNSS, retraite (part salariale)", "rate": 0.04 }],
       "employer": [
-        {
-          "id": "cnss_family",
-          "label": "CNSS, prestations familiales",
-          "rate": 0.03
-        },
-        {
-          "id": "cnss_work_risk",
-          "label": "CNSS, risques professionnels",
-          "rate": 0.02
-        },
-        {
-          "id": "cnss_pension_employer",
-          "label": "CNSS, retraite (part patronale)",
-          "rate": 0.125
-        }
+        { "id": "cnss_family", "label": "CNSS, prestations familiales et maternité", "rate": 0.03 },
+        { "id": "cnss_work_risk", "label": "CNSS, risques professionnels", "rate": 0.02 },
+        { "id": "cnss_pension_employer", "label": "CNSS, retraite (part patronale)", "rate": 0.125 }
       ],
-      "base": "all pay incl. allowances, bonuses, commissions and benefits in kind; excludes expense reimbursements and family benefits",
+      "work_risk_surcharges": [0.5, 1.0],
       "floor": "smig_monthly",
       "ceiling": null,
-      "ceiling_status": "to_verify",
-      "source": "cnss-taux",
-      "status": "in_force"
+      "ref": { "source": "decret-2012-038-taux-cnss", "article": "art. 1 à 3", "page": 1 },
+      "ref_base": { "source": "code-securite-sociale-2011", "article": "art. 12", "page": 4 },
+      "ref_surcharge": { "source": "arrete-2012-003-risques-professionnels", "article": "art. 4 et 5", "page": 1 },
+      "status": "verified"
     },
     "amu": {
       "employee_rate": 0.05,
       "employer_rate": 0.05,
-      "base": "same as CNSS (remunerations subject to contributions)",
+      "floor": "smig_monthly",
       "ceiling": null,
-      "ceiling_status": "to_verify",
-      "note": "Total 10 % since 1 January 2024, at least half paid by the employer (decree 2023-096/PR, art. 12 and 29). 5/5 is the usual split.",
-      "source": "amu-decret-2023-096",
-      "status": "in_force"
+      "valid_from": "2024-01-01",
+      "ref": { "source": "decret-2023-096-taux-amu", "article": "art. 12 et 29", "page": 4 },
+      "ref_base": { "source": "decret-2023-096-taux-amu", "article": "art. 9 et 10", "page": 3 },
+      "status": "verified"
     }
   },
+
   "irpp": {
     "method": "annualized",
-    "deduct_social_contributions": true,
-    "flat_allowance": {
-      "rate": 0.28,
-      "cap_income": 10000000,
-      "applies_to": "gross taxable income minus employee pension and social/health contributions (art. 26 al. 1-3)",
-      "source": "cgi",
-      "article": "art. 26"
-    },
-    "dependents": {
-      "amount_per_month": 10000,
-      "max": 6,
-      "applies_to": "taxable income (deduction, not a tax credit)",
-      "source": "cgi",
-      "article": "art. 72 et 73"
-    },
-    "rounding": {
-      "taxable_income_down_to": 1000,
-      "tax_down_to": 10,
-      "source": "cgi",
-      "article": "art. 74"
-    },
+    "pension_deduction_cap": 0.06,
+    "flat_allowance": { "rate": 0.28, "cap_income": 10000000 },
+    "voluntary_pension_cap": 0.06,
+    "life_insurance": { "base_cap": 200000, "per_child": 30000, "max_children": 6 },
+    "dependents": { "amount_per_month": 10000, "max": 6 },
+    "rounding": { "taxable_income_down_to": 1000, "tax_down_to": 10 },
     "brackets": [
-      {
-        "up_to": 900000,
-        "rate": 0
-      },
-      {
-        "up_to": 3000000,
-        "rate": 0.03
-      },
-      {
-        "up_to": 6000000,
-        "rate": 0.1
-      },
-      {
-        "up_to": 9000000,
-        "rate": 0.15
-      },
-      {
-        "up_to": 12000000,
-        "rate": 0.2
-      },
-      {
-        "up_to": 15000000,
-        "rate": 0.25
-      },
-      {
-        "up_to": 20000000,
-        "rate": 0.3
-      },
-      {
-        "up_to": null,
-        "rate": 0.35
-      }
+      { "up_to": 900000, "rate": 0 },
+      { "up_to": 3000000, "rate": 0.03 },
+      { "up_to": 6000000, "rate": 0.1 },
+      { "up_to": 9000000, "rate": 0.15 },
+      { "up_to": 12000000, "rate": 0.2 },
+      { "up_to": 15000000, "rate": 0.25 },
+      { "up_to": 20000000, "rate": 0.3 },
+      { "up_to": null, "rate": 0.35 }
     ],
-    "source": "cgi",
-    "article": "art. 74",
-    "status": "in_force"
+    "apprentice_exempt": true,
+    "ref": { "source": "cgi-lpf-2025", "article": "art. 74", "page": 41 },
+    "ref_deductions": { "source": "cgi-lpf-2025", "article": "art. 26", "page": 25 },
+    "ref_dependents": { "source": "cgi-lpf-2025", "article": "art. 72 et 73", "page": 40 },
+    "ref_apprentice": { "source": "cgi-lpf-2025", "article": "art. 23-4", "page": 24 },
+    "ref_withholding": { "source": "cgi-lpf-2025", "article": "LPF art. 26 et 27", "page": 223 },
+    "ref_2026": { "source": "otr-cahier-fiscal-2026", "article": "aperçu des modifications du CGI", "page": 5 },
+    "status": "verified"
   },
+
   "overtime": {
     "rates": [
-      {
-        "id": "ot_20",
-        "label": "41e à 48e heure",
-        "rate": 0.2
-      },
-      {
-        "id": "ot_40",
-        "label": "Au-delà de la 48e heure",
-        "rate": 0.4
-      },
-      {
-        "id": "ot_65",
-        "label": "Dimanche, repos ou jour férié",
-        "rate": 0.65
-      },
-      {
-        "id": "ot_night_65",
-        "label": "Nuit en semaine (22 h à 5 h)",
-        "rate": 0.65
-      },
-      {
-        "id": "ot_night_100",
-        "label": "Nuit, dimanche ou jour férié",
-        "rate": 1.0
-      }
+      { "id": "ot_20", "label": "41e à 48e heure de la semaine", "rate": 0.2 },
+      { "id": "ot_40", "label": "Au-delà de la 48e heure", "rate": 0.4 },
+      { "id": "ot_65", "label": "Dimanche, jour de repos ou férié", "rate": 0.65 },
+      { "id": "ot_night_65", "label": "Nuit en semaine (22 h à 5 h)", "rate": 0.65 },
+      { "id": "ot_night_100", "label": "Nuit, dimanche ou jour férié", "rate": 1.0 }
     ],
-    "source": "ccit-2026",
-    "article": "art. 36",
-    "status": "in_force"
+    "ref": { "source": "ccit-2026", "article": "art. 36", "page": 35 },
+    "status": "verified"
   },
+
+  "allowances": {
+    "meal": { "hours_multiplier": 3, "base_category": "E1", "ref": { "source": "ccit-2026", "article": "art. 39", "page": 37 } },
+    "mission": {
+      "one_meal": 3,
+      "two_meals": 5,
+      "two_meals_and_night": 10,
+      "ref": { "source": "ccit-2026", "article": "art. 38", "page": 37 }
+    },
+    "status": "verified"
+  },
+
   "seniority": {
     "base": "category_minimum",
     "first_step_years": 2,
@@ -164,231 +111,102 @@
     "yearly_from_year": 4,
     "yearly_increment": 0.01,
     "cap": 0.35,
-    "source": "ccit-2026",
-    "article": "art. 40",
-    "status": "in_force"
+    "ref": { "source": "ccit-2026", "article": "art. 40", "page": 39 },
+    "interpretation": "« 2 % après deux années de présence ; 1 % par année de présence à partir de la quatrième année avec un maximum de 35 % ». Read as 2 % at 2 and 3 years, then one more point each year: 3 % at 4 years, 9 % at 10 years, 35 % at 36 years. The other possible reading is listed in open_questions.",
+    "status": "verified"
   },
+
   "categories": {
-    "source": "ccit-2026",
-    "article": "annexe II",
-    "status": "to_verify",
+    "ref": { "source": "ccit-2026", "article": "annexe II", "page": 72 },
+    "ref_definitions": { "source": "ccit-2026", "article": "annexe I", "page": 63 },
+    "status": "verified",
     "groups": [
-      {
-        "id": "E",
-        "label": "Employés et ouvriers"
-      },
-      {
-        "id": "M",
-        "label": "Agents de maîtrise"
-      },
-      {
-        "id": "C",
-        "label": "Cadres"
-      }
+      { "id": "E", "label": "Agents d'exécution" },
+      { "id": "M", "label": "Agents de maîtrise" },
+      { "id": "C", "label": "Cadres" }
     ],
     "grid": {
-      "E1": [
-        52500
-      ],
-      "E2": [
-        57500,
-        60500,
-        63500
-      ],
-      "E3": [
-        64500,
-        67500,
-        70500
-      ],
-      "E4": [
-        71500,
-        75500,
-        79500
-      ],
-      "E5": [
-        80500,
-        84500,
-        88500
-      ],
-      "E6": [
-        89500,
-        93500,
-        97500
-      ],
-      "M1": [
-        103500,
-        108500,
-        113500
-      ],
-      "M2": [
-        115000,
-        120000,
-        125000
-      ],
-      "M3": [
-        126500,
-        132500,
-        138500
-      ],
-      "M4": [
-        140000,
-        146000,
-        152000
-      ],
-      "C1": [
-        161500,
-        168500,
-        175500
-      ],
-      "C2": [
-        181500,
-        188500,
-        195500
-      ],
-      "C3": [
-        202500,
-        209500,
-        216500
-      ],
-      "C4": [
-        226500,
-        236500,
-        246500
-      ]
+      "E1": [52500],
+      "E2": [57500, 60500, 63500],
+      "E3": [64500, 67500, 70500],
+      "E4": [71500, 75500, 79500],
+      "E5": [80500, 84500, 88500],
+      "E6": [89500, 93500, 97500],
+      "M1": [103500, 108500, 113500],
+      "M2": [115000, 120000, 125000],
+      "M3": [126500, 132500, 138500],
+      "M4": [140000, 146000, 152000],
+      "C1": [161500, 168500, 175500],
+      "C2": [181500, 188500, 195500],
+      "C3": [202500, 209500, 216500],
+      "C4": [226500, 236500, 246500]
+    },
+    "examples": {
+      "E1": "Manœuvre ordinaire",
+      "E2": "Gardien, agent d'entretien, manutentionnaire",
+      "E3": "Aide-ouvrier, pompiste, vendeur auxiliaire",
+      "E4": "Ouvrier spécialisé, caissier, chauffeur (permis A, B, C), employé de bureau",
+      "E5": "Agent de transit, chauffeur (permis D ou E)",
+      "E6": "Aide-comptable, titulaire du BEPC ou du CAP",
+      "M1": "Bac, archiviste, documentaliste",
+      "M2": "Bac technique, brevet de technicien, ENA cycle I",
+      "M3": "DEUG, chef d'équipe",
+      "M4": "Licence, BTS ou DUT",
+      "C1": "Licence professionnelle, maîtrise, ingénieur des travaux",
+      "C2": "Bac + 4 professionnel, master recherche",
+      "C3": "Master professionnel, ingénieur, DESS",
+      "C4": "Doctorat, expert, directeur général"
     }
   },
+
   "pay_items": [
-    {
-      "id": "sursalaire",
-      "label": "Sursalaire",
-      "cnss": true,
-      "irpp": true,
-      "cash": true
-    },
-    {
-      "id": "prime_rendement",
-      "label": "Prime de rendement",
-      "cnss": true,
-      "irpp": true,
-      "cash": true
-    },
-    {
-      "id": "prime_fonction",
-      "label": "Indemnité de fonction ou de responsabilité",
-      "cnss": true,
-      "irpp": true,
-      "cash": true
-    },
-    {
-      "id": "prime_technicite",
-      "label": "Prime de technicité",
-      "cnss": true,
-      "irpp": true,
-      "cash": true
-    },
-    {
-      "id": "indemnite_logement",
-      "label": "Indemnité de logement",
-      "cnss": true,
-      "irpp": true,
-      "cash": true
-    },
-    {
-      "id": "prime_transport",
-      "label": "Prime de transport",
-      "cnss": true,
-      "irpp": true,
-      "cash": true
-    },
-    {
-      "id": "prime_panier",
-      "label": "Prime de panier ou de repas",
-      "cnss": true,
-      "irpp": true,
-      "cash": true
-    },
-    {
-      "id": "prime_risque",
-      "label": "Prime de risque ou de pénibilité",
-      "cnss": true,
-      "irpp": true,
-      "cash": true
-    },
-    {
-      "id": "commissions",
-      "label": "Commissions",
-      "cnss": true,
-      "irpp": true,
-      "cash": true
-    },
-    {
-      "id": "autre_prime",
-      "label": "Autre prime",
-      "cnss": true,
-      "irpp": true,
-      "cash": true
-    },
-    {
-      "id": "frais_rembourses",
-      "label": "Remboursement de frais réels (justifiés)",
-      "cnss": false,
-      "irpp": false,
-      "cash": true
-    },
-    {
-      "id": "aen_logement",
-      "label": "Logement fourni (avantage en nature)",
-      "cnss": true,
-      "irpp": true,
-      "cash": false
-    },
-    {
-      "id": "aen_vehicule",
-      "label": "Véhicule de fonction (avantage en nature)",
-      "cnss": true,
-      "irpp": true,
-      "cash": false
-    },
-    {
-      "id": "aen_autre",
-      "label": "Autre avantage en nature (eau, électricité, téléphone...)",
-      "cnss": true,
-      "irpp": true,
-      "cash": false
-    }
+    { "id": "sursalaire", "label": "Sursalaire", "cnss": true, "amu": true, "irpp": true, "cash": true },
+    { "id": "prime_rendement", "label": "Prime de rendement", "cnss": true, "amu": true, "irpp": true, "cash": true },
+    { "id": "prime_fonction", "label": "Indemnité de fonction ou de responsabilité", "cnss": true, "amu": true, "irpp": true, "cash": true },
+    { "id": "prime_technicite", "label": "Prime de technicité", "cnss": true, "amu": true, "irpp": true, "cash": true },
+    { "id": "indemnite_logement", "label": "Indemnité de logement", "cnss": true, "amu": true, "irpp": true, "cash": true },
+    { "id": "prime_transport", "label": "Prime de transport", "cnss": true, "amu": true, "irpp": true, "cash": true },
+    { "id": "prime_risque", "label": "Prime de risque ou de pénibilité", "cnss": true, "amu": true, "irpp": true, "cash": true },
+    { "id": "prime_assiduite", "label": "Prime d'assiduité", "cnss": true, "amu": true, "irpp": true, "cash": true },
+    { "id": "commissions", "label": "Commissions", "cnss": true, "amu": true, "irpp": true, "cash": true },
+    { "id": "autre_prime", "label": "Autre prime ou indemnité", "cnss": true, "amu": true, "irpp": true, "cash": true },
+    { "id": "frais_rembourses", "label": "Remboursement de frais réels", "cnss": false, "amu": false, "irpp": false, "cash": true },
+    { "id": "aen_logement", "label": "Logement fourni", "cnss": true, "amu": false, "irpp": true, "cash": false, "hint": "Valeur du loyer (CGI art. 20)" },
+    { "id": "aen_vehicule", "label": "Véhicule de fonction", "cnss": true, "amu": false, "irpp": true, "cash": false, "hint": "Un tiers des frais du véhicule (CGI art. 20)" },
+    { "id": "aen_utilites", "label": "Eau, électricité, téléphone", "cnss": true, "amu": false, "irpp": true, "cash": false },
+    { "id": "aen_domesticite", "label": "Personnel de maison", "cnss": true, "amu": false, "irpp": true, "cash": false },
+    { "id": "aen_nourriture", "label": "Nourriture", "cnss": true, "amu": false, "irpp": true, "cash": false }
   ],
+  "pay_items_ref": {
+    "irpp": { "source": "cgi-lpf-2025", "article": "art. 19 et 20", "page": 22 },
+    "exempt": { "source": "cgi-lpf-2025", "article": "art. 23-1", "page": 24 },
+    "cnss": { "source": "code-securite-sociale-2011", "article": "art. 12", "page": 4 },
+    "amu": { "source": "decret-2023-096-taux-amu", "article": "art. 9", "page": 3 }
+  },
+
   "not_modeled": [
-    "Taxe sur les salaires (TS) : un communiqué officiel de 2018 indique sa suppression par le nouveau CGI. Elle n'est pas appliquée tant qu'aucun texte en vigueur ne dit le contraire.",
-    "Plafond CNSS et AMU : aucun plafond général fiable n'est publié par la CNSS. Aucun plafond n'est appliqué.",
     "Agents publics (CRT, INAM), travailleurs indépendants (21,5 %) et de l'économie informelle (19,5 %) : autres régimes, pas encore couverts.",
-    "Déduction des primes d'assurance vie (art. 26) : pas encore prise en compte.",
-    "Répartition de l'AMU : 10 % au total, dont au moins la moitié pour l'employeur. Le partage 5 % et 5 % est le plus courant."
+    "Indemnités de fin de contrat : départ à la retraite imposé pour moitié (CGI art. 21), licenciement imposé en partie (art. 22).",
+    "Intérêts d'emprunt pour la résidence principale et pensions alimentaires (CGI art. 26, alinéas 5 à 7) : rares sur un bulletin, pas encore pris en compte.",
+    "Taxe sur les salaires : elle n'existe pas dans le CGI de 2025. Aucune taxe sur la masse salariale n'est appliquée.",
+    "Crédit d'impôt de 120 000 F par an pour l'embauche d'une personne handicapée (loi de finances 2026) : il réduit l'impôt de l'entreprise, pas le bulletin."
   ],
+
+  "open_questions": [
+    "Prime d'ancienneté (CCIT 2026, art. 40) : la phrase « 1 % par année de présence à partir de la quatrième année » admet deux lectures. Le simulateur ajoute un point par an (3 % à 4 ans) ; l'autre lecture donne un taux égal au nombre d'années (4 % à 4 ans).",
+    "Assiette AMU : le décret 2023-096 (art. 9) vise le salaire de base et les primes et indemnités imposables, sans citer les avantages en nature, que le Code de sécurité sociale (art. 12) inclut pour la CNSS. Le simulateur ne soumet pas les avantages en nature à l'AMU.",
+    "Apprentis : le CGI (art. 23-4) exonère d'impôt les salaires des apprentis sous contrat. Le simulateur garde les cotisations CNSS et AMU, faute de texte qui les écarte."
+  ],
+
   "sources": {
-    "cgi": {
-      "title": "Code général des impôts du Togo (version consolidée OTR)",
-      "publisher": "Office Togolais des Recettes",
-      "url": "https://www.otr.tg/index.php/fr/impots/reglementations-fiscales/code-general-des-impots.html"
-    },
-    "cnss-taux": {
-      "title": "Cotisations sociales, taux et assiette",
-      "publisher": "Caisse Nationale de Sécurité Sociale du Togo",
-      "url": "https://cnss.tg/employeurs/cotisations-sociales/"
-    },
-    "amu-decret-2023-096": {
-      "title": "Décret n° 2023-096/PR (AMU), avis sur le taux de 10 % au 1er janvier 2024",
-      "publisher": "République togolaise",
-      "url": "https://www.republicoftogo.com/content/download/112742/2907809/1"
-    },
-    "ccit-2026": {
-      "title": "Convention collective interprofessionnelle du Togo (2026), déposée le 19 mai 2026",
-      "publisher": "Greffe du Tribunal du travail de Lomé, n° 001",
-      "url": "https://www.lqdd.org/textes-de-loi/convention-collective-interprofessionnelle-du-togo-ccit/"
-    },
-    "smig-2023": {
-      "title": "SMIG à 52 500 FCFA au 1er janvier 2023",
-      "publisher": "République togolaise",
-      "url": "https://www.lqdd.org/smig-salaire-minimum-togo-montant-droits/"
-    }
+    "cgi-lpf-2025": { "title": "Code général des impôts 2025", "publisher": "OTR", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/cgi-lpf-2025.md" },
+    "otr-cahier-fiscal-2026": { "title": "Cahier fiscal, loi de finances 2026", "publisher": "OTR", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/otr-cahier-fiscal-2026.md" },
+    "ccit-2026": { "title": "Convention collective interprofessionnelle 2026", "publisher": "Tribunal du travail de Lomé, dépôt n° 001", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/ccit-2026.md" },
+    "code-securite-sociale-2011": { "title": "Code de sécurité sociale (loi 2011-006)", "publisher": "CNSS", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/code-securite-sociale-2011.md" },
+    "decret-2012-038-taux-cnss": { "title": "Décret 2012-038 sur les taux CNSS", "publisher": "Journal officiel", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/decret-2012-038-taux-cnss.md" },
+    "arrete-2012-003-risques-professionnels": { "title": "Arrêté 003/2012, majoration des risques professionnels", "publisher": "Ministère du Travail", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/arrete-2012-003-risques-professionnels.md" },
+    "decret-2023-096-taux-amu": { "title": "Décret 2023-096 sur les cotisations AMU", "publisher": "Journal officiel", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/decret-2023-096-taux-amu.md" },
+    "code-travail-2021": { "title": "Code du travail (loi 2021-012)", "publisher": "Journal officiel", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/code-travail-2021.md" },
+    "arrete-3790-smig-2022": { "title": "Arrêté 3790 sur le SMIG", "publisher": "Ministère du Travail", "url": "https://github.com/GithAlchemist/monsalaire/blob/main/sources/text/arrete-3790-smig-2022.md" }
   }
 }

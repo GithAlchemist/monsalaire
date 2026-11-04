@@ -4,3 +4,4 @@ dist
 *.local
 .claude/.cc-writes
 *.tsbuildinfo
+sources/tools/.ocr-bin
