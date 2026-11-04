@@ -1,8 +1,10 @@
 import { useState, type FormEvent } from 'react';
+import { Icon } from '../components/fields';
 import { useRoute } from '../i18n';
 
 /** Contact page: the message is stored and forwarded to monsalaire@aconta.io; the reply comes back to the sender. */
-export function Contact() {
+/** The contact form itself, used on the Contact page and at the end of the Legal texts page. */
+export function ContactForm() {
   const { t, lang } = useRoute();
   const [state, setState] = useState<'idle' | 'busy' | 'sent'>('idle');
   const [error, setError] = useState('');
@@ -34,15 +36,7 @@ export function Contact() {
   };
 
   return (
-    <article className="doc-page narrow">
-      <header className="page-hero">
-        <div className="kicker">{t('Contact', 'Contact')}</div>
-        <h1>
-          {t('Nous écrire', 'Contact us')}
-        </h1>
-        <p className="lead">{t('Une question, une règle qui vous semble fausse, une idée pour le simulateur ? Nous lisons chaque message et répondons par email.', 'A question, a rule that looks wrong, an idea for the simulator? We read every message and reply by email.')}</p>
-      </header>
-
+    <>
       {state === 'sent' ? (
         <p className="contact-sent" role="status">
           {t('Merci, votre message est bien parti. Nous vous répondons par email.', 'Thank you, your message is on its way. We will reply by email.')}
@@ -74,6 +68,44 @@ export function Contact() {
           )}
         </form>
       )}
+    </>
+  );
+}
+
+export function Contact() {
+  const { t } = useRoute();
+  return (
+    <article className="doc-page narrow">
+      <header className="page-hero">
+        <h1>{t('Nous écrire', 'Contact us')}</h1>
+        <p className="lead">{t('Une question, une règle qui vous semble fausse, une idée pour le simulateur ? Nous lisons chaque message et répondons par email.', 'A question, a rule that looks wrong, an idea for the simulator? We read every message and reply by email.')}</p>
+      </header>
+      <ContactForm />
+      <Creator />
     </article>
+  );
+}
+
+/** A line about the person behind monsalaire, linking to his personal site. */
+export function Creator() {
+  const { t } = useRoute();
+  return (
+    <a className="creator" href="https://kevin.aconta.io" target="_blank" rel="author noopener">
+      <img src="/brand/kevin.jpg" alt="" width="64" height="64" loading="lazy" />
+      <span className="creator-text">
+        <span className="creator-k">{t('Derrière monsalaire', 'Behind monsalaire')}</span>
+        <strong>Kévin Amoussou</strong>
+        <span>
+          {t(
+            'Diplômé en comptabilité et audit, il travaille entre stratégie business et data à Lomé. Il a fondé Aconta pour que les petites entreprises suivent leur argent, et monsalaire pour que chacun comprenne son salaire.',
+            'Trained in accounting and audit, he works between business strategy and data in Lomé. He founded Aconta so small businesses can keep track of their money, and monsalaire so anyone can understand their pay.',
+          )}
+        </span>
+      </span>
+      <span className="creator-go">
+        {t('Son parcours', 'His story')}
+        <Icon.arrow />
+      </span>
+    </a>
   );
 }

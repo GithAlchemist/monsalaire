@@ -258,6 +258,9 @@ export function Footer({ rules }: { rules: Pick<Rules, 'version' | 'verified_on'
               <li>
                 <Link to="contact">{t('Nous écrire', 'Contact us')}</Link>
               </li>
+              <li>
+                <a href={`mailto:${CONTACT}`}>{CONTACT}</a>
+              </li>
               <li className="f-note">{t('Simulateur sans compte ni cookie : vos montants restent dans votre navigateur.', 'The simulator needs no account or cookie: your figures stay in your browser.')}</li>
             </ul>
           </div>

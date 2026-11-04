@@ -6,7 +6,6 @@ export function Terms() {
   return (
     <article className="doc-page narrow">
       <header className="page-hero">
-        <div className="kicker">{t('À savoir', 'Legal')}</div>
         <h1>
           {t("Conditions d'utilisation", 'Terms of use')} <em>{t('et confidentialité', 'and privacy')}</em>
         </h1>
