@@ -74,6 +74,13 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
 - Working rule changed (task of 4 November 2026): nothing is pushed to `main` directly any more, since every push
   deploys to production. Work on a branch, open a PR, merge when checked.
 
+- Design pass (4 November 2026, Kévin: "it looks AI-made"): IBM Plex Sans for text and figures (tabular-nums) instead
+  of Geist and Geist Mono; Remix Icon everywhere (`Icon` in `src/components/fields.tsx`, paths from the `remixicon`
+  package); sentence-case labels instead of tracked capitals; flatter corners; no decorative gradients; the full Aconta
+  logo (light and dark PNG in `public/brand/`) in the "par Aconta" signature; footer brand on one row; no hero subtitle
+  on phones. Rule: a line only breaks when the screen runs out of room (no max-width on titles or short texts, no
+  balanced wrapping), except the reading column of an article body.
+
 ## Decisions taken with Kévin (do not reopen without asking him)
 
 - Name `monsalaire` (not "Togolet"): the tool will compare countries.

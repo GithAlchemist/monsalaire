@@ -36,10 +36,12 @@
   --flash: rgba(233, 183, 48, 0.28);
   --shadow-card: 0 1px 0 rgba(20, 32, 26, 0.04), 0 1px 3px rgba(20, 32, 26, 0.06);
   --shadow-paper: 0 2px 4px rgba(40, 30, 10, 0.06), 0 24px 48px -20px rgba(40, 30, 10, 0.35), 0 60px 90px -60px rgba(40, 30, 10, 0.3);
-  --font-ui: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-num: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-  --font-serif: 'Outfit', 'Geist', ui-sans-serif, system-ui, sans-serif;
-  --font-brand: 'Outfit', 'Geist', ui-sans-serif, system-ui, sans-serif;
+  /* IBM Plex Sans for text and figures: a documentary, slightly industrial face with real tabular figures, far from the
+     Geist/Inter defaults. Amounts use it with tabular-nums (aligned columns) instead of a monospace font. */
+  --font-ui: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-num: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Outfit', 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-brand: 'Outfit', 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
   --ease: cubic-bezier(0.2, 0, 0, 1);
   color-scheme: light;
 }
@@ -461,7 +463,6 @@ a {
   line-height: 0.98;
   letter-spacing: -0.03em;
   font-weight: 650;
-  max-width: 14ch;
 }
 .hero h1 em {
   font-style: normal;
@@ -510,7 +511,7 @@ a {
 .controls {
   background: var(--forest);
   color: var(--on-forest);
-  border-radius: 24px;
+  border-radius: 6px;
   padding: 22px;
   position: sticky;
   top: 80px;
@@ -518,9 +519,7 @@ a {
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--forest-3) transparent;
-  box-shadow: 0 30px 60px -40px rgba(10, 40, 28, 0.6);
-  background-image: radial-gradient(120% 60% at 100% 0%, rgba(233, 183, 48, 0.1), transparent 60%),
-    radial-gradient(80% 50% at 0% 100%, rgba(0, 0, 0, 0.18), transparent 70%);
+  box-shadow: none;
 }
 @media (max-width: 1020px) {
   .controls {
@@ -530,7 +529,7 @@ a {
 }
 @media (max-width: 640px) {
   .controls {
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 18px 16px;
   }
 }
@@ -545,10 +544,10 @@ a {
 }
 .c-title h2 {
   margin: 0;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  
   color: var(--on-forest-2);
 }
 .c-reset {
@@ -569,7 +568,7 @@ a {
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   background: var(--forest-2);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 4px;
   gap: 4px;
 }
@@ -630,7 +629,7 @@ a {
 .select {
   width: 100%;
   height: 44px;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid var(--forest-line);
   background: var(--forest-2);
   color: var(--on-forest);
@@ -687,7 +686,7 @@ a {
   font-size: 28px;
   font-weight: 600;
   letter-spacing: -0.03em;
-  border-radius: 16px;
+  border-radius: 8px;
   padding-left: 16px;
 }
 .presets {
@@ -700,8 +699,8 @@ a {
   border: 1px solid var(--forest-line);
   background: transparent;
   color: var(--on-forest-2);
-  border-radius: 999px;
-  padding: 4px 10px;
+  border-radius: 5px;
+  padding: 4px 9px;
   font-size: 12px;
   font-family: var(--font-num);
   cursor: pointer;
@@ -724,7 +723,7 @@ a {
 .counter {
   background: var(--forest-2);
   border: 1px solid var(--forest-line);
-  border-radius: 14px;
+  border-radius: 8px;
   padding: 10px 8px 8px;
   text-align: center;
 }
@@ -908,7 +907,7 @@ details.sec[open] > summary .chev {
   grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
   gap: 0;
   background: var(--surface);
-  border-radius: 20px;
+  border-radius: 10px;
   box-shadow: var(--shadow-card);
   overflow: hidden;
 }
@@ -938,10 +937,9 @@ details.sec[open] > summary .chev {
   }
 }
 .k-label {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0;
   color: var(--ink-3);
   display: flex;
   align-items: center;
@@ -1002,7 +1000,7 @@ details.sec[open] > summary .chev {
   gap: 12px;
   align-items: flex-start;
   background: var(--gold-soft);
-  border-radius: 14px;
+  border-radius: 8px;
   padding: 12px 16px;
   font-size: 13.5px;
   color: var(--ink);
@@ -1308,14 +1306,13 @@ details.sec[open] > summary .chev {
   gap: 12px;
   background: #0d4f37;
   color: #f4efe2;
-  border-radius: 10px;
+  border-radius: 6px;
   padding: 16px 18px;
 }
 .netbox .label {
-  font-size: 11.5px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  font-weight: 650;
+  font-size: 14px;
+  letter-spacing: 0;
+  font-weight: 600;
 }
 .netbox .label small {
   display: block;
@@ -1436,7 +1433,7 @@ details.sec[open] > summary .chev {
 }
 .card {
   background: var(--surface);
-  border-radius: 20px;
+  border-radius: 10px;
   box-shadow: var(--shadow-card);
   padding: 24px;
   min-width: 0;
@@ -1662,7 +1659,7 @@ details.sec[open] > summary .chev {
   display: flex;
   gap: 14px;
   padding: 16px;
-  border-radius: 16px;
+  border-radius: 8px;
   background: var(--surface);
   box-shadow: var(--shadow-card);
   text-decoration: none;
@@ -1757,7 +1754,7 @@ details.sec[open] > summary .chev {
     justify-content: space-between;
     gap: 12px;
     padding: 12px 16px;
-    border-radius: 16px;
+    border-radius: 8px;
     background: #0d4f37;
     color: #f4efe2;
     text-decoration: none;
@@ -1851,7 +1848,6 @@ details.sec[open] > summary .chev {
 .hero.compact {
   display: block;
   padding: 26px 0 22px;
-  max-width: 820px;
   container-type: inline-size;
 }
 /* The title stays on one line on every screen: its width is about 18.4 times its font size in French (17.3 in
@@ -1872,13 +1868,13 @@ html[lang='en'] .hero.compact h1 {
 /* One line too, as long as it stays readable: the sentence is about 53 times its font size wide, so below a
    700 px column it would drop under 13 px; there it wraps at 15 px. */
 .hero.compact .hero-sub {
-  font-size: min(16px, 100cqi / 54);
+  font-size: min(16px, 100cqi / 52);
   white-space: nowrap;
 }
+/* On phones the page goes straight to the tool: no subtitle (Kévin, 4 November 2026). */
 @container (max-width: 700px) {
   .hero.compact .hero-sub {
-    font-size: 15px;
-    white-space: normal;
+    display: none;
   }
 }
 @media (max-width: 640px) {
@@ -1890,7 +1886,7 @@ html[lang='en'] .hero.compact h1 {
 /* Disclaimer: one line, opens on demand */
 details.disclaimer {
   background: var(--surface);
-  border-radius: 14px;
+  border-radius: 8px;
   box-shadow: var(--shadow-card);
 }
 details.disclaimer > summary {
@@ -1941,7 +1937,7 @@ details.disclaimer ul {
   justify-content: space-between;
   gap: 16px;
   padding: 16px 20px;
-  border-radius: 16px;
+  border-radius: 8px;
   background: var(--surface);
   box-shadow: var(--shadow-card);
   color: var(--ink);
@@ -1977,11 +1973,9 @@ details.disclaimer ul {
   padding-bottom: 24px;
 }
 .doc-page.narrow {
-  max-width: 780px;
 }
 .page-hero {
   padding: 44px 0 12px;
-  max-width: 860px;
 }
 @media (max-width: 640px) {
   .page-hero {
@@ -2012,7 +2006,6 @@ details.disclaimer ul {
   margin: 18px 0 0;
   font-size: 17px;
   color: var(--ink-2);
-  max-width: 680px;
 }
 .sim-chip {
   margin-top: 22px;
@@ -2021,7 +2014,7 @@ details.disclaimer ul {
   align-items: center;
   gap: 8px 16px;
   padding: 10px 10px 10px 16px;
-  border-radius: 14px;
+  border-radius: 8px;
   background: var(--surface);
   box-shadow: var(--shadow-card);
   font-size: 14px;
@@ -2041,7 +2034,7 @@ details.disclaimer ul {
   text-decoration: none;
   color: var(--brand);
   background: var(--brand-soft);
-  border-radius: 10px;
+  border-radius: 6px;
   padding: 6px 12px;
 }
 .u-section {
@@ -2057,7 +2050,6 @@ details.disclaimer ul {
   grid-template-columns: 56px minmax(0, 1fr);
   gap: 12px;
   margin-bottom: 24px;
-  max-width: 860px;
 }
 .u-n {
   font-family: var(--font-num);
@@ -2091,7 +2083,7 @@ details.disclaimer ul {
 }
 .u-card {
   background: var(--surface);
-  border-radius: 20px;
+  border-radius: 10px;
   box-shadow: var(--shadow-card);
   padding: 24px;
   min-width: 0;
@@ -2180,7 +2172,7 @@ details.disclaimer ul {
   }
 }
 .trio-card {
-  border-radius: 20px;
+  border-radius: 6px;
   padding: 24px;
   background: var(--surface);
   box-shadow: var(--shadow-card);
@@ -2315,7 +2307,7 @@ details.disclaimer ul {
 }
 .fact {
   background: var(--surface);
-  border-radius: 20px;
+  border-radius: 10px;
   box-shadow: var(--shadow-card);
   padding: 22px;
   display: flex;
@@ -2431,7 +2423,6 @@ ul.clean li::marker {
 .f-brand p {
   color: var(--ink-2);
   margin: 12px 0;
-  max-width: 340px;
 }
 .f-brand .f-meta {
   font-family: var(--font-num);
@@ -2551,8 +2542,8 @@ ul.clean li::marker {
   white-space: nowrap;
 }
 .by-aconta img {
-  width: 14px;
-  height: 14px;
+  width: auto;
+  height: 20px;
 }
 .by-aconta b {
   font-weight: 600;
@@ -2603,4 +2594,51 @@ ul.clean li::marker {
 .f-bottom .f-creator:hover {
   color: var(--ink);
   text-decoration: underline;
+}
+
+/* Figures: tabular and lining everywhere, so amounts line up in columns. */
+body {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Rule (Kévin, 4 November 2026): a line only breaks when the screen runs out of room. No max-width on titles, leads
+   or short texts, no balanced wrapping. The one exception is the reading column of an article body (.post-body). */
+
+/* Footer brand on one row: logo, tagline and description, then rules date and settings on the right. */
+.f-brand {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px 36px;
+}
+.f-brand-text .tagline {
+  margin: 0 0 4px;
+}
+.f-brand-text p {
+  margin: 0;
+}
+.f-brand-side {
+  display: grid;
+  justify-items: end;
+  gap: 10px;
+}
+.f-brand-side .f-meta {
+  margin: 0;
+}
+@media (max-width: 900px) {
+  .f-brand {
+    grid-template-columns: 1fr;
+  }
+  .f-brand-side {
+    justify-items: start;
+  }
+}
+/* Bottom line: the signature sits in the running text, never on its own line. */
+.f-bottom .by-aconta {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-top: -3px;
+}
+.f-bottom .by-aconta img {
+  height: 18px;
 }
