@@ -178,8 +178,12 @@ export function Sources({ rules }: { rules: Rules }) {
       <section className="u-sec" id="ecrire">
         <h2 className="ecrire-title">{t('Nous écrire', 'Contact us')}</h2>
         <p className="ecrire-lead">{t('Une question, une règle qui vous semble fausse, une idée ? Nous lisons chaque message et répondons par email.', 'A question, a rule that looks wrong, an idea? We read every message and reply by email.')}</p>
-        <ContactForm />
-        <Creator />
+        <div className="ecrire-grid">
+          <div>
+            <ContactForm />
+          </div>
+          <Creator />
+        </div>
       </section>
     </article>
   );

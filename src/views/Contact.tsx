@@ -80,32 +80,49 @@ export function Contact() {
         <h1>{t('Nous écrire', 'Contact us')}</h1>
         <p className="lead">{t('Une question, une règle qui vous semble fausse, une idée pour le simulateur ? Nous lisons chaque message et répondons par email.', 'A question, a rule that looks wrong, an idea for the simulator? We read every message and reply by email.')}</p>
       </header>
-      <ContactForm />
-      <Creator />
+      <div className="ecrire-grid">
+        <div>
+          <ContactForm />
+        </div>
+        <Creator />
+      </div>
     </article>
   );
 }
 
-/** A line about the person behind monsalaire, linking to his personal site. */
+/** The card about the person behind monsalaire, next to the contact form (under it on phones). */
 export function Creator() {
   const { t } = useRoute();
   return (
-    <a className="creator" href="https://kevin.aconta.io" target="_blank" rel="author noopener">
-      <img src="/brand/kevin.jpg" alt="" width="64" height="64" loading="lazy" />
-      <span className="creator-text">
-        <span className="creator-k">{t('Derrière monsalaire', 'Behind monsalaire')}</span>
-        <strong>Kévin Amoussou</strong>
-        <span>
-          {t(
-            'Diplômé en comptabilité et audit, il travaille entre stratégie business et data à Lomé. Il a fondé Aconta pour que les petites entreprises suivent leur argent, et monsalaire pour que chacun comprenne son salaire.',
-            'Trained in accounting and audit, he works between business strategy and data in Lomé. He founded Aconta so small businesses can keep track of their money, and monsalaire so anyone can understand their pay.',
-          )}
-        </span>
-      </span>
-      <span className="creator-go">
-        {t('Son parcours', 'His story')}
-        <Icon.arrow />
-      </span>
-    </a>
+    <aside className="creator" aria-label={t('Derrière monsalaire', 'Behind monsalaire')}>
+      <div className="creator-head">
+        <img src="/brand/kevin.jpg" alt="Kévin Amoussou" width="88" height="88" loading="lazy" />
+        <div>
+          <span className="creator-k">{t('Derrière monsalaire', 'Behind monsalaire')}</span>
+          <strong>Kévin Amoussou</strong>
+          <span className="creator-role">{t('Fondateur d’Aconta · Lomé', 'Founder of Aconta · Lomé')}</span>
+        </div>
+      </div>
+      <p>
+        {t(
+          'Formé en comptabilité, contrôle et audit, il travaille entre stratégie business et data. Il a créé Aconta pour que les petites entreprises suivent leur argent sans cahier, et monsalaire parce que trop de salariés découvrent leur net le jour de la paie.',
+          'Trained in accounting, control and audit, he works between business strategy and data. He built Aconta so small businesses can track their money without a notebook, and monsalaire because too many employees only discover their net pay on payday.',
+        )}
+      </p>
+      <ul className="creator-facts">
+        <li>{t('Master en comptabilité, contrôle et audit', 'Master’s in accounting, control and audit')}</li>
+        <li>{t('Stratégie, market intelligence et data', 'Strategy, market intelligence and data')}</li>
+        <li>{t('Outils libres et gratuits, publiés par Aconta', 'Free, open-source tools, published by Aconta')}</li>
+      </ul>
+      <div className="creator-links">
+        <a className="btn primary" href="https://kevin.aconta.io" target="_blank" rel="author noopener">
+          {t('Voir son parcours', 'See his story')}
+          <Icon.arrow />
+        </a>
+        <a className="creator-in" href="https://www.linkedin.com/in/kevin-amoussou" target="_blank" rel="noopener">
+          LinkedIn
+        </a>
+      </div>
+    </aside>
   );
 }
