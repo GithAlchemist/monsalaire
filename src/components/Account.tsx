@@ -1,42 +1,56 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { useRoute } from '../i18n';
+import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from 'react';
+import { Link, useRoute, type Lang } from '../i18n';
 import { Icon } from './fields';
 
-type Account = { email: string; lang: string; newsletter: boolean };
+export type Account = { email: string; lang: string; newsletter: boolean; picture?: string | null };
 type Step = 'signup' | 'login' | 'verify' | 'forgot' | 'reset' | 'done';
+type Me = { loaded: boolean; off: boolean; google: string | null; account: Account | null };
 
 async function call(action: string, body: Record<string, unknown> = {}) {
   const r = await fetch(`/api/account/${action}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   return { status: r.status, data: (await r.json().catch(() => ({}))) as { error?: string; step?: Step; account?: Account } };
 }
 
-/**
- * The account offer shown under the payslip. The simulator never needs an account; this only signs people up to
- * receive monsalaire's salary analyses. Email and password, email confirmed by a six-digit code.
- */
-export function AccountOffer() {
+/* One account state for the whole page (header button, profile menu, offer under the payslip). */
+let me: Me = { loaded: false, off: true, google: null, account: null };
+const listeners = new Set<() => void>();
+const setMe = (patch: Partial<Me>) => {
+  me = { ...me, ...patch };
+  listeners.forEach((l) => l());
+};
+let started = false;
+function load() {
+  if (started) return;
+  started = true;
+  fetch('/api/account/me')
+    .then((r) => (r.ok ? r.json() : { off: true }))
+    .then((d) => setMe({ loaded: true, off: Boolean(d.off), google: d.google ?? null, account: d.account ?? null }))
+    .catch(() => setMe({ loaded: true, off: true }));
+}
+const SERVER_ME: Me = { loaded: false, off: true, google: null, account: null };
+export function useMe(): Me {
+  useEffect(load, []);
+  return useSyncExternalStore(
+    (l) => {
+      listeners.add(l);
+      return () => listeners.delete(l);
+    },
+    () => me,
+    () => SERVER_ME,
+  );
+}
+
+/** Signup, login, code, forgotten password and Google: shared by the header dialog and the offer under the payslip. */
+function AuthForms({ start, onDone }: { start: 'signup' | 'login'; onDone?: () => void }) {
   const { t, lang } = useRoute();
-  const [account, setAccount] = useState<Account | null | undefined>(undefined);
-  const [off, setOff] = useState(false);
-  const [googleId, setGoogleId] = useState<string | null>(null);
+  const { google } = useMe();
   const googleBox = useRef<HTMLDivElement>(null);
-  const [step, setStep] = useState<Step>('signup');
+  const [step, setStep] = useState<Step>(start);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    fetch('/api/account/me')
-      .then((r) => (r.ok ? r.json() : { account: null, off: true }))
-      .then((d) => {
-        setOff(Boolean(d.off));
-        setGoogleId(d.google ?? null);
-        setAccount(d.account ?? null);
-      })
-      .catch(() => setOff(true));
-  }, []);
 
   const messages: Record<string, string> = {
     email: t('Cette adresse email ne semble pas valide.', 'That email address does not look right.'),
@@ -48,28 +62,32 @@ export function AccountOffer() {
     google: t('La connexion avec Google n’a pas abouti.', 'Signing in with Google did not work.'),
   };
 
+  const signedIn = (a: Account) => {
+    setMe({ account: a });
+    setStep('done');
+    onDone?.();
+  };
+
   // "Continue with Google": Google's own button; its ID token is checked by our server (not by Supabase Auth).
-  const showGoogle = Boolean(googleId) && (step === 'signup' || step === 'login') && !account;
+  const showGoogle = Boolean(google) && (step === 'signup' || step === 'login');
   useEffect(() => {
-    if (!showGoogle || !googleId || !googleBox.current) return;
+    if (!showGoogle || !google || !googleBox.current) return;
     const box = googleBox.current;
     const render = () => {
       const g = (window as unknown as { google?: { accounts: { id: { initialize: (o: object) => void; renderButton: (el: HTMLElement, o: object) => void } } } }).google;
       if (!g) return;
       g.accounts.id.initialize({
-        client_id: googleId,
+        client_id: google,
         callback: async (res: { credential: string }) => {
           setBusy(true);
           setError('');
           const { data } = await call('google', { credential: res.credential, lang });
-          if (data.account) {
-            setAccount(data.account);
-            setStep('done');
-          } else setError(messages[data.error ?? ''] ?? messages.google);
+          if (data.account) signedIn(data.account);
+          else setError(messages[data.error ?? ''] ?? messages.google);
           setBusy(false);
         },
       });
-      g.accounts.id.renderButton(box, { theme: 'outline', size: 'large', text: step === 'login' ? 'signin_with' : 'continue_with', locale: lang, width: 280 });
+      g.accounts.id.renderButton(box, { theme: 'outline', size: 'large', text: step === 'login' ? 'signin_with' : 'continue_with', locale: lang, width: Math.min(320, box.clientWidth || 280) });
     };
     if ((window as unknown as { google?: unknown }).google) render();
     else {
@@ -79,7 +97,7 @@ export function AccountOffer() {
       sc.onload = render;
       document.head.appendChild(sc);
     }
-  }, [showGoogle, googleId, step, lang]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [showGoogle, google, step, lang]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const go = async (e: FormEvent, action: string, body: Record<string, unknown>) => {
     e.preventDefault();
@@ -88,10 +106,8 @@ export function AccountOffer() {
     try {
       const { data } = await call(action, { ...body, lang });
       if (data.error) setError(messages[data.error] ?? messages.server);
-      else if (data.account) {
-        setAccount(data.account);
-        setStep('done');
-      } else if (data.step) {
+      else if (data.account) signedIn(data.account);
+      else if (data.step) {
         setCode('');
         setStep(data.step);
       }
@@ -101,40 +117,12 @@ export function AccountOffer() {
     setBusy(false);
   };
 
-  const logout = async () => {
-    await call('logout');
-    setAccount(null);
-    setStep('login');
-  };
-  const remove = async () => {
-    if (!window.confirm(t('Supprimer votre compte et votre adresse email ? Vous ne recevrez plus rien.', 'Delete your account and email address? You will no longer receive anything.'))) return;
-    await call('delete');
-    setAccount(null);
-    setStep('signup');
-  };
-
-  if (off || account === undefined) return null;
-
-  if (account) {
-    return (
-      <section className="acct acct-in" aria-label={t('Votre compte', 'Your account')}>
-        <p>
-          {step === 'done' ? t('C’est fait. ', 'All set. ') : ''}
-          {t('Vous recevrez nos analyses salariales sur', 'You will receive our salary analyses at')} <b>{account.email}</b>.
-        </p>
-        <div className="acct-links">
-          <button type="button" className="linkish" onClick={logout}>
-            {t('Se déconnecter', 'Log out')}
-          </button>
-          <button type="button" className="linkish" onClick={remove}>
-            {t('Supprimer mon compte', 'Delete my account')}
-          </button>
-        </div>
-      </section>
-    );
-  }
-
-  const honeypot = <input className="hp" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />;
+  const googleBlock = google && (
+    <>
+      <div className="acct-google" ref={googleBox} />
+      <p className="acct-or">{t('ou avec votre email', 'or with your email')}</p>
+    </>
+  );
   const emailField = (
     <label className="acct-field">
       <span>{t('Email', 'Email')}</span>
@@ -155,31 +143,13 @@ export function AccountOffer() {
   );
 
   return (
-    <section className="acct" aria-labelledby="acct-title">
-      <div className="acct-pitch">
-        <h2 id="acct-title">
-          <Icon.book />
-          {t('Recevez nos analyses salariales', 'Get our salary analyses')}
-        </h2>
-        <p>
-          {t(
-            'SMIG, impôts, comparaisons entre pays : nos articles et nos analyses par email, deux fois par mois au plus. Il suffit de votre compte Google ou d’un email et d’un mot de passe, et vous pouvez supprimer votre compte en un clic. Le simulateur reste libre, sans compte.',
-            'Minimum wages, tax, country comparisons: our articles and analyses by email, twice a month at most. All it takes is your Google account or an email and a password, and you can delete your account in one click. The simulator stays free, with no account.',
-          )}
-        </p>
-      </div>
-
+    <div className="auth">
       {step === 'signup' && (
         <form className="acct-form" onSubmit={(e) => go(e, 'signup', { email, password, website: (e.currentTarget.elements.namedItem('website') as HTMLInputElement)?.value })}>
-          {googleId && (
-            <>
-              <div className="acct-google" ref={googleBox} />
-              <p className="acct-or">{t('ou avec votre email', 'or with your email')}</p>
-            </>
-          )}
+          {googleBlock}
           {emailField}
           {passwordField(t('Mot de passe (8 caractères au moins)', 'Password (at least 8 characters)'), 'new-password')}
-          {honeypot}
+          <input className="hp" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
           <button className="btn primary" disabled={busy}>
             {t('Créer mon compte', 'Create my account')}
           </button>
@@ -194,24 +164,20 @@ export function AccountOffer() {
 
       {step === 'login' && (
         <form className="acct-form" onSubmit={(e) => go(e, 'login', { email, password })}>
-          {googleId && (
-            <>
-              <div className="acct-google" ref={googleBox} />
-              <p className="acct-or">{t('ou avec votre email', 'or with your email')}</p>
-            </>
-          )}
+          {googleBlock}
           {emailField}
           {passwordField(t('Mot de passe', 'Password'), 'current-password')}
           <button className="btn primary" disabled={busy}>
             {t('Se connecter', 'Log in')}
           </button>
           <p className="acct-alt">
-            <button type="button" className="linkish" onClick={() => setStep('forgot')}>
-              {t('Mot de passe oublié', 'Forgot your password')}
+            {t('Pas encore de compte ?', 'No account yet?')}{' '}
+            <button type="button" className="linkish" onClick={() => setStep('signup')}>
+              {t('Créer un compte', 'Create one')}
             </button>
             {' · '}
-            <button type="button" className="linkish" onClick={() => setStep('signup')}>
-              {t('Créer un compte', 'Create an account')}
+            <button type="button" className="linkish" onClick={() => setStep('forgot')}>
+              {t('Mot de passe oublié', 'Forgot your password')}
             </button>
           </p>
         </form>
@@ -267,6 +233,169 @@ export function AccountOffer() {
           {error}
         </p>
       )}
+    </div>
+  );
+}
+
+async function logout() {
+  await call('logout');
+  setMe({ account: null });
+}
+async function removeAccount(confirmText: string) {
+  if (!window.confirm(confirmText)) return;
+  await call('delete');
+  setMe({ account: null });
+}
+
+/** Round avatar: the Google photo when there is one, else the first letter of the email. */
+function Avatar({ account, size = 32 }: { account: Account; size?: number }) {
+  const [broken, setBroken] = useState(false);
+  if (account.picture && !broken) {
+    return <img className="avatar" src={account.picture} alt="" width={size} height={size} referrerPolicy="no-referrer" onError={() => setBroken(true)} />;
+  }
+  return (
+    <span className="avatar letter" style={{ width: size, height: size }} aria-hidden="true">
+      {account.email.charAt(0).toUpperCase()}
+    </span>
+  );
+}
+
+/** The other language, as a menu item: on phones the language lives in the account menu (Kévin, 4 November 2026). */
+function LangItem({ onPick }: { onPick: () => void }) {
+  const { lang, page, altHref } = useRoute();
+  const other: Lang = lang === 'fr' ? 'en' : 'fr';
+  const inner = (
+    <>
+      <Icon.globe />
+      <span>{other === 'en' ? 'Read in English' : 'Lire en français'}</span>
+    </>
+  );
+  if (altHref)
+    return (
+      <a className="pop-item" href={altHref} hrefLang={other} lang={other} onClick={onPick}>
+        {inner}
+      </a>
+    );
+  return (
+    <Link className="pop-item" to={page} lang={other} hrefLang={other} onClick={onPick}>
+      {inner}
+    </Link>
+  );
+}
+
+const isPhone = () => typeof window !== 'undefined' && window.matchMedia('(max-width: 520px)').matches;
+
+/**
+ * Header: "Se connecter" when signed out (opens a dialog, login first, signup one click away);
+ * the avatar and a small menu (email, log out, delete) when signed in.
+ */
+export function AccountButton() {
+  const { t } = useRoute();
+  const { loaded, off, account } = useMe();
+  const [open, setOpen] = useState(false);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const menu = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: MouseEvent) => {
+      if (menu.current && !menu.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', close);
+    return () => document.removeEventListener('mousedown', close);
+  }, [open]);
+
+  if (!loaded || off) return null;
+
+  if (account) {
+    return (
+      <div className="acct-menu" ref={menu}>
+        <button type="button" className="btn icon avatar-btn acct-entry" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(!open)} title={account.email}>
+          <Avatar account={account} />
+        </button>
+        {open && (
+          <div className="acct-pop" role="menu">
+            <div className="acct-pop-head">
+              <Avatar account={account} size={40} />
+              <div>
+                <strong>{t('Votre compte', 'Your account')}</strong>
+                <span>{account.email}</span>
+              </div>
+            </div>
+            <p className="acct-pop-note">{t('Vous recevez nos analyses salariales par email.', 'You receive our salary analyses by email.')}</p>
+            <div className="phone-only">
+              <LangItem onPick={() => setOpen(false)} />
+            </div>
+            <button type="button" role="menuitem" onClick={() => logout().then(() => setOpen(false))}>
+              {t('Se déconnecter', 'Log out')}
+            </button>
+            <button type="button" role="menuitem" className="danger" onClick={() => removeAccount(t('Supprimer votre compte et votre adresse email ? Vous ne recevrez plus rien.', 'Delete your account and email address? You will no longer receive anything.'))}>
+              {t('Supprimer mon compte', 'Delete my account')}
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  const openDialog = () => {
+    setOpen(false);
+    dialog.current?.showModal();
+  };
+  return (
+    <div className="acct-menu acct-entry" ref={menu}>
+      <button type="button" className="btn has-label signin-btn" aria-label={t('Se connecter', 'Log in')} onClick={() => (isPhone() ? setOpen(!open) : openDialog())}>
+        <Icon.user />
+        <span className="label-md">{t('Se connecter', 'Log in')}</span>
+      </button>
+      {open && (
+        <div className="acct-pop" role="menu">
+          <button type="button" role="menuitem" className="pop-item" onClick={openDialog}>
+            <Icon.user />
+            <span>{t('Se connecter ou créer un compte', 'Log in or create an account')}</span>
+          </button>
+          <LangItem onPick={() => setOpen(false)} />
+        </div>
+      )}
+      <dialog className="auth-dialog" ref={dialog} onClick={(e) => e.target === dialog.current && dialog.current?.close()}>
+        <div className="auth-dialog-in">
+          <div className="auth-dialog-head">
+            <h2>{t('Votre compte monsalaire', 'Your monsalaire account')}</h2>
+            <button type="button" className="btn icon" onClick={() => dialog.current?.close()} aria-label={t('Fermer', 'Close')}>
+              <Icon.x />
+            </button>
+          </div>
+          <p className="acct-note">{t('Le simulateur reste libre, sans compte. Le compte sert à recevoir nos analyses salariales.', 'The simulator stays free, with no account. The account is for receiving our salary analyses.')}</p>
+          <AuthForms start="login" onDone={() => dialog.current?.close()} />
+        </div>
+      </dialog>
+    </div>
+  );
+}
+
+/**
+ * The discreet offer under the payslip: it pushes people to sign up to receive the salary analyses. Hidden when the
+ * visitor is already signed in.
+ */
+export function AccountOffer() {
+  const { t } = useRoute();
+  const { loaded, off, account } = useMe();
+  if (!loaded || off || account) return null;
+  return (
+    <section className="acct" aria-labelledby="acct-title">
+      <div className="acct-pitch">
+        <h2 id="acct-title">
+          <Icon.book />
+          {t('Recevez nos analyses salariales', 'Get our salary analyses')}
+        </h2>
+        <p>
+          {t(
+            'SMIG, impôts, comparaisons entre pays : nos articles et nos analyses par email, deux fois par mois au plus. Il suffit de votre compte Google ou d’un email et d’un mot de passe, et vous pouvez supprimer votre compte en un clic. Le simulateur reste libre, sans compte.',
+            'Minimum wages, tax, country comparisons: our articles and analyses by email, twice a month at most. All it takes is your Google account or an email and a password, and you can delete your account in one click. The simulator stays free, with no account.',
+          )}
+        </p>
+      </div>
+      <AuthForms start="signup" />
     </section>
   );
 }

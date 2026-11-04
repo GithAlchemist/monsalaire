@@ -40,7 +40,6 @@ function Shell() {
   const rules = useMemo(() => rulesFor(today), []);
   const [s, setS] = useState<AppState>(defaultState);
   const [ready, setReady] = useState(false);
-  const [copied, setCopied] = useState(false);
   const set = (patch: Partial<AppState>) => setS((prev) => ({ ...prev, ...patch }));
 
   const computedBase = useMemo(() => (s.mode === 'net' ? baseForTargetNet(s.targetNet, toInput({ ...s, base: 0 }), rules) : s.base), [s, rules]);
@@ -76,26 +75,20 @@ function Shell() {
     document.title = META[lang][page].title;
   }, [page, lang]);
 
-  const share = async () => {
-    const url = window.location.href;
-    try {
-      if (navigator.share && window.matchMedia('(pointer: coarse)').matches) {
-        await navigator.share({ title: t('Ma simulation de salaire', 'My salary simulation'), text: `${t('Net à payer', 'Net pay')} : ${makeFmt(lang).fcfa(slip.netPay)}`, url });
-        return;
-      }
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      /* share sheet closed or clipboard blocked */
-    }
+  // What the share menu and the printed or PDF payslip point back to: this page with the simulation in the address.
+  const shareUrl = ready && typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}#${encode(s)}` : '';
+  const share = {
+    url: shareUrl,
+    title: t('Ma simulation de salaire', 'My salary simulation'),
+    text: `${t('Net à payer', 'Net pay')} : ${makeFmt(lang).fcfa(slip.netPay)}`,
+    fileName: `monsalaire-${t('bulletin', 'payslip')}-${Math.round(slip.netPay)}.pdf`,
   };
 
   return (
     <>
-      <Header onShare={page === 'home' ? share : undefined} copied={copied} />
+      <Header share={page === 'home' && shareUrl ? share : undefined} />
       <main className="wrap" id="contenu">
-        {page === 'home' && <Home s={s} set={set} rules={rules} slip={slip} computedBase={computedBase} />}
+        {page === 'home' && <Home s={s} set={set} rules={rules} slip={slip} computedBase={computedBase} shareUrl={shareUrl} />}
         {page === 'understand' && <Understand s={s} rules={rules} slip={slip} computedBase={computedBase} />}
         {page === 'sources' && <Sources rules={rules} />}
         {page === 'terms' && <Terms />}
