@@ -1,19 +1,19 @@
 import { createContext, useCallback, useContext, useEffect, useState, type MouseEvent, type ReactNode } from 'react';
 
 export type Lang = 'fr' | 'en';
-export type Page = 'home' | 'understand' | 'articles' | 'sources' | 'terms';
+export type Page = 'home' | 'understand' | 'articles' | 'sources' | 'terms' | 'contact';
 
 /** Every page has a French and an English address. French lives at the root, English under /en. */
 export const PATHS: Record<Lang, Record<Page, string>> = {
-  fr: { home: '/', understand: '/comprendre', articles: '/articles', sources: '/textes', terms: '/conditions' },
-  en: { home: '/en', understand: '/en/understand', articles: '/en/articles', sources: '/en/sources', terms: '/en/terms' },
+  fr: { home: '/', understand: '/comprendre', articles: '/articles', sources: '/textes', terms: '/conditions', contact: '/contact' },
+  en: { home: '/en', understand: '/en/understand', articles: '/en/articles', sources: '/en/sources', terms: '/en/terms', contact: '/en/contact' },
 };
 
 /**
  * Pages drawn by the React app (src/App.tsx), built by src/pages/[...path].astro and switched without reloading.
  * The articles live in static Astro pages (src/pages/articles, src/pages/en/articles): links to them always load.
  */
-export const APP_PAGES: Page[] = ['home', 'understand', 'sources', 'terms'];
+export const APP_PAGES: Page[] = ['home', 'understand', 'sources', 'terms', 'contact'];
 
 export function parsePath(pathname: string): { lang: Lang; page: Page } {
   const p = pathname.replace(/\/+$/, '') || '/';

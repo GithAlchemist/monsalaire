@@ -74,6 +74,28 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
 - Working rule changed (task of 4 November 2026): nothing is pushed to `main` directly any more, since every push
   deploys to production. Work on a branch, open a PR, merge when checked.
 
+- Design pass (4 November 2026, Kévin: "it looks AI-made"): IBM Plex Sans for text and figures (tabular-nums) instead
+  of Geist and Geist Mono; Remix Icon everywhere (`Icon` in `src/components/fields.tsx`, paths from the `remixicon`
+  package); sentence-case labels instead of tracked capitals; flatter corners; no decorative gradients; the full Aconta
+  logo (light and dark PNG in `public/brand/`) in the "par Aconta" signature; footer brand on one row; no hero subtitle
+  on phones. Rule: a line only breaks when the screen runs out of room (no max-width on titles or short texts, no
+  balanced wrapping), except the reading column of an article body.
+
+- Accounts and contact form (4 November 2026, PR #2, not live yet): `@astrojs/vercel` adapter, pages stay static and
+  only `/api/account/[action]` and `/api/contact` run as functions. Data in the `monsalaire` schema of the
+  aconta-preview Supabase project (Kévin's choice: no new database), reached only as the role `monsalaire_app`, which
+  can touch that schema and nothing else (`docs/db/001_monsalaire_schema.sql`). Email and password (scrypt), email
+  confirmed by a six-digit code, reset by code, 60-day session cookie, rate limits, honeypot, no account enumeration,
+  account deletion in one click. Offer shown under the payslip; contact page `/contact` and `/en/contact` (stored and
+  forwarded to monsalaire@aconta.io). Both switch themselves off without the variables. Variables on the Vercel project:
+  `MONSALAIRE_DATABASE_URL`, `MONSALAIRE_SECRET`, `MAILGUN_SMTP_USER`, `MAILGUN_SMTP_PASSWORD` (Aconta's Mailgun, sender
+  noreply@aconta.io). Still to do: Kévin runs the SQL, copies the Mailgun variables; then set the two others, test,
+  merge. Google sign-in: verified by monsalaire itself (`jose`, Google keys, `GOOGLE_CLIENT_ID`), stored in
+  `monsalaire.accounts.google_sub` (`docs/db/002_google_sign_in.sql`), never in Supabase Auth, so monsalaire accounts can
+  never log into Aconta. Contact form also at the end of Legal texts (`#ecrire`) with a creator line linking to
+  kevin.aconta.io; email address in the footer; no kicker above page titles; header menu moves to the second line
+  below 980 px. Checked: no page wider than the screen on 11 pages at 320 to 1180 px. Open Graph image now country-neutral: change it only for a major product change.
+
 ## Decisions taken with Kévin (do not reopen without asking him)
 
 - Name `monsalaire` (not "Togolet"): the tool will compare countries.

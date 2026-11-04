@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Controls } from '../components/Controls';
 import { Icon } from '../components/fields';
+import { AccountOffer } from '../components/Account';
 import { Amount, Payslip } from '../components/Payslip';
 import { categoryMinimum, type Payslip as Slip, type Rules } from '../engine';
 import { useFmt } from '../format';
@@ -108,6 +109,8 @@ export function Home({ s, set, rules, slip, computedBase }: { s: AppState; set: 
             </span>
             <Icon.arrow />
           </Link>
+
+          <AccountOffer />
         </div>
       </div>
 

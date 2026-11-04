@@ -13,7 +13,6 @@ export function Understand({ s, rules, slip, computedBase }: { s: AppState; rule
   return (
     <article className="doc-page">
       <header className="page-hero">
-        <div className="kicker">{t('Comprendre', 'How it works')}</div>
         <h1>
           {t('Comment votre salaire', 'How your pay')} <em>{t('est calculé', 'is calculated')}</em>
         </h1>
@@ -52,7 +51,7 @@ export function Understand({ s, rules, slip, computedBase }: { s: AppState; rule
               </p>
             </div>
           </div>
-          <div className="u-card">
+          <div className="u-card centred">
             <h3 className="u-h3">{t("Sur 100 F dépensés par l'employeur", 'For every 100 F the employer spends')}</h3>
             <Hundred slip={slip} />
           </div>
@@ -234,6 +233,7 @@ function Brackets({ slip }: { slip: Payslip }) {
   const { t } = useRoute();
   const { money, pct, fcfa } = useFmt();
   return (
+    <div className="table-wrap">
     <table className="u-table compact">
       <thead>
         <tr>
@@ -258,6 +258,7 @@ function Brackets({ slip }: { slip: Payslip }) {
         </tr>
       </tbody>
     </table>
+    </div>
   );
 }
 

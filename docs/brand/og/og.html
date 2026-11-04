@@ -1,12 +1,13 @@
 <!doctype html>
-<!-- Social preview (1200 x 630) of monsalaire. Rendered by docs/brand/og/render.sh into public/og-fr.png and og-en.png. -->
+<!-- Social preview (1200 x 630) of monsalaire. Country-neutral on purpose (Kévin, 4 November 2026): it only changes
+     with a major change of the product, never when a country is added. Rendered by docs/brand/og/render.sh into public/og-fr.png and og-en.png. -->
 <html>
 <head>
 <meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
-  body { background: #f3efe6; font-family: Geist, sans-serif; color: #14201a; position: relative; }
+  body { background: #f3efe6; font-family: IBM Plex Sans, sans-serif; color: #14201a; position: relative; }
   .card { position: absolute; inset: 0; padding: 78px 84px 0; box-sizing: border-box; }
   .lockup { width: 560px; display: block; }
   h1 { font-family: Outfit, sans-serif; font-weight: 600; font-size: 54px; line-height: 1.12; letter-spacing: -0.02em; margin: 54px 0 18px; max-width: 980px; color: #073f2a; text-wrap: balance; }
@@ -30,8 +31,8 @@
   <script>
     const en = location.hash === '#en';
     document.documentElement.lang = en ? 'en' : 'fr';
-    document.getElementById('h').textContent = en ? 'Your Togo payslip, worked out as you type.' : 'Votre bulletin de paie au Togo, calculé sous vos yeux.';
-    document.getElementById('p').textContent = en ? 'Gross to net pay, income tax, CNSS, AMU and employer cost. Every line cites the law behind it. Free and open source.' : 'Du brut au net, IRPP, CNSS, AMU et coût employeur. Chaque ligne cite le texte officiel. Gratuit et libre.';
+    document.getElementById('h').textContent = en ? 'Your payslip, worked out as you type.' : 'Votre bulletin de paie, calculé sous vos yeux.';
+    document.getElementById('p').textContent = en ? 'Gross to net pay, income tax, social contributions and employer cost. Every line cites the law behind it. Free and open source.' : 'Du brut au net, impôt, cotisations sociales et coût employeur. Chaque ligne cite le texte officiel. Gratuit et libre.';
     document.getElementById('by').textContent = en ? 'by' : 'par';
   </script>
 </body>

@@ -6,7 +6,6 @@ export function Terms() {
   return (
     <article className="doc-page narrow">
       <header className="page-hero">
-        <div className="kicker">{t('À savoir', 'Legal')}</div>
         <h1>
           {t("Conditions d'utilisation", 'Terms of use')} <em>{t('et confidentialité', 'and privacy')}</em>
         </h1>
@@ -36,8 +35,14 @@ export function Terms() {
           <li>{t('Tout le calcul se fait dans votre navigateur. Aucun chiffre saisi n’est envoyé à un serveur.', 'All calculations run in your browser. Nothing you type is sent to a server.')}</li>
           <li>
             {t(
-              'Pas de compte, pas de cookie, pas de publicité.',
-              'No sign-up, no cookies, no advertising.',
+              'Le simulateur s’utilise sans compte, sans cookie et sans publicité.',
+              'The simulator needs no account, no cookies and no advertising.',
+            )}
+          </li>
+          <li>
+            {t(
+              'Si vous créez un compte pour recevoir nos analyses, nous gardons votre email, votre mot de passe sous forme chiffrée irréversible (ou, avec Google, l’identifiant de votre compte Google) et votre langue, et rien d’autre : aucun montant de vos simulations. Un cookie de session vous garde connecté. Vous pouvez supprimer votre compte à tout moment, sous le bulletin. Si vous nous écrivez, nous gardons votre nom, votre email et votre message pour vous répondre.',
+              'If you create an account to receive our analyses, we keep your email, your password in irreversibly hashed form (or, with Google, your Google account ID) and your language, and nothing else: none of your simulation figures. A session cookie keeps you logged in. You can delete your account at any time, under the payslip. If you write to us, we keep your name, email and message so we can reply.',
             )}
           </li>
           <li>
@@ -76,7 +81,7 @@ export function Terms() {
           <a href={`${REPO}/issues`} target="_blank" rel="noreferrer">
             {t('Tickets du projet', 'Project issues')}
           </a>
-          . {t('Pour tout le reste :', 'For anything else:')} <a href="mailto:monsalaire@aconta.io">monsalaire@aconta.io</a>.{' '}
+          . {t('Pour tout le reste :', 'For anything else:')} <Link to="contact">{t('nous écrire', 'contact us')}</Link>.{' '}
           {t('monsalaire a été créé par', 'monsalaire was created by')}{' '}
           <a href="https://kevin.aconta.io" target="_blank" rel="author noopener">
             Kévin

@@ -28,8 +28,8 @@ export function ByAconta({ place, className = '' }: { place: string; className?:
   return (
     <a className={`by-aconta ${className}`} href={acontaLink(place)} target="_blank" rel="noopener" title={t('Visiter aconta.io', 'Visit aconta.io')}>
       <span>{t('par', 'by')}</span>
-      <img src="/brand/aconta-emblem.png" alt="" width="16" height="16" />
-      <b>Aconta</b>
+      <img className="only-light" src="/brand/aconta-logo.png" alt="Aconta" width="80" height="24" />
+      <img className="only-dark" src="/brand/aconta-logo-dark.png" alt="Aconta" width="80" height="24" />
     </a>
   );
 }
@@ -136,14 +136,18 @@ export function Footer({ rules }: { rules: Pick<Rules, 'version' | 'verified_on'
             <Link to="home" className="brand" aria-label="monsalaire">
               <Logo size="lg" />
             </Link>
-            <p className="tagline">{t('Les salaires en perspective.', 'Salaries in perspective.')}</p>
-            <p>{t('Le bulletin de paie, calculé sous vos yeux et expliqué ligne par ligne. Libre, gratuit, sans compte.', 'Your payslip, worked out as you type and explained line by line. Free, open source, no sign-up.')}</p>
-            <p className="f-meta">
-              {t('Règles', 'Rules')} {rules.version} · {t('vérifiées le', 'checked on')} {date(rules.verified_on)}
-            </p>
-            <div className="f-actions">
-              <LangSwitch />
-              <ThemeButton />
+            <div className="f-brand-text">
+              <p className="tagline">{t('Les salaires en perspective.', 'Salaries in perspective.')}</p>
+              <p>{t('Le bulletin de paie, calculé sous vos yeux et expliqué ligne par ligne. Libre, gratuit, sans compte.', 'Your payslip, worked out as you type and explained line by line. Free, open source, no sign-up.')}</p>
+            </div>
+            <div className="f-brand-side">
+              <p className="f-meta">
+                {t('Règles', 'Rules')} {rules.version} · {t('vérifiées le', 'checked on')} {date(rules.verified_on)}
+              </p>
+              <div className="f-actions">
+                <LangSwitch />
+                <ThemeButton />
+              </div>
             </div>
           </div>
           <div>
@@ -252,9 +256,12 @@ export function Footer({ rules }: { rules: Pick<Rules, 'version' | 'verified_on'
                 <Link to="terms">{t('Confidentialité', 'Privacy')}</Link>
               </li>
               <li>
-                <a href={`mailto:${CONTACT}`}>{t('Nous écrire', 'Contact us')}</a>
+                <Link to="contact">{t('Nous écrire', 'Contact us')}</Link>
               </li>
-              <li className="f-note">{t('Aucun compte, aucun cookie : vos montants restent dans votre navigateur.', 'No sign-up, no cookies: your figures stay in your browser.')}</li>
+              <li>
+                <a href={`mailto:${CONTACT}`}>{CONTACT}</a>
+              </li>
+              <li className="f-note">{t('Simulateur sans compte ni cookie : vos montants restent dans votre navigateur.', 'The simulator needs no account or cookie: your figures stay in your browser.')}</li>
             </ul>
           </div>
         </div>
