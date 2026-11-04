@@ -1,1 +1,0 @@
-{"root":["./src/app.tsx","./src/format.ts","./src/main.tsx","./src/state.ts","./src/vite-env.d.ts","./src/components/explain.tsx","./src/components/inputs.tsx","./src/components/payslip.tsx","./src/components/fields.tsx","./src/engine/index.ts","./src/engine/irpp.ts","./src/engine/payroll.test.ts","./src/engine/payroll.ts","./src/engine/types.ts"],"version":"5.9.3"}
