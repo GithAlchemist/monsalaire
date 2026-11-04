@@ -3161,3 +3161,24 @@ body {
     overflow-wrap: anywhere;
   }
 }
+
+/* Phones: the header carries share, logo, account and language; the language button drops its globe to make room. */
+@media (max-width: 520px) {
+  .header-in .lang-btn svg {
+    display: none;
+  }
+  .header-in .lang-btn {
+    padding: 0 10px;
+  }
+  .header-in .header-actions {
+    gap: 4px;
+  }
+}
+@media (max-width: 380px) {
+  .header-in .logo img {
+    height: 28px;
+  }
+  .header-in .logo img.wm {
+    height: 16px;
+  }
+}
