@@ -10,7 +10,7 @@ export function makeFmt(lang: Lang) {
     money,
     fcfa: (n: number) => `${money(n)} F`,
     pct: (r: number, digits = 2) => `${(r * 100).toLocaleString(loc, { maximumFractionDigits: digits })} %`,
-    date: (iso: string) => new Date(iso).toLocaleDateString(loc, { day: 'numeric', month: 'long', year: 'numeric' }),
+    date: (iso: string) => new Date(iso).toLocaleDateString(loc, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }),
     monthLabel: (d = new Date()) => {
       const s = d.toLocaleDateString(loc, { month: 'long', year: 'numeric' });
       return s.charAt(0).toUpperCase() + s.slice(1);

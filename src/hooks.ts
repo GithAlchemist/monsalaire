@@ -47,14 +47,22 @@ export function useChanged(value: number): boolean {
 export type Theme = 'system' | 'light' | 'dark';
 
 export function useTheme(): [Theme, (t: Theme) => void] {
-  const [theme, setTheme] = useState<Theme>(() => {
-    try {
-      return (localStorage.getItem('monsalaire-theme') as Theme) || 'system';
-    } catch {
-      return 'system';
-    }
-  });
+  // 'system' in the static HTML; the stored choice is applied before paint by the head script, then read here.
+  const [theme, setTheme] = useState<Theme>('system');
+  const loaded = useRef(false);
   useEffect(() => {
+    try {
+      const stored = localStorage.getItem('monsalaire-theme');
+      if (stored === 'light' || stored === 'dark') setTheme(stored);
+    } catch {
+      /* storage blocked */
+    }
+  }, []);
+  useEffect(() => {
+    if (!loaded.current) {
+      loaded.current = true;
+      return;
+    }
     const root = document.documentElement;
     if (theme === 'system') root.removeAttribute('data-theme');
     else root.setAttribute('data-theme', theme);
@@ -65,4 +73,11 @@ export function useTheme(): [Theme, (t: Theme) => void] {
     }
   }, [theme]);
   return [theme, setTheme];
+}
+
+/** The current date, known only in the browser (null in the static HTML, so it never disagrees with it). */
+export function useNow(): Date | null {
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => setNow(new Date()), []);
+  return now;
 }

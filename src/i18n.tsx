@@ -21,26 +21,11 @@ export function parsePath(pathname: string): { lang: Lang; page: Page } {
 
 const LANG_KEY = 'monsalaire-lang';
 
-/** First visit to "/" from a device that is not set to French: go to the English home, once. */
-function initialRoute(): { lang: Lang; page: Page } {
-  const r = parsePath(window.location.pathname);
-  if (window.location.pathname === '/' || window.location.pathname === '') {
-    let stored: string | null = null;
-    try {
-      stored = localStorage.getItem(LANG_KEY);
-    } catch {
-      /* storage blocked: decide from the device language */
-    }
-    const device = (navigator.languages?.[0] ?? navigator.language ?? 'fr').toLowerCase();
-    const want: Lang = stored === 'en' || stored === 'fr' ? stored : device.startsWith('fr') ? 'fr' : 'en';
-    if (want === 'en') {
-      window.history.replaceState(null, '', PATHS.en.home + window.location.hash);
-      return { lang: 'en', page: 'home' };
-    }
-  }
-  return r;
-}
-
+/**
+ * Every page is rendered to static HTML at build time with its language and page, then hydrated in the browser.
+ * The first-visit language redirect of "/" runs in an inline script of the page head (see src/layouts/Base.astro),
+ * before anything is painted.
+ */
 interface Ctx {
   lang: Lang;
   page: Page;
@@ -51,8 +36,8 @@ interface Ctx {
 
 const RouteContext = createContext<Ctx | null>(null);
 
-export function RouterProvider({ children }: { children: ReactNode }) {
-  const [route, setRoute] = useState(initialRoute);
+export function RouterProvider({ lang, page, children }: { lang: Lang; page: Page; children: ReactNode }) {
+  const [route, setRoute] = useState<{ lang: Lang; page: Page }>({ lang, page });
 
   useEffect(() => {
     const onPop = () => setRoute(parsePath(window.location.pathname));

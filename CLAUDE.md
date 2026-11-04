@@ -16,10 +16,17 @@ Brief for the next session (French, written for Kévin's other Claude account as
 
 ## Stack and commands
 
-Vite + React + TypeScript, plain CSS tokens (`src/styles.css`), no backend.
+Astro (static output) + one React island per page + TypeScript, plain CSS tokens (`src/styles.css`), no backend.
+Every address is prerendered to real HTML at build time (search engines, AI crawlers and link previews read it),
+then `src/App.tsx` hydrates and restores the simulation from the hash or localStorage.
 
 - `npm run dev` (or the `monsalaire-dev` config in Codebase `.claude/launch.json`, port 3150)
-- `npm test` (vitest, engine only), `npm run build`
+- `npm test` (vitest, engine only), `npm run build` (inside the command sandbox, prefix with
+  `ASTRO_TELEMETRY_DISABLED=1`: Astro's telemetry writes to `~/Library/Preferences/astro`)
+- Layout: `src/pages/[...path].astro` builds the 8 addresses from `PATHS` (`src/i18n.tsx`); head, hreflang, Open Graph
+  and JSON-LD in `src/layouts/Base.astro`; titles and descriptions in `src/seo.ts`; `sitemap.xml` and `llms.txt`
+  (key figures generated from the rules file) are endpoints in `src/pages/`; React views in `src/views/`.
+- Social previews `public/og-fr.png`, `og-en.png`: `docs/brand/og/render.sh` (headless Chrome, outside the sandbox).
 
 ## Rules of this repo
 
@@ -32,4 +39,7 @@ Vite + React + TypeScript, plain CSS tokens (`src/styles.css`), no backend.
   hard-code a rate in the engine.
 - Every rule change comes with a test case in `src/engine/payroll.test.ts` worked out from the legal text.
 - `status: to_verify` is shown as such; never invent a ceiling or a rate found in only one unsourced guide.
-- No Vercel deployment until Kévin asks.
+- Published by Aconta: "par Aconta" signature in the header, "Autres projets" in the footer, links built with
+  `acontaLink(place)` (`src/seo.ts`). Aconta does no payroll: never say or imply it manages salaries, and no pitch
+  or "why Aconta offers this" paragraph (Kévin, 4 November 2026).
+- Domain: `monsalaire.aconta.io` (Vercel). No Vercel deployment until Kévin asks.

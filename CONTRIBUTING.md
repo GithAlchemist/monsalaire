@@ -17,7 +17,7 @@ Open a [rule issue](https://github.com/GithAlchemist/monsalaire/issues/new?templ
 
 ```bash
 npm install
-npm run dev     # the site, http://localhost:5173
+npm run dev     # the site, http://localhost:3150
 npm test        # engine tests
 npm run build   # type check and production build
 ```

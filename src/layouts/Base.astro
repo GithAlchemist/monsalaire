@@ -1,0 +1,109 @@
+---
+import '../styles.css';
+import { rulesFor } from '../engine';
+import { PATHS, type Lang, type Page } from '../i18n';
+import { ACONTA, META, SITE } from '../seo';
+
+interface Props {
+  lang: Lang;
+  page: Page;
+}
+const { lang, page } = Astro.props;
+const meta = META[lang][page];
+const url = (l: Lang) => SITE + (PATHS[l][page] === '/' ? '' : PATHS[l][page]);
+const canonical = url(lang);
+const rules = rulesFor(new Date().toISOString().slice(0, 10));
+const ogImage = `${SITE}/og-${lang}.png`;
+
+// Structured data: who publishes the site, what the tool is, and when its rules were last checked.
+const graph: Record<string, unknown>[] = [
+  { '@type': 'Organization', '@id': `${ACONTA}/#organization`, name: 'Aconta', url: ACONTA },
+  {
+    '@type': 'WebSite',
+    '@id': `${SITE}/#website`,
+    url: SITE,
+    name: 'monsalaire',
+    alternateName: lang === 'en' ? 'Salaries in perspective.' : 'Les salaires en perspective.',
+    inLanguage: ['fr', 'en'],
+    publisher: { '@id': `${ACONTA}/#organization` },
+  },
+  {
+    '@type': 'WebPage',
+    '@id': `${canonical}#page`,
+    url: canonical,
+    name: meta.title,
+    description: meta.description,
+    inLanguage: lang,
+    isPartOf: { '@id': `${SITE}/#website` },
+    dateModified: rules.verified_on,
+  },
+];
+if (page === 'home') {
+  graph.push({
+    '@type': 'WebApplication',
+    name: 'monsalaire',
+    url: canonical,
+    description: meta.description,
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Any',
+    browserRequirements: 'Requires JavaScript',
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'XOF' },
+    license: 'https://opensource.org/licenses/MIT',
+    codeRepository: 'https://github.com/GithAlchemist/monsalaire',
+    inLanguage: lang,
+    areaServed: { '@type': 'Country', name: 'Togo' },
+    publisher: { '@id': `${ACONTA}/#organization` },
+  });
+}
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+
+// Before the first paint: apply the stored theme, and send a first visit to "/" from a non-French device to /en
+// (never for crawlers, so search engines index the French home as it is).
+const headScript = `(function(){var d=document.documentElement;try{var t=localStorage.getItem('monsalaire-theme');if(t==='light'||t==='dark')d.setAttribute('data-theme',t)}catch(e){}
+if(location.pathname!=='/')return;if(/bot|crawl|spider|slurp|google|bing|yandex|duckduck|baidu|facebook|linkedin|whatsapp|telegram|twitter|gpt|claude|anthropic|perplexity|preview/i.test(navigator.userAgent))return;
+var s=null;try{s=localStorage.getItem('monsalaire-lang')}catch(e){}var n=((navigator.languages&&navigator.languages[0])||navigator.language||'fr').toLowerCase();
+var w=s==='en'||s==='fr'?s:(n.indexOf('fr')===0?'fr':'en');if(w==='en')location.replace('/en'+location.hash)})();`;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="fr" href={url('fr')} />
+    <link rel="alternate" hreflang="en" href={url('en')} />
+    <link rel="alternate" hreflang="x-default" href={url('fr')} />
+    <script is:inline set:html={headScript} />
+    <meta name="theme-color" content="#073f2a" />
+    <meta name="author" content="Aconta" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="monsalaire" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={meta.title} />
+    <meta property="og:description" content={meta.description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={lang === 'en' ? 'en_GB' : 'fr_FR'} />
+    <meta property="og:locale:alternate" content={lang === 'en' ? 'fr_FR' : 'en_GB'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={meta.title} />
+    <meta name="twitter:description" content={meta.description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={jsonLd} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

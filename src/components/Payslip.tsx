@@ -1,8 +1,8 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import type { PayLine, Payslip as Slip, Rules } from '../engine';
 import { refLabel, refUrl, useFmt } from '../format';
 import { useRoute } from '../i18n';
-import { useChanged, useTweened } from '../hooks';
+import { useChanged, useNow, useTweened } from '../hooks';
 import { Icon } from './fields';
 
 export function Amount({ value, className }: { value: number; className?: string }) {
@@ -73,7 +73,12 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
   const { t } = useRoute();
   const { money, monthLabel, date } = useFmt();
   const [open, setOpen] = useState<string | null>(null);
-  const [employer, setEmployer] = useState(() => typeof window === 'undefined' || window.innerWidth > 640);
+  const [employer, setEmployer] = useState(true);
+  // Employer block open on wide screens, folded on phones (decided in the browser, after the static HTML).
+  useEffect(() => {
+    if (window.innerWidth <= 640) setEmployer(false);
+  }, []);
+  const now = useNow();
   const net = useTweened(slip.netPay);
   const grossFlash = useChanged(slip.grossTotal);
   const totalFlash = useChanged(slip.netPay);
@@ -102,7 +107,7 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
         <header className="sheet-head">
           <div>
             <div className="doc-type">{t('Bulletin de paie', 'Payslip')}</div>
-            <div className="period">{monthLabel()}</div>
+            <div className="period">{now ? monthLabel(now) : '\u00a0'}</div>
           </div>
           <img className="sheet-logo" src="/brand/symbol.png" alt="" />
         </header>

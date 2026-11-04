@@ -28,7 +28,19 @@ Lis d'abord, dans cet ordre : `CLAUDE.md`, `docs/STATUS.md` (état, décisions, 
 - README bilingue (`README.md` en anglais, `README.fr.md`) avec le logo, des captures (`docs/screenshots/`), le schéma
   des trois couches et la feuille de route ; `CONTRIBUTING.md` ; modèles de tickets (règle fausse, nouveau pays, bug).
 
+- **Passage à Astro** (même jour, plus tard) : chaque adresse est une vraie page HTML construite à l'avance, puis
+  l'application React prend le relais. Métadonnées par page, hreflang, aperçus LinkedIn (`public/og-fr.png`,
+  `og-en.png`, générés par `docs/brand/og/render.sh`), données structurées, `sitemap.xml`, `robots.txt`, `llms.txt`
+  généré depuis les règles, page 404. Domaine prévu : `monsalaire.aconta.io`.
+- **Signature « par Aconta »** à côté du logo (ordinateur), en bas du pied de page et une colonne « Autres projets »
+  vers aconta.io, liens marqués `utm_source=monsalaire`. Aconta ne fait pas de paie : ne jamais le laisser entendre,
+  pas d'argumentaire (Kévin, 04/11).
+
 ## À faire ensuite, par ordre de valeur
+
+0. **Déploiement**, dès que Kévin le demande : projet Vercel depuis le dépôt, domaine `monsalaire.aconta.io`, puis
+   Search Console et Bing Webmaster Tools avec `sitemap.xml`, et vérifier l'aperçu LinkedIn. Ensuite le blog et les
+   pages de données (comparatif du SMIG entre pays d'abord), voir `docs/STATUS.md`.
 
 1. **Vectoriser le logo.** Les découpes sont des PNG (nets jusqu'à environ 2x la taille d'affichage). Un SVG fidèle du
    symbole et du logotype rendrait le favicon et le README plus nets. Demander à Kévin s'il a le fichier source
@@ -45,8 +57,7 @@ Lis d'abord, dans cet ordre : `CLAUDE.md`, `docs/STATUS.md` (état, décisions, 
    de la vie (facteurs de parité de pouvoir d'achat de la Banque mondiale). Présenter un plan à Kévin avant de coder.
 6. **Chaque janvier** : nouvelle loi de finances et Cahier fiscal de l'OTR, vérifier CGI art. 17 à 26 et 72 à 74, SMIG,
    décrets CNSS et AMU ; nouveau `rules/tg/<année>.json` si quelque chose change, avec un test.
-7. **Déploiement**, quand Kévin le décide : construction statique Vite (`npm run build`, sortie `dist/`), domaine à
-   choisir avec lui.
+7. (Le déploiement est passé en tête de liste, point 0.)
 
 ## Règles de travail (Kévin)
 

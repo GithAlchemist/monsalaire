@@ -3,6 +3,7 @@ import type { Rules } from '../engine';
 import { useFmt } from '../format';
 import { useTheme, type Theme } from '../hooks';
 import { Link, useRoute, type Lang, type Page } from '../i18n';
+import { acontaLink } from '../seo';
 import { Icon } from './fields';
 
 export const REPO = 'https://github.com/GithAlchemist/monsalaire';
@@ -16,6 +17,18 @@ export function Logo({ size = 'md' }: { size?: 'md' | 'lg' }) {
       <img className="only-light wm" src="/brand/wordmark.png" alt="monsalaire" />
       <img className="only-dark wm" src="/brand/wordmark-dark.png" alt="monsalaire" />
     </span>
+  );
+}
+
+/** "par Aconta": the publisher's signature, a plain link to aconta.io. */
+export function ByAconta({ place, className = '' }: { place: string; className?: string }) {
+  const { t } = useRoute();
+  return (
+    <a className={`by-aconta ${className}`} href={acontaLink(place)} target="_blank" rel="noopener" title={t('Visiter aconta.io', 'Visit aconta.io')}>
+      <span>{t('par', 'by')}</span>
+      <img src="/brand/aconta-emblem.png" alt="" width="16" height="16" />
+      <b>Aconta</b>
+    </a>
   );
 }
 
@@ -57,6 +70,7 @@ export function Header({ onShare, copied }: { onShare?: () => void; copied?: boo
         <Link to="home" className="brand" aria-label={t('monsalaire, accueil', 'monsalaire, home')}>
           <Logo />
         </Link>
+        <ByAconta place="header" className="h-by" />
         <nav className="nav" aria-label={t('Pages', 'Pages')}>
           {nav.map((n) => (
             <Link key={n.to} to={n.to} aria-current={page === n.to ? 'page' : undefined}>
@@ -187,6 +201,20 @@ export function Footer({ rules }: { rules: Rules }) {
             </ul>
           </div>
           <div>
+            <h3>{t('Autres projets', 'Other projects')}</h3>
+            <ul>
+              <li>
+                <a className="f-project" href={acontaLink('footer')} target="_blank" rel="noopener">
+                  <img src="/brand/aconta-emblem.png" alt="" width="18" height="18" />
+                  <span>
+                    <b>aconta.io</b>
+                    <small>{t('Le suivi de l’argent des petites entreprises, sans cahier ni Excel.', 'Money tracking for small businesses, without a notebook or Excel.')}</small>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
             <h3>{t('À savoir', 'Legal')}</h3>
             <ul>
               <li>
@@ -200,7 +228,9 @@ export function Footer({ rules }: { rules: Rules }) {
           </div>
         </div>
         <div className="f-bottom">
-          <span>© 2026 monsalaire · {t('projet libre sous licence MIT', 'open source under the MIT licence')}</span>
+          <span>
+            © 2026 monsalaire · {t('projet libre sous licence MIT', 'open source under the MIT licence')} · <ByAconta place="footer-bottom" />
+          </span>
           <span>{t('Simulation indicative : elle ne remplace pas le bulletin de votre employeur.', 'Indicative simulation: it does not replace your employer’s payslip.')}</span>
         </div>
       </div>

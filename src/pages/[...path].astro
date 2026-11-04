@@ -1,0 +1,21 @@
+---
+import App from '../App';
+import { PATHS, type Lang, type Page } from '../i18n';
+import Base from '../layouts/Base.astro';
+
+// One static page per address and language: /, /comprendre, /textes, /conditions, /en, /en/understand...
+export function getStaticPaths() {
+  return (['fr', 'en'] as Lang[]).flatMap((lang) =>
+    (Object.entries(PATHS[lang]) as [Page, string][]).map(([page, path]) => ({
+      params: { path: path === '/' ? undefined : path.slice(1) },
+      props: { lang, page },
+    })),
+  );
+}
+
+const { lang, page } = Astro.props as { lang: Lang; page: Page };
+---
+
+<Base lang={lang} page={page}>
+  <App client:load lang={lang} page={page} />
+</Base>

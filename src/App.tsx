@@ -1,13 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Footer, Header } from './components/Chrome';
 import { baseForTargetNet, computePayslip, rulesFor } from './engine';
 import { makeFmt } from './format';
-import { RouterProvider, useRoute } from './i18n';
-import { Home } from './pages/Home';
-import { Sources } from './pages/Sources';
-import { Terms } from './pages/Terms';
-import { Understand } from './pages/Understand';
-import { decode, encode, toInput, type AppState } from './state';
+import { RouterProvider, useRoute, type Lang, type Page } from './i18n';
+import { META } from './seo';
+import { Home } from './views/Home';
+import { Sources } from './views/Sources';
+import { Terms } from './views/Terms';
+import { Understand } from './views/Understand';
+import { decode, defaultState, encode, toInput, type AppState } from './state';
 
 const today = new Date().toISOString().slice(0, 10);
 const SIM_KEY = 'monsalaire-simulation';
@@ -24,9 +25,10 @@ function initialState(): AppState {
   return decode('');
 }
 
-export default function App() {
+/** One React island per page: the static HTML is rendered with the defaults, the browser then restores the simulation. */
+export default function App({ lang, page }: { lang: Lang; page: Page }) {
   return (
-    <RouterProvider>
+    <RouterProvider lang={lang} page={page}>
       <Shell />
     </RouterProvider>
   );
@@ -35,14 +37,22 @@ export default function App() {
 function Shell() {
   const { page, lang, t } = useRoute();
   const rules = useMemo(() => rulesFor(today), []);
-  const [s, setS] = useState<AppState>(initialState);
+  const [s, setS] = useState<AppState>(defaultState);
+  const [ready, setReady] = useState(false);
   const [copied, setCopied] = useState(false);
   const set = (patch: Partial<AppState>) => setS((prev) => ({ ...prev, ...patch }));
 
   const computedBase = useMemo(() => (s.mode === 'net' ? baseForTargetNet(s.targetNet, toInput({ ...s, base: 0 }), rules) : s.base), [s, rules]);
   const slip = useMemo(() => computePayslip(toInput({ ...s, base: computedBase }), rules, lang), [s, computedBase, rules, lang]);
 
+  // Read the shared link or the last simulation before the first paint, so the defaults never overwrite it.
+  useLayoutEffect(() => {
+    setS(initialState());
+    setReady(true);
+  }, []);
+
   useEffect(() => {
+    if (!ready) return;
     const h = encode(s);
     if (page === 'home') window.history.replaceState(null, '', `${window.location.pathname}#${h}`);
     try {
@@ -50,7 +60,7 @@ function Shell() {
     } catch {
       /* not remembered */
     }
-  }, [s, page]);
+  }, [s, page, ready]);
 
   // A shared link opened in a tab already on the site only changes the hash: read it again.
   useEffect(() => {
@@ -62,14 +72,8 @@ function Shell() {
   }, [s]);
 
   useEffect(() => {
-    const titles = {
-      home: t('monsalaire · votre bulletin de paie au Togo', 'monsalaire · your payslip in Togo'),
-      understand: t('Comprendre le calcul · monsalaire', 'How it is computed · monsalaire'),
-      sources: t('Les textes officiels · monsalaire', 'Official texts · monsalaire'),
-      terms: t("Conditions d'utilisation · monsalaire", 'Terms of use · monsalaire'),
-    };
-    document.title = titles[page];
-  }, [page, t]);
+    document.title = META[lang][page].title;
+  }, [page, lang]);
 
   const share = async () => {
     const url = window.location.href;

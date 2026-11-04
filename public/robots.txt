@@ -1,0 +1,5 @@
+# monsalaire is public and free to read, quote and index, by search engines and AI assistants alike.
+User-agent: *
+Allow: /
+
+Sitemap: https://monsalaire.aconta.io/sitemap.xml

@@ -88,7 +88,7 @@ calculator of another country.
 git clone https://github.com/GithAlchemist/monsalaire.git
 cd monsalaire
 npm install
-npm run dev        # http://localhost:5173
+npm run dev        # http://localhost:3150
 npm test           # 32 engine tests, checked against cases worked out from the law
 npm run build      # static site in dist/, ready for any host
 ```

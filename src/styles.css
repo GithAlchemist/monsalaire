@@ -187,8 +187,8 @@ a {
 }
 .header-in {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
-  grid-template-areas: 'brand nav start end';
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+  grid-template-areas: 'brand by nav start end';
   align-items: center;
   gap: 8px 16px;
   height: 68px;
@@ -198,6 +198,9 @@ a {
 }
 .header-in .nav {
   grid-area: nav;
+}
+.header-in .h-by {
+  grid-area: by;
 }
 .h-start {
   grid-area: start;
@@ -2380,8 +2383,16 @@ ul.clean li::marker {
 }
 .f-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) repeat(4, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.5fr) repeat(5, minmax(0, 1fr));
   gap: 28px;
+}
+@media (max-width: 1100px) and (min-width: 961px) {
+  .f-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .f-brand {
+    grid-column: 1 / -1;
+  }
 }
 @media (max-width: 960px) {
   .f-grid {
@@ -2484,4 +2495,76 @@ ul.clean li::marker {
 .trio-card .t-value,
 .fact .f-k {
   font-feature-settings: 'tnum';
+}
+
+/* 404 page */
+.notfound {
+  min-height: 80vh;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 8px;
+}
+.notfound h1 {
+  font-family: var(--font-brand);
+  margin: 28px 0 4px;
+}
+.notfound p {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+/* Publisher signature: "par Aconta" */
+.by-aconta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--ink-3);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.by-aconta img {
+  width: 14px;
+  height: 14px;
+}
+.by-aconta b {
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.by-aconta:hover b {
+  color: var(--ink);
+  text-decoration: underline;
+}
+.header-in .h-by {
+  padding-left: 12px;
+  margin-left: -4px;
+  border-left: 1px solid var(--line-2);
+  height: 22px;
+}
+@media (max-width: 760px) {
+  .header-in .h-by {
+    display: none;
+  }
+}
+.f-bottom .by-aconta {
+  vertical-align: -2px;
+}
+.site-footer .f-project {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.f-project img {
+  margin-top: 2px;
+  flex: none;
+}
+.f-project span {
+  display: grid;
+  gap: 2px;
+}
+.f-project small {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.4;
 }

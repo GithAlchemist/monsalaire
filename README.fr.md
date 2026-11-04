@@ -89,7 +89,7 @@ d'un autre pays.
 git clone https://github.com/GithAlchemist/monsalaire.git
 cd monsalaire
 npm install
-npm run dev        # http://localhost:5173
+npm run dev        # http://localhost:3150
 npm test           # 32 tests du moteur, sur des cas calculés à partir des textes
 npm run build      # site statique dans dist/, prêt pour n'importe quel hébergeur
 ```

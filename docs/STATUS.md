@@ -1,13 +1,14 @@
 # monsalaire: where the project stands
 
-Last update: 4 November 2026. This file is loaded by `CLAUDE.md`, so any Claude session (any account) starts from
+Last update: 4 November 2026 (Astro migration and Aconta signature). This file is loaded by `CLAUDE.md`, so any Claude session (any account) starts from
 it. Keep it current at the end of every session.
 
 ## In one paragraph
 
-Free, open-source payslip simulator for Togo. The user types a salary; the payslip (gross, CNSS, AMU, IRPP, net,
+Free, open-source payslip simulator for Togo, published as "the open-source salary tool by Aconta" on
+`monsalaire.aconta.io` (not deployed yet). The user types a salary; the payslip (gross, CNSS, AMU, IRPP, net,
 employer cost) updates live, and every line opens its explanation and a link to the article and page of the official
-text. Public repo `GithAlchemist/monsalaire` (MIT), owner Kévin. Not deployed yet. Long-term goal: compare the net of
+text. Public repo `GithAlchemist/monsalaire` (MIT), owner Kévin. Long-term goal: compare the net of
 a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected for the cost of living.
 
 ## State
@@ -23,13 +24,24 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
   home page hash and in localStorage, so the other pages use it.
 - Bilingual README (`README.md`, `README.fr.md`) with banner (`docs/banner.svg`) and screenshots
   (`docs/screenshots/`, taken with headless Chrome at 2x), `CONTRIBUTING.md`, issue templates (rule error, new
-  country, bug), PR template. `vercel.json` rewrites every path to `index.html` for the day it is deployed.
+  country, bug), PR template. `vercel.json` serves the prerendered pages without their `.html` extension.
 - Logo by Kévin (4 November 2026): Africa with three bars and an arc, wordmark with a gold i-dot, tagline "Les salaires
   en perspective.". Original in `docs/brand/logo-original.png`; PNG cuts in `public/brand/` (symbol, wordmark, lockup,
   each with a `-dark` version) and icons in `public/`. Centred in the header on phones, left on larger screens.
   Headings in Outfit (closest to the logo font). Palette from the logo: #073f2a, #209b44, #f5b102, #e60514.
 - UI checked in the browser on desktop, phone width (375 px, no horizontal scroll) and dark theme, in both languages.
 - Local preview: `npm run dev`, or the `monsalaire-dev` entry of `~/Codebase/.claude/launch.json` (port 3150).
+
+- 4 November 2026 (later): moved from a Vite single-page app to **Astro** with static output. Each of the 8
+  addresses is real HTML at build time (the old SPA served an empty page to AI crawlers and LinkedIn previews), then
+  the React app hydrates. Per page: title, description, canonical, hreflang fr/en/x-default, Open Graph and Twitter
+  card (`public/og-fr.png`, `og-en.png`), JSON-LD (Organization Aconta, WebSite, WebPage, WebApplication on the home).
+  `sitemap.xml` with hreflang, `robots.txt` open to every crawler, `llms.txt` generated from the rules file with the
+  key figures and their sources, `404.html`. `vercel.json`: `cleanUrls`, no trailing slash. The first-visit language
+  redirect of "/" now runs in an inline head script and skips crawlers and link-preview bots.
+- "par Aconta" signature with the Aconta emblem (`public/brand/aconta-emblem.png`) next to the logo on desktop
+  (hidden on phones), in the footer bottom line, and an "Autres projets" footer column linking to aconta.io. Every
+  Aconta link carries `utm_source=monsalaire` and the place (`header`, `footer`, `footer-bottom`).
 
 ## Decisions taken with Kévin (do not reopen without asking him)
 
@@ -43,6 +55,12 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
 - Seniority bonus (CCIT 2026 art. 40) read as "2 % at 2 and 3 years, then one more point a year" (3 % at 4 years);
   the other reading is shown on the site as an open question.
 - AMU base excludes benefits in kind (decree 2023-096 art. 9 does not list them); CNSS includes them (code art. 12).
+- Published by Aconta on `monsalaire.aconta.io`; logo and colours of monsalaire kept. Links to aconta.io only in
+  obvious places (header signature, footer), no pitch, and never imply Aconta does payroll: it does not (Aconta is a
+  money tracker for very small businesses that replaces the notebook and the Excel file).
+- Blog later on this site (not on aconta.io): every LinkedIn post of Kévin (minimum wage compared across West
+  African countries, minimum wage corrected for the cost of living...) gets a durable, sourced data page and a dated
+  article here. Aim: become the reference source on salaries, cited by search engines and AI assistants.
 - **No Vercel deployment until Kévin asks.**
 
 ## Next steps
@@ -54,7 +72,13 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
    country), then a purchasing-power correction (World Bank PPP conversion factors).
 5. Every January: fetch the new finance law and the OTR "Cahier fiscal", check CGI art. 17 to 26 and 72 to 74, add
    `rules/tg/<year>.json` with its `valid_from` if anything changed, and a test.
-6. Deployment on Vercel when Kévin decides (static Vite build, `npm run build`, output `dist/`).
+6. Deployment on Vercel when Kévin decides: new project from the repo (Astro is detected, output `dist/`), domain
+   `monsalaire.aconta.io`, then Google Search Console (a domain property on aconta.io covers the subdomains) and
+   Bing Webmaster Tools (ChatGPT search leans on Bing), submit `sitemap.xml`. Check a LinkedIn preview with the
+   LinkedIn Post Inspector.
+7. Blog and data pages (Astro content collections in Markdown), starting with the minimum wage compared across
+   countries; one page per real question ("SMIG Togo 2026", "taux CNSS Togo", "barème IRPP Togo"), answer in the
+   first sentence, sources and update date.
 
 ## Working notes
 
