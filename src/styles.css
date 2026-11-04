@@ -2798,7 +2798,7 @@ body {
 }
 @media (max-width: 760px) {
   .acct {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     padding: 18px;
   }
 }
@@ -2828,6 +2828,8 @@ body {
 
 .acct-google {
   min-height: 44px;
+  max-width: 100%;
+  overflow: hidden;
 }
 .acct-or {
   margin: 0;
@@ -3212,4 +3214,9 @@ a.pop-item:hover {
   .header-actions:has(.acct-entry) > .lang-btn {
     display: none;
   }
+}
+
+.auth,
+.acct-pitch {
+  min-width: 0;
 }
