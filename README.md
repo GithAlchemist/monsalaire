@@ -51,7 +51,7 @@ and it tells you why, with the article and the page.
 | **Family and savings** | Spouse, children and other dependents (6 at most), voluntary pension and life insurance deductions, apprentice exemption. |
 | **Explained** | A How it works page: where each franc goes, the tax step by step, contributions and what they pay for. |
 | **Sourced** | 13 official texts archived in the repo with page-by-page transcriptions; every rule cites `{ source, article, page }`. |
-| **Private by design** | No account, no server, no cookie, no tracker. Shareable links carry the simulation in the URL. |
+| **Private by design** | No account, no server, no cookie. The figures you type never leave the browser; only anonymous, cookie-free page views and load times are counted (Vercel Web Analytics and Speed Insights). Shareable links carry the simulation in the URL. |
 | **Bilingual** | French and English, site and payslip alike. Light and dark themes, phone first, print-ready. |
 
 <p align="center">

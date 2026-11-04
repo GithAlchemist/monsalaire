@@ -223,7 +223,7 @@ export function Footer({ rules }: { rules: Rules }) {
               <li>
                 <Link to="terms">{t('Confidentialité', 'Privacy')}</Link>
               </li>
-              <li className="f-note">{t('Aucune donnée collectée, aucun traceur.', 'No data collected, no trackers.')}</li>
+              <li className="f-note">{t('Aucun compte, aucun cookie : vos montants restent dans votre navigateur.', 'No account, no cookie: your figures stay in your browser.')}</li>
             </ul>
           </div>
         </div>

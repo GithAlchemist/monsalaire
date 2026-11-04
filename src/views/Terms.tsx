@@ -10,7 +10,7 @@ export function Terms() {
         <h1>
           {t("Conditions d'utilisation", 'Terms of use')} <em>{t('et confidentialité', 'and privacy')}</em>
         </h1>
-        <p className="lead">{t('Courtes, parce qu’il n’y a presque rien à cacher : pas de compte, pas de donnée collectée.', 'Short, because there is almost nothing to hide: no account, no data collected.')}</p>
+        <p className="lead">{t('Courtes, parce qu’il n’y a presque rien à cacher : pas de compte, et vos montants ne quittent pas votre navigateur.', 'Short, because there is almost nothing to hide: no account, and your figures never leave your browser.')}</p>
       </header>
 
       <div className="prose">
@@ -36,8 +36,14 @@ export function Terms() {
           <li>{t('Tout le calcul se fait dans votre navigateur. Aucun chiffre saisi n’est envoyé à un serveur.', 'All calculation happens in your browser. No figure you type is sent to a server.')}</li>
           <li>
             {t(
-              'Pas de compte, pas de cookie, pas de mesure d’audience, pas de publicité.',
-              'No account, no cookie, no audience measurement, no advertising.',
+              'Pas de compte, pas de cookie, pas de publicité.',
+              'No account, no cookie, no advertising.',
+            )}
+          </li>
+          <li>
+            {t(
+              'Une mesure d’audience anonyme et sans cookie (Vercel Web Analytics et Speed Insights) compte les pages vues et leur vitesse d’affichage. Elle ne reçoit ni les montants saisis ni la partie de l’adresse qui les contient, et ne permet pas de vous identifier.',
+              'An anonymous, cookie-free audience measurement (Vercel Web Analytics and Speed Insights) counts page views and how fast pages load. It never receives the figures you type nor the part of the address that holds them, and cannot identify you.',
             )}
           </li>
           <li>

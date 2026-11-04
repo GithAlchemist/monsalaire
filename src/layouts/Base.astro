@@ -105,5 +105,8 @@ var w=s==='en'||s==='fr'?s:(n.indexOf('fr')===0?'fr':'en');if(w==='en')location.
   </head>
   <body>
     <slot />
+    <script>
+      import '../analytics';
+    </script>
   </body>
 </html>

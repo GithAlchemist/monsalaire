@@ -51,7 +51,7 @@ négocier. Touchez une ligne, il vous dit pourquoi, avec l'article et la page.
 | **Famille et épargne** | Conjoint, enfants et autres personnes à charge (6 au plus), épargne retraite et assurance vie, exonération des apprentis. |
 | **Expliqué** | Une page Comprendre : où va chaque franc, l'impôt pas à pas, les cotisations et ce qu'elles financent. |
 | **Sourcé** | 13 textes officiels archivés dans le dépôt, transcrits page par page ; chaque règle cite `{ source, article, page }`. |
-| **Confidentiel** | Ni compte, ni serveur, ni cookie, ni traceur. Un lien partagé contient la simulation. |
+| **Confidentiel** | Ni compte, ni serveur, ni cookie. Les montants saisis ne quittent pas le navigateur ; seules les pages vues et leur vitesse sont comptées, de façon anonyme et sans cookie (Vercel Web Analytics et Speed Insights). Un lien partagé contient la simulation. |
 | **Bilingue** | Français et anglais, site et bulletin. Thème clair ou sombre, pensé pour le téléphone, prêt à imprimer. |
 
 <p align="center">

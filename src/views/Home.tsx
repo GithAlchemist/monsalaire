@@ -10,7 +10,7 @@ import type { AppState } from '../state';
 
 export function Home({ s, set, rules, slip, computedBase }: { s: AppState; set: (p: Partial<AppState>) => void; rules: Rules; slip: Slip; computedBase: number }) {
   const { t } = useRoute();
-  const { fcfa, pct, date } = useFmt();
+  const { fcfa, pct } = useFmt();
   const [period, setPeriod] = useState<'month' | 'year'>('month');
   const [dockHidden, setDockHidden] = useState(false);
   const k = period === 'year' ? 12 : 1;
@@ -34,17 +34,6 @@ export function Home({ s, set, rules, slip, computedBase }: { s: AppState; set: 
   return (
     <>
       <section className="hero compact">
-        <span className="eyebrow">
-          <span className="flag" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-            <i />
-            <i />
-            <b />
-          </span>
-          {t('Togo · textes en vigueur vérifiés le', 'Togo · laws in force checked on')} {date(rules.verified_on)}
-        </span>
         <h1>
           {t('Votre bulletin de paie,', 'Your payslip,')} <em>{t('calculé sous vos yeux.', 'computed before your eyes.')}</em>
         </h1>

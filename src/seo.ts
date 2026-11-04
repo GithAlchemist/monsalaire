@@ -27,7 +27,7 @@ export const META: Record<Lang, Record<Page, { title: string; description: strin
     },
     terms: {
       title: 'Conditions d’utilisation et confidentialité · monsalaire',
-      description: 'Simulation indicative, gratuite et libre. Aucune donnée collectée, aucun traceur : le calcul se fait dans votre navigateur.',
+      description: 'Simulation indicative, gratuite et libre. Pas de compte, pas de cookie : le calcul se fait dans votre navigateur et vos montants n’en sortent pas.',
     },
   },
   en: {
@@ -48,7 +48,7 @@ export const META: Record<Lang, Record<Page, { title: string; description: strin
     },
     terms: {
       title: 'Terms of use and privacy · monsalaire',
-      description: 'Indicative, free and open-source simulation. No data collected, no trackers: the computation runs in your browser.',
+      description: 'Indicative, free and open-source simulation. No account, no cookie: the computation runs in your browser and your figures never leave it.',
     },
   },
 };
