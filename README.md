@@ -8,6 +8,7 @@
 <p align="center"><b>Salaries in perspective.</b> Your Togo payslip, worked out as you type. By <a href="https://aconta.io">Aconta</a>.</p>
 
 <p align="center">
+  <a href="https://monsalaire.aconta.io/en"><b>Open the simulator: monsalaire.aconta.io</b></a><br>
   <b>English</b> · <a href="README.fr.md">Français</a>
 </p>
 

@@ -8,6 +8,7 @@
 <p align="center"><b>Les salaires en perspective.</b> Votre bulletin de paie au Togo, calculé sous vos yeux. Par <a href="https://aconta.io">Aconta</a>.</p>
 
 <p align="center">
+  <a href="https://monsalaire.aconta.io"><b>Ouvrir le simulateur : monsalaire.aconta.io</b></a><br>
   <a href="README.md">English</a> · <b>Français</b>
 </p>
 
