@@ -24,6 +24,10 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
 - Bilingual README (`README.md`, `README.fr.md`) with banner (`docs/banner.svg`) and screenshots
   (`docs/screenshots/`, taken with headless Chrome at 2x), `CONTRIBUTING.md`, issue templates (rule error, new
   country, bug), PR template. `vercel.json` rewrites every path to `index.html` for the day it is deployed.
+- Logo by Kévin (4 November 2026): Africa with three bars and an arc, wordmark with a gold i-dot, tagline "Les salaires
+  en perspective.". Original in `docs/brand/logo-original.png`; PNG cuts in `public/brand/` (symbol, wordmark, lockup,
+  each with a `-dark` version) and icons in `public/`. Centred in the header on phones, left on larger screens.
+  Headings in Outfit (closest to the logo font). Palette from the logo: #073f2a, #209b44, #f5b102, #e60514.
 - UI checked in the browser on desktop, phone width (375 px, no horizontal scroll) and dark theme, in both languages.
 - Local preview: `npm run dev`, or the `monsalaire-dev` entry of `~/Codebase/.claude/launch.json` (port 3150).
 
@@ -32,8 +36,8 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
 - Name `monsalaire` (not "Togolet"): the tool will compare countries.
 - Engine in TypeScript in the browser (not Python): the payslip must change at every keystroke without a server; the
   site stays static. Legal parameters are data in `rules/`, never constants in the engine.
-- Look: Togolese flag and OTR colours (forest green, gold, a touch of red) on the structure of the Aconta design
-  system (Geist, mono figures, Instrument Serif accents, documents on paper). No separate design system.
+- Look: Kévin's logo and its colours (dark green, green, gold, red) on the structure of the Aconta design system
+  (Geist body, mono figures, Outfit headings, documents on paper). No separate design system.
 - Bilingual from the start (Kévin, 4 November 2026): site, payslip and README in French and English.
 - Home page compact: it stops at the payslip; explanations live on How it works, sources on Legal texts.
 - Seniority bonus (CCIT 2026 art. 40) read as "2 % at 2 and 3 years, then one more point a year" (3 % at 4 years);

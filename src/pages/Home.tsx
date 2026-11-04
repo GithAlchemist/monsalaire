@@ -23,7 +23,8 @@ export function Home({ s, set, rules, slip, computedBase }: { s: AppState; set: 
       const box = document.querySelector('.netbox');
       if (!box) return;
       const r = box.getBoundingClientRect();
-      setDockHidden(r.top < window.innerHeight && r.bottom > 0);
+      const footer = document.querySelector('.site-footer')?.getBoundingClientRect();
+      setDockHidden(r.top < window.innerHeight || (!!footer && footer.top < window.innerHeight));
     };
     on();
     window.addEventListener('scroll', on, { passive: true });

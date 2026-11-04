@@ -10,6 +10,10 @@ Where the project stands, decisions and next steps (read first, update at the en
 
 @docs/STATUS.md
 
+Brief for the next session (French, written for Kévin's other Claude account as much as this one):
+
+@docs/PROMPT_SESSION_SUIVANTE.md
+
 ## Stack and commands
 
 Vite + React + TypeScript, plain CSS tokens (`src/styles.css`), no backend.

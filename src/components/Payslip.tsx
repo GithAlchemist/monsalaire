@@ -104,7 +104,7 @@ export function Payslip({ slip, rules, statusLabel, category }: { slip: Slip; ru
             <div className="doc-type">{t('Bulletin de paie', 'Payslip')}</div>
             <div className="period">{monthLabel()}</div>
           </div>
-          <img className="sheet-logo" src="/logo.svg" alt="" width={40} height={40} />
+          <img className="sheet-logo" src="/brand/symbol.png" alt="" />
         </header>
 
         <dl className="parties">

@@ -7,6 +7,18 @@ import { Icon } from './fields';
 
 export const REPO = 'https://github.com/GithAlchemist/monsalaire';
 
+/** The brand: Africa symbol and wordmark, each with a light version for the dark theme. */
+export function Logo({ size = 'md' }: { size?: 'md' | 'lg' }) {
+  return (
+    <span className={`logo logo-${size}`}>
+      <img className="only-light" src="/brand/symbol.png" alt="" />
+      <img className="only-dark" src="/brand/symbol-dark.png" alt="" />
+      <img className="only-light wm" src="/brand/wordmark.png" alt="monsalaire" />
+      <img className="only-dark wm" src="/brand/wordmark-dark.png" alt="monsalaire" />
+    </span>
+  );
+}
+
 export function LangSwitch({ compact }: { compact?: boolean }) {
   const { lang, page, t } = useRoute();
   const other: Lang = lang === 'fr' ? 'en' : 'fr';
@@ -43,8 +55,7 @@ export function Header({ onShare, copied }: { onShare?: () => void; copied?: boo
     <header className={`header${scrolled ? ' scrolled' : ''}`}>
       <div className="wrap header-in">
         <Link to="home" className="brand" aria-label={t('monsalaire, accueil', 'monsalaire, home')}>
-          <img src="/logo.svg" alt="" width={30} height={30} />
-          monsalaire <span className="tg">TG</span>
+          <Logo />
         </Link>
         <nav className="nav" aria-label={t('Pages', 'Pages')}>
           {nav.map((n) => (
@@ -53,20 +64,22 @@ export function Header({ onShare, copied }: { onShare?: () => void; copied?: boo
             </Link>
           ))}
         </nav>
+        <div className="h-start">
+          {onShare && (
+            <button type="button" className="btn has-label" onClick={onShare} aria-label={t('Partager cette simulation', 'Share this simulation')}>
+              <Icon.share />
+              <span className="label-md">{copied ? t('Lien copié', 'Link copied') : t('Partager', 'Share')}</span>
+            </button>
+          )}
+        </div>
         <div className="header-actions">
           {onShare && (
-            <>
-              <button type="button" className="btn has-label" onClick={onShare} aria-label={t('Partager cette simulation', 'Share this simulation')}>
-                <Icon.share />
-                <span className="label-md">{copied ? t('Lien copié', 'Link copied') : t('Partager', 'Share')}</span>
-              </button>
-              <button type="button" className="btn icon hide-xs" onClick={() => window.print()} aria-label={t('Imprimer le bulletin', 'Print the payslip')}>
-                <Icon.print />
-              </button>
-            </>
+            <button type="button" className="btn icon hide-xs" onClick={() => window.print()} aria-label={t('Imprimer le bulletin', 'Print the payslip')}>
+              <Icon.print />
+            </button>
           )}
           <LangSwitch />
-          <button type="button" className="btn icon" onClick={() => setTheme(next[theme])} aria-label={label[theme]} title={label[theme]}>
+          <button type="button" className="btn icon hide-xs" onClick={() => setTheme(next[theme])} aria-label={label[theme]} title={label[theme]}>
             {theme === 'light' ? <Icon.sun /> : theme === 'dark' ? <Icon.moon /> : <Icon.auto />}
           </button>
           <a className="btn icon hide-xs" href={REPO} target="_blank" rel="noreferrer" aria-label={t('Code source sur GitHub', 'Source code on GitHub')}>
@@ -94,15 +107,18 @@ export function Footer({ rules }: { rules: Rules }) {
       <div className="wrap">
         <div className="f-grid">
           <div className="f-brand">
-            <Link to="home" className="brand">
-              <img src="/logo.svg" alt="" width={30} height={30} />
-              monsalaire
+            <Link to="home" className="brand" aria-label="monsalaire">
+              <Logo size="lg" />
             </Link>
+            <p className="tagline">{t('Les salaires en perspective.', 'Salaries in perspective.')}</p>
             <p>{t('Le bulletin de paie, calculé sous vos yeux et expliqué ligne par ligne. Libre, gratuit, sans compte.', 'Your payslip, computed before your eyes and explained line by line. Free, open source, no account.')}</p>
             <p className="f-meta">
               {t('Règles', 'Rules')} {rules.version} · {t('vérifiées le', 'checked on')} {date(rules.verified_on)}
             </p>
-            <LangSwitch />
+            <div className="f-actions">
+              <LangSwitch />
+              <ThemeButton />
+            </div>
           </div>
           <div>
             <h3>{t('Simulateur', 'Simulator')}</h3>
@@ -189,5 +205,22 @@ export function Footer({ rules }: { rules: Rules }) {
         </div>
       </div>
     </footer>
+  );
+}
+
+function ThemeButton() {
+  const { t } = useRoute();
+  const [theme, setTheme] = useTheme();
+  const next: Record<Theme, Theme> = { system: 'light', light: 'dark', dark: 'system' };
+  const label: Record<Theme, string> = {
+    system: t('Thème : celui de l’appareil', 'Theme: device'),
+    light: t('Thème : clair', 'Theme: light'),
+    dark: t('Thème : sombre', 'Theme: dark'),
+  };
+  return (
+    <button type="button" className="btn" onClick={() => setTheme(next[theme])} aria-label={label[theme]}>
+      {theme === 'light' ? <Icon.sun /> : theme === 'dark' ? <Icon.moon /> : <Icon.auto />}
+      <span>{label[theme].split(': ').pop()?.split(' : ').pop()}</span>
+    </button>
   );
 }

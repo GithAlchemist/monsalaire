@@ -52,6 +52,15 @@ function Shell() {
     }
   }, [s, page]);
 
+  // A shared link opened in a tab already on the site only changes the hash: read it again.
+  useEffect(() => {
+    const onHash = () => {
+      if (window.location.hash.length > 1 && window.location.hash.slice(1) !== encode(s)) setS(decode(window.location.hash));
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, [s]);
+
   useEffect(() => {
     const titles = {
       home: t('monsalaire · votre bulletin de paie au Togo', 'monsalaire · your payslip in Togo'),

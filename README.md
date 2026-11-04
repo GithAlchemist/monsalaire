@@ -1,6 +1,11 @@
 <p align="center">
-  <img src="docs/banner.svg" alt="monsalaire: your payslip in Togo, computed before your eyes" width="100%">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/brand/lockup-dark.png">
+    <img src="public/brand/lockup.png" alt="monsalaire · Salaries in perspective" width="520">
+  </picture>
 </p>
+
+<p align="center"><b>Salaries in perspective.</b> Your payslip in Togo, computed before your eyes.</p>
 
 <p align="center">
   <b>English</b> · <a href="README.fr.md">Français</a>

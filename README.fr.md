@@ -1,6 +1,11 @@
 <p align="center">
-  <img src="docs/banner.svg" alt="monsalaire : votre bulletin de paie au Togo, calculé sous vos yeux" width="100%">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/brand/lockup-dark.png">
+    <img src="public/brand/lockup.png" alt="monsalaire · Les salaires en perspective" width="520">
+  </picture>
 </p>
+
+<p align="center"><b>Les salaires en perspective.</b> Votre bulletin de paie au Togo, calculé sous vos yeux.</p>
 
 <p align="center">
   <a href="README.md">English</a> · <b>Français</b>
