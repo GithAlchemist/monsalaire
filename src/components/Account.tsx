@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from 'react';
-import { useRoute } from '../i18n';
+import { Link, useRoute, type Lang } from '../i18n';
 import { Icon } from './fields';
 
 export type Account = { email: string; lang: string; newsletter: boolean; picture?: string | null };
@@ -260,6 +260,31 @@ function Avatar({ account, size = 32 }: { account: Account; size?: number }) {
   );
 }
 
+/** The other language, as a menu item: on phones the language lives in the account menu (Kévin, 4 November 2026). */
+function LangItem({ onPick }: { onPick: () => void }) {
+  const { lang, page, altHref } = useRoute();
+  const other: Lang = lang === 'fr' ? 'en' : 'fr';
+  const inner = (
+    <>
+      <Icon.globe />
+      <span>{other === 'en' ? 'Read in English' : 'Lire en français'}</span>
+    </>
+  );
+  if (altHref)
+    return (
+      <a className="pop-item" href={altHref} hrefLang={other} lang={other} onClick={onPick}>
+        {inner}
+      </a>
+    );
+  return (
+    <Link className="pop-item" to={page} lang={other} hrefLang={other} onClick={onPick}>
+      {inner}
+    </Link>
+  );
+}
+
+const isPhone = () => typeof window !== 'undefined' && window.matchMedia('(max-width: 520px)').matches;
+
 /**
  * Header: "Se connecter" when signed out (opens a dialog, login first, signup one click away);
  * the avatar and a small menu (email, log out, delete) when signed in.
@@ -272,20 +297,20 @@ export function AccountButton() {
   const menu = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!open || !account) return;
+    if (!open) return;
     const close = (e: MouseEvent) => {
       if (menu.current && !menu.current.contains(e.target as Node)) setOpen(false);
     };
     document.addEventListener('mousedown', close);
     return () => document.removeEventListener('mousedown', close);
-  }, [open, account]);
+  }, [open]);
 
   if (!loaded || off) return null;
 
   if (account) {
     return (
       <div className="acct-menu" ref={menu}>
-        <button type="button" className="btn icon avatar-btn" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(!open)} title={account.email}>
+        <button type="button" className="btn icon avatar-btn acct-entry" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(!open)} title={account.email}>
           <Avatar account={account} />
         </button>
         {open && (
@@ -298,6 +323,9 @@ export function AccountButton() {
               </div>
             </div>
             <p className="acct-pop-note">{t('Vous recevez nos analyses salariales par email.', 'You receive our salary analyses by email.')}</p>
+            <div className="phone-only">
+              <LangItem onPick={() => setOpen(false)} />
+            </div>
             <button type="button" role="menuitem" onClick={() => logout().then(() => setOpen(false))}>
               {t('Se déconnecter', 'Log out')}
             </button>
@@ -310,12 +338,25 @@ export function AccountButton() {
     );
   }
 
+  const openDialog = () => {
+    setOpen(false);
+    dialog.current?.showModal();
+  };
   return (
-    <>
-      <button type="button" className="btn has-label signin-btn" onClick={() => dialog.current?.showModal()}>
+    <div className="acct-menu acct-entry" ref={menu}>
+      <button type="button" className="btn has-label signin-btn" aria-label={t('Se connecter', 'Log in')} onClick={() => (isPhone() ? setOpen(!open) : openDialog())}>
         <Icon.user />
         <span className="label-md">{t('Se connecter', 'Log in')}</span>
       </button>
+      {open && (
+        <div className="acct-pop" role="menu">
+          <button type="button" role="menuitem" className="pop-item" onClick={openDialog}>
+            <Icon.user />
+            <span>{t('Se connecter ou créer un compte', 'Log in or create an account')}</span>
+          </button>
+          <LangItem onPick={() => setOpen(false)} />
+        </div>
+      )}
       <dialog className="auth-dialog" ref={dialog} onClick={(e) => e.target === dialog.current && dialog.current?.close()}>
         <div className="auth-dialog-in">
           <div className="auth-dialog-head">
@@ -328,7 +369,7 @@ export function AccountButton() {
           <AuthForms start="login" onDone={() => dialog.current?.close()} />
         </div>
       </dialog>
-    </>
+    </div>
   );
 }
 

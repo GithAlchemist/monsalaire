@@ -3182,3 +3182,34 @@ body {
     height: 16px;
   }
 }
+
+/* Menu items that are links or buttons with an icon (account menu, language) */
+.pop-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 12px;
+  border-radius: 7px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 14.5px;
+}
+a.pop-item:hover {
+  background: var(--canvas-2);
+}
+.pop-item svg {
+  color: var(--brand);
+  flex: none;
+}
+.phone-only {
+  display: none;
+}
+@media (max-width: 520px) {
+  .phone-only {
+    display: block;
+  }
+  /* The account button carries the language on phones: no separate language button next to it. */
+  .header-actions:has(.acct-entry) > .lang-btn {
+    display: none;
+  }
+}
