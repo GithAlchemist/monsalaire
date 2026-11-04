@@ -81,7 +81,7 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
   on phones. Rule: a line only breaks when the screen runs out of room (no max-width on titles or short texts, no
   balanced wrapping), except the reading column of an article body.
 
-- Accounts and contact form (4 November 2026, PR #2, not live yet): `@astrojs/vercel` adapter, pages stay static and
+- Accounts and contact form (4 November 2026, PR #2, live since the merge `7ea1f80`): `@astrojs/vercel` adapter, pages stay static and
   only `/api/account/[action]` and `/api/contact` run as functions. Data in the `monsalaire` schema of the
   aconta-preview Supabase project (Kévin's choice: no new database), reached only as the role `monsalaire_app`, which
   can touch that schema and nothing else (`docs/db/001_monsalaire_schema.sql`). Email and password (scrypt), email
@@ -89,8 +89,9 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
   account deletion in one click. Offer shown under the payslip; contact page `/contact` and `/en/contact` (stored and
   forwarded to monsalaire@aconta.io). Both switch themselves off without the variables. Variables on the Vercel project:
   `MONSALAIRE_DATABASE_URL`, `MONSALAIRE_SECRET`, `MAILGUN_SMTP_USER`, `MAILGUN_SMTP_PASSWORD` (Aconta's Mailgun, sender
-  noreply@aconta.io). Still to do: Kévin runs the SQL, copies the Mailgun variables; then set the two others, test,
-  merge. Google sign-in: verified by monsalaire itself (`jose`, Google keys, `GOOGLE_CLIENT_ID`), stored in
+  noreply@aconta.io). Both SQL files were run by Kévin; Mailgun is a monsalaire SMTP of its own. Not yet verified: a full Google sign-in
+  (needs Kévin's Google account) and a full email signup with the code typed in. `MONSALAIRE_*` exist for Production and
+  for the old `design-pass` preview only: add them for future preview branches if accounts must work there. Google sign-in: verified by monsalaire itself (`jose`, Google keys, `GOOGLE_CLIENT_ID`), stored in
   `monsalaire.accounts.google_sub` (`docs/db/002_google_sign_in.sql`), never in Supabase Auth, so monsalaire accounts can
   never log into Aconta. Contact form also at the end of Legal texts (`#ecrire`) with a creator line linking to
   kevin.aconta.io; email address in the footer; no kicker above page titles; header menu moves to the second line
