@@ -45,9 +45,10 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
 
 - Deployed on 4 November 2026: Vercel project `monsalaire` (team githalchemist), connected to the GitHub repo, so
   every push to `main` deploys to production. Addresses: https://monsalaire-aconta.vercel.app
-  (`monsalaire.vercel.app` belongs to someone else) and `monsalaire.aconta.io`, added to the project but waiting for
-  its DNS record: aconta.io's DNS is on Cloudflare, it needs a CNAME `monsalaire` ->
-  `0b89f626125f4d37.vercel-dns-017.com`, DNS only (grey cloud), like bookme. `vercel.json` declares Astro and `dist`.
+  (`monsalaire.vercel.app` belongs to someone else) and https://monsalaire.aconta.io (live: CNAME `monsalaire` ->
+  `0b89f626125f4d37.vercel-dns-017.com` on Cloudflare, DNS only, like bookme).
+- Footer: "créé par Kévin" links to https://kevin.aconta.io; contact address `monsalaire@aconta.io` (footer and
+  Terms). The aconta.io catch-all (ImproveMX) forwards it to Kévin's Gmail; one address per product lets him filter. `vercel.json` declares Astro and `dist`.
 - Vercel Web Analytics and Speed Insights injected in production (`src/analytics.ts`), the address hash (the
   user's figures) cut before sending; privacy texts say so.
 - English rewritten on 4 November 2026 (Kévin: the English read as translated French). British English, natural

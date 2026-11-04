@@ -7,6 +7,8 @@ import { acontaLink } from '../seo';
 import { Icon } from './fields';
 
 export const REPO = 'https://github.com/GithAlchemist/monsalaire';
+export const CONTACT = 'monsalaire@aconta.io';
+export const CREATOR = 'https://kevin.aconta.io';
 
 /** The brand: Africa symbol and wordmark, each with a light version for the dark theme. */
 export function Logo({ size = 'md' }: { size?: 'md' | 'lg' }) {
@@ -223,13 +225,20 @@ export function Footer({ rules }: { rules: Rules }) {
               <li>
                 <Link to="terms">{t('Confidentialité', 'Privacy')}</Link>
               </li>
+              <li>
+                <a href={`mailto:${CONTACT}`}>{t('Nous écrire', 'Contact us')}</a>
+              </li>
               <li className="f-note">{t('Aucun compte, aucun cookie : vos montants restent dans votre navigateur.', 'No sign-up, no cookies: your figures stay in your browser.')}</li>
             </ul>
           </div>
         </div>
         <div className="f-bottom">
           <span>
-            © 2026 monsalaire · {t('projet libre sous licence MIT', 'open source under the MIT licence')} · <ByAconta place="footer-bottom" />
+            © 2026 monsalaire · {t('projet libre sous licence MIT', 'open source under the MIT licence')} · <ByAconta place="footer-bottom" /> ·{' '}
+            {t('créé par', 'created by')}{' '}
+            <a className="f-creator" href={CREATOR} target="_blank" rel="author noopener">
+              Kévin
+            </a>
           </span>
           <span>{t('Simulation indicative : elle ne remplace pas le bulletin de votre employeur.', 'This is an estimate, not your employer’s payslip.')}</span>
         </div>

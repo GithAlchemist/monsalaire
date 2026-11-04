@@ -76,7 +76,12 @@ export function Terms() {
           <a href={`${REPO}/issues`} target="_blank" rel="noreferrer">
             {t('Tickets du projet', 'Project issues')}
           </a>
-          .
+          . {t('Pour tout le reste :', 'For anything else:')} <a href="mailto:monsalaire@aconta.io">monsalaire@aconta.io</a>.{' '}
+          {t('monsalaire a été créé par', 'monsalaire was created by')}{' '}
+          <a href="https://kevin.aconta.io" target="_blank" rel="author noopener">
+            Kévin
+          </a>
+          {t(', et il est publié par Aconta.', ' and is published by Aconta.')}
         </p>
       </div>
     </article>

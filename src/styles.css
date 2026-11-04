@@ -2582,3 +2582,13 @@ ul.clean li::marker {
   color: var(--ink-3);
   line-height: 1.4;
 }
+
+.f-bottom .f-creator {
+  color: var(--ink-2);
+  font-weight: 600;
+  text-decoration: none;
+}
+.f-bottom .f-creator:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
