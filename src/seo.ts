@@ -20,6 +20,10 @@ export const META: Record<Lang, Record<Page, { title: string; description: strin
       description:
         'Comment passe-t-on du brut au net au Togo ? Cotisations CNSS et AMU, abattement, barème de l’IRPP par tranches et coût employeur, expliqués pas à pas avec un exemple chiffré.',
     },
+    contact: {
+      title: 'Nous écrire · monsalaire',
+      description: 'Une question, une erreur dans une règle, une idée ? Écrivez à l’équipe de monsalaire, nous lisons chaque message.',
+    },
     articles: {
       title: 'Articles sur les salaires au Togo et en Afrique de l’Ouest · monsalaire',
       description:
@@ -45,6 +49,10 @@ export const META: Record<Lang, Record<Page, { title: string; description: strin
       title: 'How pay is calculated in Togo · monsalaire',
       description:
         'How does gross pay become net pay in Togo? CNSS and AMU contributions, the standard deduction, income tax brackets and employer cost, explained step by step with a worked example.',
+    },
+    contact: {
+      title: 'Contact us · monsalaire',
+      description: 'A question, a rule that looks wrong, an idea? Write to the monsalaire team: we read every message.',
     },
     articles: {
       title: 'Articles on pay in Togo and West Africa · monsalaire',

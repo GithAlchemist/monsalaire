@@ -1,6 +1,7 @@
 import { satteri } from '@astrojs/markdown-satteri';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
+import vercel from '@astrojs/vercel';
 import { defineConfig } from 'astro/config';
 import { articleFigures, articleRules } from './src/blog/markdown.ts';
 
@@ -11,6 +12,8 @@ export default defineConfig({
   site: 'https://monsalaire.aconta.io',
   trailingSlash: 'never',
   build: { format: 'file' },
+  // Pages stay static; only /api/* (accounts, contact form) runs as Vercel functions.
+  adapter: vercel(),
   integrations: [react(), mdx()],
   markdown: {
     // Smart quotes and ellipses, but never dashes: "--" must not turn into an en dash (house rule: no dashes).

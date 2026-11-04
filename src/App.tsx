@@ -4,6 +4,7 @@ import { baseForTargetNet, computePayslip, rulesFor } from './engine';
 import { makeFmt } from './format';
 import { RouterProvider, useRoute, type Lang, type Page } from './i18n';
 import { META } from './seo';
+import { Contact } from './views/Contact';
 import { Home } from './views/Home';
 import { Sources } from './views/Sources';
 import { Terms } from './views/Terms';
@@ -98,6 +99,7 @@ function Shell() {
         {page === 'understand' && <Understand s={s} rules={rules} slip={slip} computedBase={computedBase} />}
         {page === 'sources' && <Sources rules={rules} />}
         {page === 'terms' && <Terms />}
+        {page === 'contact' && <Contact />}
       </main>
       <Footer rules={rules} />
     </>

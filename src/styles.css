@@ -2642,3 +2642,157 @@ body {
 .f-bottom .by-aconta img {
   height: 18px;
 }
+
+/* Buttons and text links used by the account offer and the contact form */
+.btn.primary {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--on-forest);
+  font-weight: 600;
+  padding: 0 18px;
+}
+.btn.primary:hover {
+  background: var(--forest-3);
+}
+.btn.primary:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.linkish {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* Account offer under the payslip */
+.acct {
+  margin-top: 28px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
+  background: var(--surface);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px 32px;
+  align-items: start;
+}
+.acct-pitch h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-family: var(--font-brand);
+  font-size: 20px;
+  font-weight: 600;
+}
+.acct-pitch h2 svg {
+  color: var(--gold-ink);
+}
+.acct-pitch p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+.acct-form {
+  display: grid;
+  gap: 12px;
+}
+.acct-form .btn.primary {
+  justify-self: start;
+}
+.acct-field {
+  display: grid;
+  gap: 5px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.acct-field input,
+.acct-field textarea {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink);
+  background: var(--canvas);
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  padding: 9px 11px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.acct-field input:focus,
+.acct-field textarea:focus {
+  outline: 2px solid var(--brand);
+  outline-offset: 1px;
+  border-color: var(--brand);
+}
+.acct-alt,
+.acct-note {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--ink-3);
+}
+.acct-error {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--red);
+  font-size: 14px;
+}
+.acct.acct-in {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px 24px;
+}
+.acct.acct-in p {
+  margin: 0;
+  color: var(--ink-2);
+}
+.acct-links {
+  display: flex;
+  gap: 18px;
+  font-size: 14px;
+}
+@media (max-width: 760px) {
+  .acct {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+}
+
+/* Contact page */
+.contact-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px 20px;
+  margin-top: 24px;
+}
+.contact-form .wide {
+  grid-column: 1 / -1;
+}
+.contact-sent {
+  margin-top: 24px;
+  padding: 18px 20px;
+  border-left: 3px solid var(--leaf);
+  background: var(--surface);
+  border-radius: 6px;
+}
+@media (max-width: 640px) {
+  .contact-form {
+    grid-template-columns: 1fr;
+  }
+}

@@ -81,6 +81,17 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
   on phones. Rule: a line only breaks when the screen runs out of room (no max-width on titles or short texts, no
   balanced wrapping), except the reading column of an article body.
 
+- Accounts and contact form (4 November 2026, PR #2, not live yet): `@astrojs/vercel` adapter, pages stay static and
+  only `/api/account/[action]` and `/api/contact` run as functions. Data in the `monsalaire` schema of the
+  aconta-preview Supabase project (Kévin's choice: no new database), reached only as the role `monsalaire_app`, which
+  can touch that schema and nothing else (`docs/db/001_monsalaire_schema.sql`). Email and password (scrypt), email
+  confirmed by a six-digit code, reset by code, 60-day session cookie, rate limits, honeypot, no account enumeration,
+  account deletion in one click. Offer shown under the payslip; contact page `/contact` and `/en/contact` (stored and
+  forwarded to monsalaire@aconta.io). Both switch themselves off without the variables. Variables on the Vercel project:
+  `MONSALAIRE_DATABASE_URL`, `MONSALAIRE_SECRET`, `MAILGUN_SMTP_USER`, `MAILGUN_SMTP_PASSWORD` (Aconta's Mailgun, sender
+  noreply@aconta.io). Still to do: Kévin runs the SQL, copies the Mailgun variables; then set the two others, test,
+  merge. Open Graph image now country-neutral: change it only for a major product change.
+
 ## Decisions taken with Kévin (do not reopen without asking him)
 
 - Name `monsalaire` (not "Togolet"): the tool will compare countries.
