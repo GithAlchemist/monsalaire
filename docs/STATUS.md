@@ -97,6 +97,13 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
   kevin.aconta.io; email address in the footer; no kicker above page titles; header menu moves to the second line
   below 980 px. Checked: no page wider than the screen on 11 pages at 320 to 1180 px. Open Graph image now country-neutral: change it only for a major product change.
 
+- PR #3 live (`3627ac3`): "Se connecter" in the header (dialog; on phones the language moves into the account menu), avatar
+  menu once signed in, per-member visits and Google photo (`docs/db/003_profile_and_visits.sql`, code tolerant until it
+  runs), "Partager" menu (link, print with the link back, PDF via `src/pdf.ts`: jsPDF + html2canvas-pro loaded on
+  demand, one A4 page with a clickable link to the simulation). Contact form and creator card same default height.
+  Note: polling production too often from one address triggers Vercel's automatic challenge (403, `x-vercel-mitigated:
+  challenge`) for that address only; other clients are not affected.
+
 ## Decisions taken with Kévin (do not reopen without asking him)
 
 - Name `monsalaire` (not "Togolet"): the tool will compare countries.
