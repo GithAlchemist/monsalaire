@@ -90,7 +90,11 @@ a similar income across countries (Benin, Senegal, Côte d'Ivoire...), corrected
   forwarded to monsalaire@aconta.io). Both switch themselves off without the variables. Variables on the Vercel project:
   `MONSALAIRE_DATABASE_URL`, `MONSALAIRE_SECRET`, `MAILGUN_SMTP_USER`, `MAILGUN_SMTP_PASSWORD` (Aconta's Mailgun, sender
   noreply@aconta.io). Still to do: Kévin runs the SQL, copies the Mailgun variables; then set the two others, test,
-  merge. Open Graph image now country-neutral: change it only for a major product change.
+  merge. Google sign-in: verified by monsalaire itself (`jose`, Google keys, `GOOGLE_CLIENT_ID`), stored in
+  `monsalaire.accounts.google_sub` (`docs/db/002_google_sign_in.sql`), never in Supabase Auth, so monsalaire accounts can
+  never log into Aconta. Contact form also at the end of Legal texts (`#ecrire`) with a creator line linking to
+  kevin.aconta.io; email address in the footer; no kicker above page titles; header menu moves to the second line
+  below 980 px. Checked: no page wider than the screen on 11 pages at 320 to 1180 px. Open Graph image now country-neutral: change it only for a major product change.
 
 ## Decisions taken with Kévin (do not reopen without asking him)
 

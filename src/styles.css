@@ -294,7 +294,7 @@ a {
 .subnav {
   display: none;
 }
-@media (max-width: 760px) {
+@media (max-width: 980px) {
   .subnav {
     display: flex;
     gap: 4px;
@@ -354,7 +354,7 @@ a {
   gap: 6px;
   align-items: center;
 }
-@media (max-width: 760px) {
+@media (max-width: 980px) {
   .nav {
     display: none;
   }
@@ -2116,8 +2116,25 @@ details.disclaimer ul {
 .u-split > .u-card.centred {
   justify-content: center;
 }
+.u-split > .u-card.centred .hundred-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+}
 .u-split > .u-card.centred .hundred-wrap .hundred {
-  max-width: 100%;
+  max-width: none;
+}
+.u-split > .u-card.centred .hundred-legend {
+  margin: 0;
+}
+@media (max-width: 1100px) and (min-width: 961px), (max-width: 520px) {
+  .u-split > .u-card.centred .hundred-wrap {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .u-split > .u-card.centred .hundred-wrap .hundred {
+    max-width: 280px;
+  }
 }
 .u-split.tax {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -2412,23 +2429,24 @@ ul.clean li::marker {
 }
 .f-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) repeat(6, minmax(0, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 32px 28px;
 }
-@media (max-width: 1360px) and (min-width: 961px) {
+/* The brand always takes its own full row; the link columns go 6, then 3, then 2 across. */
+.f-grid > .f-brand {
+  grid-column: 1 / -1;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+@media (max-width: 1100px) {
   .f-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-  .f-brand {
-    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-@media (max-width: 960px) {
+@media (max-width: 600px) {
   .f-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .f-brand {
-    grid-column: 1 / -1;
+    gap: 28px 20px;
   }
 }
 .f-brand p {
@@ -2570,7 +2588,7 @@ ul.clean li::marker {
   border-left: 1px solid var(--line-2);
   height: 22px;
 }
-@media (max-width: 760px) {
+@media (max-width: 1080px) {
   .header-in .h-by {
     display: none;
   }
@@ -2891,4 +2909,8 @@ body {
   .creator-go {
     grid-column: 2;
   }
+}
+
+.site-footer ul a {
+  overflow-wrap: anywhere;
 }

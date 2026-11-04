@@ -233,6 +233,7 @@ function Brackets({ slip }: { slip: Payslip }) {
   const { t } = useRoute();
   const { money, pct, fcfa } = useFmt();
   return (
+    <div className="table-wrap">
     <table className="u-table compact">
       <thead>
         <tr>
@@ -257,6 +258,7 @@ function Brackets({ slip }: { slip: Payslip }) {
         </tr>
       </tbody>
     </table>
+    </div>
   );
 }
 
