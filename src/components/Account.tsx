@@ -48,6 +48,7 @@ function AuthForms({ start, onDone }: { start: 'signup' | 'login'; onDone?: () =
   const [step, setStep] = useState<Step>(start);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -87,7 +88,7 @@ function AuthForms({ start, onDone }: { start: 'signup' | 'login'; onDone?: () =
           setBusy(false);
         },
       });
-      g.accounts.id.renderButton(box, { theme: 'outline', size: 'large', text: step === 'login' ? 'signin_with' : 'continue_with', locale: lang, width: Math.min(320, box.clientWidth || 280) });
+      g.accounts.id.renderButton(box, { theme: 'outline', size: 'large', text: step === 'login' ? 'signin_with' : 'continue_with', locale: lang, width: Math.min(400, box.clientWidth || 280) });
     };
     if ((window as unknown as { google?: unknown }).google) render();
     else {
@@ -132,7 +133,18 @@ function AuthForms({ start, onDone }: { start: 'signup' | 'login'; onDone?: () =
   const passwordField = (label: string, auto: string) => (
     <label className="acct-field">
       <span>{label}</span>
-      <input type="password" required minLength={8} autoComplete={auto} value={password} onChange={(e) => setPassword(e.target.value)} />
+      <span className="acct-pwd">
+        <input type={showPassword ? 'text' : 'password'} required minLength={8} autoComplete={auto} value={password} onChange={(e) => setPassword(e.target.value)} />
+        <button
+          type="button"
+          className="acct-eye"
+          aria-pressed={showPassword}
+          aria-label={showPassword ? t('Masquer le mot de passe', 'Hide the password') : t('Afficher le mot de passe', 'Show the password')}
+          onClick={() => setShowPassword((v) => !v)}
+        >
+          {showPassword ? <Icon.eyeOff /> : <Icon.eye />}
+        </button>
+      </span>
     </label>
   );
   const codeField = (
