@@ -1,6 +1,6 @@
 import type { APIContext } from 'astro';
 import { db } from './db';
-import { codeEmail, sendMail } from './email';
+import { codeEmail, sendMailInSlot, takeMailSlot } from './email';
 import { codeHash, newCode, newToken, tokenHash } from './security';
 
 export const COOKIE = 'ms_session';
@@ -62,13 +62,20 @@ export async function closeSession(ctx: APIContext) {
   ctx.cookies.delete(COOKIE, { path: '/' });
 }
 
-/** Sends a fresh six-digit code (15 minutes) and voids the previous ones of the same purpose. */
-export async function sendCode(email: string, purpose: 'verify' | 'reset', lang: 'fr' | 'en') {
+/**
+ * Sends a fresh six-digit code (15 minutes) and voids the previous ones of the same purpose. The daily email cap is
+ * checked first: once it is reached, nothing changes and the code already received stays valid.
+ */
+export async function sendCode(email: string, purpose: 'verify' | 'reset', lang: 'fr' | 'en'): Promise<'sent' | 'off' | 'capped'> {
+  const slot = await takeMailSlot(`code ${purpose}`);
+  if (slot === 'capped') return 'capped';
   const code = newCode();
   await db().query('update codes set used_at = now() where email = $1 and purpose = $2 and used_at is null', [email, purpose]);
   await db().query(`insert into codes (email, purpose, code_hash, expires_at) values ($1, $2, $3, now() + interval '15 minutes')`, [email, purpose, codeHash(email, purpose, code)]);
+  if (slot === 'off') return 'off';
   const m = codeEmail(lang, purpose, code);
-  await sendMail(email, m.subject, m.text);
+  await sendMailInSlot(email, m.subject, m.text);
+  return 'sent';
 }
 
 /** Checks a code: five tries at most, then the code is void. Marks it used on success. */

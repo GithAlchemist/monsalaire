@@ -3,6 +3,7 @@ import { db } from '../../server/db';
 import { CONTACT_INBOX, sendMail } from '../../server/email';
 import { clientIp, json, langOf, readBody } from '../../server/http';
 import { allow, EMAIL_RE, ipHash, normEmail, str } from '../../server/security';
+import { turnstileOk } from '../../server/turnstile';
 
 export const prerender = false;
 
@@ -19,9 +20,11 @@ export async function POST(ctx: APIContext) {
   if (!EMAIL_RE.test(email)) return json({ error: 'email' }, 400);
   if (message.length < 10) return json({ error: 'message' }, 400);
   try {
+    if (!(await turnstileOk(body.turnstile, clientIp(ctx)))) return json({ error: 'captcha' }, 403);
     const ip = ipHash(clientIp(ctx));
     if (!(await allow(`contact:${ip}`, 5, 60))) return json({ error: 'too_many' }, 429);
     await db().query('insert into messages (name, email, body, lang, ip_hash) values ($1, $2, $3, $4, $5)', [name, email, message, lang, ip]);
+    // Past the daily email cap the message is not forwarded, but it is kept in the database (table messages).
     await sendMail(CONTACT_INBOX, `[monsalaire] Message de ${name}`, `${message}\n\n${name} <${email}> · ${lang}`, email);
     return json({ ok: true });
   } catch (e) {

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Icon } from '../components/fields';
 import { useRoute } from '../i18n';
+import { Turnstile } from '../components/Turnstile';
 
 /** Contact page: the message is stored and forwarded to monsalaire@aconta.io; the reply comes back to the sender. */
 /** The contact form itself, used on the Contact page and at the end of the Legal texts page. */
@@ -8,6 +9,8 @@ export function ContactForm() {
   const { t, lang } = useRoute();
   const [state, setState] = useState<'idle' | 'busy' | 'sent'>('idle');
   const [error, setError] = useState('');
+  const [captcha, setCaptcha] = useState<string | null>(null);
+  const [captchaVersion, setCaptchaVersion] = useState(0);
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,7 +21,7 @@ export function ContactForm() {
       const r = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: f.get('name'), email: f.get('email'), message: f.get('message'), website: f.get('website'), lang }),
+        body: JSON.stringify({ name: f.get('name'), email: f.get('email'), message: f.get('message'), website: f.get('website'), turnstile: captcha, lang }),
       });
       const d = await r.json().catch(() => ({}));
       if (r.ok) return setState('sent');
@@ -27,9 +30,12 @@ export function ContactForm() {
         email: t('Cette adresse email ne semble pas valide.', 'That email address does not look right.'),
         message: t('Votre message est un peu court.', 'Your message is a little short.'),
         too_many: t('Trop de messages envoyés. Réessayez dans une heure.', 'Too many messages sent. Try again in an hour.'),
+        captcha: t('La vérification anti-robot n’a pas abouti. Réessayez.', 'The robot check did not go through. Try again.'),
       };
+      setCaptchaVersion((v) => v + 1);
       setError(m[d.error] ?? t('L’envoi a échoué. Écrivez-nous directement à monsalaire@aconta.io.', 'Sending failed. Write to us directly at monsalaire@aconta.io.'));
     } catch {
+      setCaptchaVersion((v) => v + 1);
       setError(t('L’envoi a échoué. Écrivez-nous directement à monsalaire@aconta.io.', 'Sending failed. Write to us directly at monsalaire@aconta.io.'));
     }
     setState('idle');
@@ -56,6 +62,7 @@ export function ContactForm() {
             <textarea name="message" required minLength={10} maxLength={5000} rows={3} />
           </label>
           <input className="hp" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+          <Turnstile onToken={setCaptcha} version={captchaVersion} lang={lang} />
           <div className="wide">
             <button className="btn primary" disabled={state === 'busy'}>
               {t('Envoyer', 'Send')}

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from 'react';
 import { Link, useRoute, type Lang } from '../i18n';
 import { Icon } from './fields';
+import { Turnstile } from './Turnstile';
 
 export type Account = { email: string; lang: string; newsletter: boolean; picture?: string | null };
 type Step = 'signup' | 'login' | 'verify' | 'forgot' | 'reset' | 'done';
@@ -52,6 +53,8 @@ function AuthForms({ start, onDone }: { start: 'signup' | 'login'; onDone?: () =
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [captcha, setCaptcha] = useState<string | null>(null);
+  const [captchaVersion, setCaptchaVersion] = useState(0);
 
   const messages: Record<string, string> = {
     email: t('Cette adresse email ne semble pas valide.', 'That email address does not look right.'),
@@ -61,6 +64,8 @@ function AuthForms({ start, onDone }: { start: 'signup' | 'login'; onDone?: () =
     too_many: t('Trop d’essais. Réessayez dans quelques minutes.', 'Too many attempts. Try again in a few minutes.'),
     server: t('Le service ne répond pas. Réessayez plus tard.', 'The service is not responding. Try again later.'),
     google: t('La connexion avec Google n’a pas abouti.', 'Signing in with Google did not work.'),
+    captcha: t('La vérification anti-robot n’a pas abouti. Réessayez.', 'The robot check did not go through. Try again.'),
+    busy: t('Trop d’emails envoyés aujourd’hui. Réessayez plus tard.', 'Too many emails have gone out today. Try again later.'),
   };
 
   const signedIn = (a: Account) => {
@@ -106,6 +111,8 @@ function AuthForms({ start, onDone }: { start: 'signup' | 'login'; onDone?: () =
     setError('');
     try {
       const { data } = await call(action, { ...body, lang });
+      // A Turnstile token is good once: ask for a new one after each sign-up attempt.
+      if (action === 'signup') setCaptchaVersion((v) => v + 1);
       if (data.error) setError(messages[data.error] ?? messages.server);
       else if (data.account) signedIn(data.account);
       else if (data.step) {
@@ -157,11 +164,12 @@ function AuthForms({ start, onDone }: { start: 'signup' | 'login'; onDone?: () =
   return (
     <div className="auth">
       {step === 'signup' && (
-        <form className="acct-form" onSubmit={(e) => go(e, 'signup', { email, password, website: (e.currentTarget.elements.namedItem('website') as HTMLInputElement)?.value })}>
+        <form className="acct-form" onSubmit={(e) => go(e, 'signup', { email, password, turnstile: captcha, website: (e.currentTarget.elements.namedItem('website') as HTMLInputElement)?.value })}>
           {googleBlock}
           {emailField}
           {passwordField(t('Mot de passe (8 caractères au moins)', 'Password (at least 8 characters)'), 'new-password')}
           <input className="hp" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+          <Turnstile onToken={setCaptcha} version={captchaVersion} lang={lang} />
           <button className="btn primary" disabled={busy}>
             {t('Créer mon compte', 'Create my account')}
           </button>

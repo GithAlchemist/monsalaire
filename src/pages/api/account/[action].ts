@@ -3,6 +3,7 @@ import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { db } from '../../../server/db';
 import { clientIp, closeSession, countVisit, currentAccount, json, langOf, openSession, readBody, sendCode, useCode } from '../../../server/http';
 import { allow, checkPassword, DUMMY_HASH, EMAIL_RE, hashPassword, ipHash, normEmail, str } from '../../../server/security';
+import { turnstileOk } from '../../../server/turnstile';
 
 export const prerender = false;
 
@@ -10,7 +11,7 @@ export const prerender = false;
  * Subscriber accounts of monsalaire (separate from Aconta accounts): email and password, email confirmed by a
  * six-digit code, password reset by code. Answers never reveal whether an email has an account.
  *
- * POST /api/account/signup  { email, password, lang }      -> { step: 'verify' }
+ * POST /api/account/signup  { email, password, lang, turnstile? } -> { step: 'verify' }
  * POST /api/account/verify  { email, code }                -> { account }
  * POST /api/account/login   { email, password }            -> { account } | { step: 'verify' }
  * POST /api/account/forgot  { email, lang }                -> { step: 'reset' }
@@ -55,13 +56,16 @@ export async function POST(ctx: APIContext) {
         const password = typeof body.password === 'string' ? body.password : '';
         if (!EMAIL_RE.test(email)) return fail('email');
         if (!goodPassword(password)) return fail('password');
+        // Turnstile (only when its two variables are set): before the limits, so a robot does not use them up.
+        if (!(await turnstileOk(body.turnstile, clientIp(ctx)))) return fail('captcha', 403);
         if (!(await allow(`signup:${ip}`, 8, 60)) || !(await allow(`mail:${email}`, 5, 60))) return fail('too_many', 429);
         const { rows } = await db().query('select id, verified_at from accounts where email = $1', [email]);
         if (rows[0]?.verified_at) return json({ step: 'verify' }); // already a member: same answer, no email
         const hash = await hashPassword(password);
         if (rows[0]) await db().query('update accounts set password_hash = $2, lang = $3 where id = $1', [rows[0].id, hash, lang]);
         else await db().query('insert into accounts (email, password_hash, lang) values ($1, $2, $3)', [email, hash, lang]);
-        await sendCode(email, 'verify', lang);
+        // Daily email cap reached (audit MS-01): say so rather than wait for a code that will not come.
+        if ((await sendCode(email, 'verify', lang)) === 'capped') return fail('busy', 503);
         return json({ step: 'verify' });
       }
 
@@ -83,7 +87,7 @@ export async function POST(ctx: APIContext) {
         const ok = await checkPassword(password, a?.password_hash ?? DUMMY_HASH);
         if (!a || !ok) return fail('credentials', 401);
         if (!a.verified_at) {
-          if (await allow(`mail:${email}`, 5, 60)) await sendCode(email, 'verify', langOf(a.lang));
+          if ((await allow(`mail:${email}`, 5, 60)) && (await sendCode(email, 'verify', langOf(a.lang))) === 'capped') return fail('busy', 503);
           return json({ step: 'verify' });
         }
         await openSession(ctx, a.id);
